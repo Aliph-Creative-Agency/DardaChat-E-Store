@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ToastProvider } from "@/components/ui/Toast";
 import { localeDir, routing } from "@/lib/i18n/routing";
 import { fontVariables } from "@/lib/shell/fonts";
 import "../globals.css";
@@ -30,7 +31,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   return (
     <html lang={locale} dir={localeDir(locale)} className={fontVariables}>
       <body className="min-h-dvh bg-paper font-sans text-ink antialiased">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

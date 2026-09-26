@@ -98,6 +98,47 @@
       "warning": "Low stock",
       "danger": "Payment failed",
       "info": "Out for delivery"
+    },
+    "dialog": {
+      "heading": "Dialog",
+      "note": "Native modal: Esc or the close button closes it and focus returns to the button that opened it.",
+      "open": "Remove from cart",
+      "title": "Remove this game from your cart?",
+      "description": "You can add it again at any time.",
+      "body": "The Family edition will leave your cart. Your other items stay as they are.",
+      "cancel": "Keep it",
+      "confirm": "Remove",
+      "confirmed": "Removed from your cart"
+    },
+    "toast": {
+      "heading": "Notifications",
+      "note": "Short messages at the end of the screen. They pause while hovered or focused; errors are announced immediately.",
+      "info": "Show info",
+      "success": "Show success",
+      "warning": "Show warning",
+      "error": "Show error",
+      "infoTitle": "Your order is being prepared",
+      "successTitle": "Saved",
+      "successBody": "Your address was updated.",
+      "warningTitle": "Only 3 boxes left",
+      "errorTitle": "Payment did not go through",
+      "errorBody": "Check the card details or choose cash on delivery."
+    },
+    "tabs": {
+      "heading": "Tabs",
+      "note": "Arrow keys follow the reading direction: on Arabic pages the left arrow moves to the next tab.",
+      "label": "Game details",
+      "story": "The story",
+      "contents": "In the box",
+      "delivery": "Delivery",
+      "storyBody": "Born around a family table: questions that turn a quiet evening into stories nobody had told before.",
+      "contentsBody": "120 question cards, 10 blank cards to write your own, and a cloth pouch.",
+      "deliveryBody": "Delivered across the West Bank within 2 to 4 working days."
     }
+  },
+  "ui": {
+    "close": "Close",
+    "dismiss": "Dismiss notification",
+    "notifications": "Notifications"
   }
 }

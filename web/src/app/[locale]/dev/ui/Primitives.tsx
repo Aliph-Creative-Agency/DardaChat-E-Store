@@ -19,6 +19,7 @@ import {
   Textarea,
   type BadgeTone,
 } from "@/components/ui";
+import { DialogDemo, TabsDemo, ToastDemo } from "./InteractiveDemos";
 import { GallerySection } from "./Section";
 
 /** SHL-06 gallery sections: icons, buttons, form fields, cards, badges. Server-rendered. */
@@ -145,6 +146,24 @@ export async function PrimitivesGallery() {
             </Card>
           ))}
         </div>
+      </GallerySection>
+
+      <div aria-hidden className="stitch-rule-quiet" />
+
+      <GallerySection id="dialog" title={t("dialog.heading")} note={t("dialog.note")}>
+        <DialogDemo />
+      </GallerySection>
+
+      <div aria-hidden className="stitch-rule-quiet" />
+
+      <GallerySection id="toast" title={t("toast.heading")} note={t("toast.note")}>
+        <ToastDemo />
+      </GallerySection>
+
+      <div aria-hidden className="stitch-rule-quiet" />
+
+      <GallerySection id="tabs" title={t("tabs.heading")} note={t("tabs.note")}>
+        <TabsDemo />
       </GallerySection>
 
       <div aria-hidden className="stitch-rule-quiet" />

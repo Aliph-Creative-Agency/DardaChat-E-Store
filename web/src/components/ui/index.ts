@@ -9,3 +9,6 @@ export { Checkbox, type CheckboxProps } from "./Checkbox";
 export { Field, FieldError, type FieldControlProps, type FieldProps } from "./Field";
 export { Card, CardDescription, CardFooter, CardHeader, CardTitle, type CardProps } from "./Card";
 export { Badge, type BadgeProps, type BadgeTone } from "./Badge";
+export { Dialog, type DialogProps } from "./Dialog";
+export { ToastProvider, useToast, type ToastOptions, type ToastTone } from "./Toast";
+export { Tabs, type TabItem, type TabsProps } from "./Tabs";
