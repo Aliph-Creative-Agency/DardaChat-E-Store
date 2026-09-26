@@ -37,3 +37,5 @@ export {
   type RateLimitStore,
 } from "./rate-limit";
 export { revokeAllSessions, type SubjectType } from "./session";
+export { issueOtp, verifyOtp, type IssueOtpResult, type OtpTarget, type VerifyOtpResult } from "./otp";
+export { outboxOtpDelivery, type OtpChannel, type OtpDelivery, type OtpPurpose } from "./otp-delivery";
