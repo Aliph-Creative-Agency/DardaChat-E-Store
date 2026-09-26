@@ -36,3 +36,9 @@ export function randomIp(): string {
   const b = () => 1 + Math.floor(Math.random() * 250);
   return `10.${b()}.${b()}.${b()}`;
 }
+
+/** Forget a staff user's authenticator (and its TOTP rate-limit / replay rows) so enrolment can run again. */
+export async function resetStaffTwoFactor(email: string): Promise<void> {
+  await client`delete from rate_limit_hits where key like ${"totp:%"} or key = ${`signin:staff:${email}`}`;
+  await client`delete from totp_secrets where user_id = (select id from staff_users where lower(email) = ${email.toLowerCase()})`;
+}

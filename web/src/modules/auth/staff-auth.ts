@@ -94,6 +94,14 @@ export async function signInStaff(
   };
 }
 
+export async function mustChangePassword(db: DbOrTx, userId: string): Promise<boolean> {
+  const [u] = await db
+    .select({ v: staffUsers.mustChangePassword })
+    .from(staffUsers)
+    .where(eq(staffUsers.id, userId));
+  return u?.v ?? false;
+}
+
 /** Does this staff user have a confirmed authenticator? */
 export async function hasConfirmedTotp(db: DbOrTx, userId: string): Promise<boolean> {
   const [t] = await db

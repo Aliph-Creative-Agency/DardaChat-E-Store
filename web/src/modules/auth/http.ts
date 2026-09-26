@@ -3,7 +3,8 @@ import { z } from "zod";
 import { COOKIE_NAMES } from "./config";
 import { readCookie } from "./guards";
 import { clientIp } from "./rate-limit";
-import { type SubjectType, sessionCookie } from "./session";
+import type { DbOrTx } from "../../db/connection";
+import { type Session, type SubjectType, sessionCookie, validateSession } from "./session";
 
 /** Shared plumbing for the auth route handlers (JSON in/out, status mapping, cookies). */
 
@@ -76,4 +77,9 @@ export function withoutSessionCookie(res: NextResponse, subjectType: SubjectType
   const { name, ...opts } = sessionCookie(subjectType);
   res.cookies.set(name, "", { ...opts, maxAge: 0 });
   return res;
+}
+
+/** Staff session from the request cookie, INCLUDING one still waiting for its second factor (2FA routes only). */
+export function pendingStaffSession(db: DbOrTx, req: Request): Promise<Session | null> {
+  return validateSession(db, tokenFrom(req, "staff"), "staff");
 }

@@ -10,9 +10,9 @@ import { authT, type AuthT } from "./t";
  * STOREFRONT / W3 restyle them later; only logical CSS (start/end) is used so rtl and ltr both work.
  */
 
-type ApiResult = { ok?: boolean; error?: string; retryAfterMs?: number; problems?: string[]; [k: string]: unknown };
+export type ApiResult = { ok?: boolean; error?: string; retryAfterMs?: number; problems?: string[]; [k: string]: unknown };
 
-async function postJson(url: string, body: unknown): Promise<ApiResult> {
+export async function postJson(url: string, body: unknown): Promise<ApiResult> {
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -34,9 +34,9 @@ export function errorText(t: AuthT, r: ApiResult): string {
   return text === `errors.${code}` ? t("errors.unknown") : text;
 }
 
-const inputCls =
+export const inputCls =
   "w-full rounded-control border border-line-strong bg-surface px-3 py-2 text-base text-ink focus:outline-2 focus:outline-offset-2 focus:outline-focus";
-const buttonCls =
+export const buttonCls =
   "inline-flex items-center justify-center rounded-control bg-brand px-4 py-2 font-semibold text-on-brand hover:bg-brand-strong disabled:opacity-60";
 
 export function Field(props: {
@@ -80,7 +80,7 @@ export function Field(props: {
   );
 }
 
-function Alert({ kind, children }: { kind: "error" | "info"; children: ReactNode }) {
+export function Alert({ kind, children }: { kind: "error" | "info"; children: ReactNode }) {
   return (
     <p
       role={kind === "error" ? "alert" : "status"}
@@ -95,7 +95,7 @@ function Alert({ kind, children }: { kind: "error" | "info"; children: ReactNode
   );
 }
 
-function useSubmit() {
+export function useSubmit() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   async function run(e: FormEvent, fn: () => Promise<void>) {
