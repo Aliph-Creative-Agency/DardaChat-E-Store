@@ -3,7 +3,7 @@
  * Conventions (PLAN §1, lane BRIEF): uuid ids, timestamptz in UTC, money as integer agorot, bilingual `_ar`/`_en`,
  * snake_case column names (drizzle `casing: "snake_case"` maps camelCase keys).
  */
-import { integer, pgEnum, timestamp, uuid } from "drizzle-orm/pg-core";
+import { customType, integer, pgEnum, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /** Primary key: uuid with DB-side default. */
 export const id = () => uuid().primaryKey().defaultRandom();
@@ -20,3 +20,10 @@ export const money = () => integer();
 
 /** UI locales (UI-001). */
 export const localeEnum = pgEnum("core_locale", ["ar", "en"]);
+
+/** Postgres `tsvector` (full-text search). Maintained by triggers in `src/db/sql/*.sql`, never written by app code. */
+export const tsvector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});

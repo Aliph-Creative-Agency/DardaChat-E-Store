@@ -3,3 +3,4 @@
 export * from "../modules/core/schema";
 export * from "../modules/auth/schema";
 export * from "../modules/engagement/schema";
+export * from "../modules/catalog/schema";
