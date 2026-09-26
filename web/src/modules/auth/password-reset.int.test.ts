@@ -117,7 +117,11 @@ describe("password reset", () => {
       ok: false,
       problems: expect.arrayContaining(["too_short"]),
     });
-    expect(await resetPassword(db, token, "copper-kettle-morning-77", meta, tick())).toMatchObject({ ok: true });
+    expect(await resetPassword(db, token, "copper-kettle-morning-77", { ...meta, subjectType: "customer" }, tick())).toEqual({
+      ok: false,
+      error: "invalid_token",
+    });
+    expect(await resetPassword(db, token, "copper-kettle-morning-77", { ...meta, subjectType: "staff" }, tick())).toMatchObject({ ok: true });
     const [u] = await db.select().from(staffUsers).where(eq(staffUsers.id, staffId));
     expect(u!.mustChangePassword).toBe(false);
     expect(await validateSession(db, s.token, "staff", tick())).toBeNull();

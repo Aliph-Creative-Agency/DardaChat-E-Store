@@ -144,11 +144,13 @@ export async function resetPassword(
   db: DbOrTx,
   token: string,
   newPassword: string,
-  meta: { ip?: string } = {},
+  meta: { ip?: string; subjectType?: SubjectType } = {},
   now: Date = new Date(),
 ): Promise<ResetResult> {
   const found = await peekResetToken(db, token, now);
   if (!found || typeof newPassword !== "string") return { ok: false, error: "invalid_token" };
+  // A staff link used on the customer form (or vice versa) is refused without being consumed.
+  if (meta.subjectType && meta.subjectType !== found.subjectType) return { ok: false, error: "invalid_token" };
   const subject = await findSubjectById(db, found.subjectType, found.subjectId);
   if (!subject || !subject.active) return { ok: false, error: "invalid_token" };
 
