@@ -180,6 +180,10 @@
     "locale": {
       "heading": "Language switcher",
       "note": "Takes you to the same page in the other language, keeps the query, and remembers your choice."
+    },
+    "boom": {
+      "title": "Error boundary test",
+      "recovered": "Recovered: the page rendered after trying again."
     }
   },
   "ui": {
@@ -303,6 +307,32 @@
       "title": "This section is not ready yet",
       "body": "The page you asked for does not exist or has not been built yet. Pick another section from the menu, or go back to the dashboard.",
       "action": "Back to the dashboard"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "We couldn't find this page",
+      "body": "The link may have changed or the page was removed. Go back to the home page or browse the shop.",
+      "home": "Back to home",
+      "shop": "Browse the shop"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "body": "We couldn't finish loading this page. Try again, and if it keeps happening, go back to the home page.",
+      "retry": "Try again",
+      "home": "Back to home",
+      "reference": "Reference: {digest}"
+    },
+    "codes": {
+      "notFound": "We couldn't find what you were looking for. Check the link or search again.",
+      "unauthorized": "You're signed out or your session ended. Sign in and try again.",
+      "forbidden": "You don't have permission to do this. Ask the store owner for access.",
+      "validation": "Some details need fixing. Correct the highlighted fields and submit again.",
+      "conflict": "This changed since you opened it. Refresh the page and review the changes before continuing.",
+      "rateLimited": "Too many attempts in a short time. Wait a minute, then try again.",
+      "network": "We couldn't connect. Check your internet connection and try again.",
+      "unavailable": "This service is temporarily unavailable. Try again in a few minutes.",
+      "server": "Something went wrong on our side. Try again shortly, and contact us if it keeps happening."
     }
   }
 }
