@@ -80,3 +80,48 @@ export function outboxOtpDelivery(db: DbOrTx): OtpDelivery {
     },
   };
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Password-reset link (FR-ACC-006): email only.
+// ---------------------------------------------------------------------------------------------------------------
+
+export interface ResetLinkMessage {
+  to: string;
+  locale: Locale;
+  url: string;
+  subjectType: "customer" | "staff";
+}
+
+export interface ResetLinkDelivery {
+  sendResetLink(message: ResetLinkMessage): Promise<void>;
+}
+
+const RESET_MINUTES = Math.round(TTL.resetTokenMs / 60_000);
+
+export function resetLinkText(locale: Locale, url: string): { subject: string; text: string } {
+  return locale === "en"
+    ? {
+        subject: "Reset your DardaChat password",
+        text: `Use this link to choose a new password: ${url}\nIt works once and expires in ${RESET_MINUTES} minutes. If you did not ask for this, ignore this email.`,
+      }
+    : {
+        subject: "إعادة تعيين كلمة المرور في دردشة",
+        text: `استخدم هذا الرابط لاختيار كلمة مرور جديدة: ${url}\nيعمل الرابط مرة واحدة وتنتهي صلاحيته بعد ${RESET_MINUTES} دقيقة. إذا لم تطلب ذلك فتجاهل هذه الرسالة.`,
+      };
+}
+
+// SHIM(platform-merge): rebind to the core messaging contract
+/** Lane shim: queues the reset email in the `messages` outbox (event `auth.password_reset`). */
+export function outboxResetLinkDelivery(db: DbOrTx): ResetLinkDelivery {
+  return {
+    async sendResetLink(m) {
+      await db.insert(messages).values({
+        channel: "email",
+        to: m.to,
+        eventKey: "auth.password_reset",
+        locale: m.locale,
+        payload: { url: m.url, subjectType: m.subjectType, ...resetLinkText(m.locale, m.url) },
+      });
+    },
+  };
+}

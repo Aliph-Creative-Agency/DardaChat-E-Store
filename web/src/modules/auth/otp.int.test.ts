@@ -58,7 +58,9 @@ describe("OTP service", () => {
       ok: false,
       error: "expired",
     });
-    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code }, at(4 * 60_000 + 59_000))).toEqual({
+    expect(
+      await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code }, at(4 * 60_000 + 59_000)),
+    ).toEqual({
       ok: true,
     });
   });
@@ -74,11 +76,15 @@ describe("OTP service", () => {
   it("accepts Arabic-Indic digits; a code for another purpose does not verify", async () => {
     await issue(PHONE, T0);
     const code = await lastCode(PHONE);
-    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "verify_phone", code }, at(1000))).toMatchObject({
+    expect(
+      await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "verify_phone", code }, at(1000)),
+    ).toMatchObject({
       ok: false,
     });
     const arabic = code.replace(/\d/g, (d) => String.fromCharCode(0x0660 + Number(d)));
-    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: arabic }, at(1000))).toEqual({ ok: true });
+    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: arabic }, at(1000))).toEqual({
+      ok: true,
+    });
   });
 
   it("five wrong codes lock it; the right code then fails too", async () => {
@@ -87,9 +93,19 @@ describe("OTP service", () => {
     const wrong = code === "000000" ? "111111" : "000000";
     const results = [];
     for (let i = 0; i < 5; i++) {
-      results.push((await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: wrong }, at(1000))) as { error?: string });
+      results.push(
+        (await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: wrong }, at(1000))) as {
+          error?: string;
+        },
+      );
     }
-    expect(results.map((r) => r.error)).toEqual(["invalid_code", "invalid_code", "invalid_code", "invalid_code", "locked"]);
+    expect(results.map((r) => r.error)).toEqual([
+      "invalid_code",
+      "invalid_code",
+      "invalid_code",
+      "invalid_code",
+      "locked",
+    ]);
     expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code }, at(2000))).toEqual({
       ok: false,
       error: "locked",
@@ -102,9 +118,13 @@ describe("OTP service", () => {
     await issue(PHONE, at(1000));
     const second = await lastCode(PHONE);
     if (first !== second) {
-      expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: first }, at(2000))).toMatchObject({ ok: false });
+      expect(
+        await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: first }, at(2000)),
+      ).toMatchObject({ ok: false });
     }
-    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: second }, at(2000))).toEqual({ ok: true });
+    expect(await verifyOtp(db, { target: { phoneE164: PHONE }, purpose: "login", code: second }, at(2000))).toEqual({
+      ok: true,
+    });
   });
 
   it("the 11th request for one number within an hour is refused; allowed again after the window", async () => {
@@ -134,7 +154,10 @@ describe("OTP service", () => {
       },
     };
     expect(await issue(PHONE, T0, "203.0.113.1", flaky)).toMatchObject({ ok: true, channel: "sms" });
-    const rows = await db.select().from(messages).where(and(eq(messages.to, PHONE)));
+    const rows = await db
+      .select()
+      .from(messages)
+      .where(and(eq(messages.to, PHONE)));
     expect(rows.map((r) => r.channel)).toEqual(["sms"]);
   });
 
@@ -148,6 +171,8 @@ describe("OTP service", () => {
     expect(r).toMatchObject({ ok: true, channel: "email" });
     const code = await lastCode("mona@example.ps");
     expect((await lastMessage("mona@example.ps")).payload).toMatchObject({ purpose: "verify_email" });
-    expect(await verifyOtp(db, { target: { email: "mona@example.ps" }, purpose: "verify_email", code }, at(1000))).toEqual({ ok: true });
+    expect(
+      await verifyOtp(db, { target: { email: "mona@example.ps" }, purpose: "verify_email", code }, at(1000)),
+    ).toEqual({ ok: true });
   });
 });

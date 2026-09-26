@@ -60,7 +60,10 @@ describe("phone + OTP sign-in", () => {
     await requestPhoneSignIn(db, "0591234567", meta, deps, tick());
     const code = await codeFor(E164);
     const wrong = code === "000000" ? "111111" : "000000";
-    expect(await verifyPhoneSignIn(db, "0591234567", wrong, meta, tick())).toEqual({ ok: false, error: "invalid_code" });
+    expect(await verifyPhoneSignIn(db, "0591234567", wrong, meta, tick())).toEqual({
+      ok: false,
+      error: "invalid_code",
+    });
   });
 
   it("disabled and erased customers are refused after a correct code", async () => {
