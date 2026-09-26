@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
+import { rememberLocale } from "@/lib/i18n/actions";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { LOCALES, type Locale } from "@/lib/i18n/routing";
 import { IconGlobe } from "./icons";
@@ -41,13 +42,16 @@ function Links({ query, className, variant = "pill" }: LocaleSwitcherProps & { q
       <ul className="flex items-center gap-2">
         {others.map((locale) => (
           <li key={locale}>
-            {/* `locale` makes next-intl's Link set NEXT_LOCALE on click and add hrefLang; SHL-12 adds the
-                signed-in preference write. */}
+            {/* `locale` makes next-intl's Link set NEXT_LOCALE on click and add hrefLang; `rememberLocale` saves
+                the choice on the signed-in user's row (no-op when anonymous). */}
             <Link
               href={{ pathname, query }}
               locale={locale}
               lang={locale}
               data-testid={`locale-switch-${locale}`}
+              onClick={() => {
+                void rememberLocale(locale).catch(() => undefined);
+              }}
               className={cn(
                 "inline-flex min-h-11 items-center gap-2 rounded-control font-semibold text-brand",
                 variant === "pill"

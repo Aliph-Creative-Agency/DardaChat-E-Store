@@ -44,3 +44,18 @@ test.describe("locale routing (UI-001, UI-003)", () => {
     expect(response.headers()["location"]).toBeUndefined();
   });
 });
+
+test("switching to English with the locale switcher makes / land on /en afterwards (UI-003)", async ({ page, context }) => {
+  await context.clearCookies();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/ar");
+  await page.getByTestId("main-nav").waitFor();
+  await page.getByRole("banner").locator("[data-testid=\"locale-switch-en\"]:visible").click();
+  await expect(page).toHaveURL(/\/en$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/en$/);
+  const cookie = (await context.cookies()).find((c) => c.name === "NEXT_LOCALE");
+  expect(cookie?.value).toBe("en");
+});
