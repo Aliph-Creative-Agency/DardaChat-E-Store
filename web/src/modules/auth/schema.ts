@@ -74,7 +74,7 @@ export const sessions = pgTable(
   "sessions",
   {
     id: id(),
-    tokenHash: text().notNull().unique(),
+    tokenHash: text().notNull().unique("sessions_token_hash_unique"),
     subjectType: subjectTypeEnum().notNull(),
     subjectId: uuid().notNull(), // staff_users.id or customers.id
     secondFactorAt: tstz(), // staff: when 2FA was completed for this session (FR-ACC-012)
@@ -128,7 +128,7 @@ export const passwordResetTokens = pgTable("password_reset_tokens", {
   id: id(),
   subjectType: subjectTypeEnum().notNull(),
   subjectId: uuid().notNull(),
-  tokenHash: text().notNull().unique(),
+  tokenHash: text().notNull().unique("password_reset_tokens_token_hash_unique"),
   expiresAt: tstz().notNull(),
   usedAt: tstz(),
   createdAt: createdAt(),

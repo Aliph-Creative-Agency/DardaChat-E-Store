@@ -160,7 +160,7 @@ export const slugRedirects = pgTable(
   "slug_redirects",
   {
     id: id(),
-    fromSlug: text().notNull().unique(),
+    fromSlug: text().notNull().unique("slug_redirects_from_slug_unique"),
     productId: uuid()
       .notNull()
       .references(() => products.id, { onDelete: "cascade" }),

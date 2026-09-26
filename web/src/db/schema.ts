@@ -6,3 +6,4 @@ export * from "../modules/engagement/schema";
 export * from "../modules/catalog/schema";
 export * from "../modules/inventory/schema";
 export * from "../modules/storefront/schema";
+export * from "../modules/orders/schema";

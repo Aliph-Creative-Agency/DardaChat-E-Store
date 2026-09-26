@@ -14,7 +14,7 @@ export const carts = pgTable(
   {
     id: id(),
     customerId: uuid().references(() => customers.id, { onDelete: "cascade" }),
-    anonTokenHash: text().unique(),
+    anonTokenHash: text().unique("carts_anon_token_hash_unique"),
     expiresAt: tstz()
       .notNull()
       .$defaultFn(() => new Date(Date.now() + 30 * 86_400_000)), // ≥ 30 days (FR-CRT-002); app-side default avoids push churn
