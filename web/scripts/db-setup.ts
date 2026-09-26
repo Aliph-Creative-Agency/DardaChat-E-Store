@@ -49,7 +49,8 @@ async function main() {
 
   if (seed) {
     const { runSeed } = await import("../src/db/seed");
-    await runSeed(url);
+    const { resolveSeedStaff } = await import("./seed-credentials");
+    await runSeed(url, { staff: resolveSeedStaff() });
     console.log(`[${label}] seeded`);
   }
 }
