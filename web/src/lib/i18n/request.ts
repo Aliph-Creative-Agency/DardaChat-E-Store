@@ -1,6 +1,7 @@
 import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 import { BUSINESS_TZ } from "@/lib/time";
+import { INTL_FORMATS } from "./format";
 import { MESSAGE_NAMESPACES } from "./namespaces";
 import { routing, type Locale } from "./routing";
 
@@ -28,5 +29,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale,
     messages: await loadMessages(locale),
     timeZone: BUSINESS_TZ,
+    formats: INTL_FORMATS,
   };
 });
