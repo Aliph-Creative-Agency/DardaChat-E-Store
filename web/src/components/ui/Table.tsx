@@ -63,7 +63,7 @@ export function Table<Row>({
         <caption
           id={captionId}
           className={cn(
-            captionHidden ? "sr-only" : "px-4 pb-2 pt-4 text-start font-display text-lg text-ink",
+            captionHidden ? "sr-only" : "px-4 pb-2 pt-4 text-start text-lg font-semibold text-ink",
           )}
         >
           {caption}

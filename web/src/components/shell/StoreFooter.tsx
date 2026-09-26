@@ -20,7 +20,7 @@ export function StoreFooter() {
         </div>
 
         <nav aria-labelledby="footer-shop" className="flex flex-col gap-2">
-          <h2 id="footer-shop" className="font-display text-lg text-ink">
+          <h2 id="footer-shop" className="font-sans text-lg font-semibold text-ink">
             {t("footer.shop")}
           </h2>
           <ul>
@@ -35,7 +35,7 @@ export function StoreFooter() {
         </nav>
 
         <nav aria-labelledby="footer-policies" className="flex flex-col gap-2">
-          <h2 id="footer-policies" className="font-display text-lg text-ink">
+          <h2 id="footer-policies" className="font-sans text-lg font-semibold text-ink">
             {t("footer.policies")}
           </h2>
           <ul>
@@ -50,7 +50,7 @@ export function StoreFooter() {
         </nav>
 
         <div className="flex flex-col gap-2">
-          <h2 className="font-display text-lg text-ink">{t("footer.contact")}</h2>
+          <h2 className="font-sans text-lg font-semibold text-ink">{t("footer.contact")}</h2>
           <p className="text-sm text-ink-soft">{t("footer.contactSoon")}</p>
           <p className="text-sm text-ink-soft">{t("footer.language")}</p>
           <LocaleSwitcher />

@@ -45,7 +45,7 @@ export function CardTitle({
   ...rest
 }: HTMLAttributes<HTMLHeadingElement> & { as?: "h2" | "h3" | "h4" }) {
   return (
-    <Tag className={cn("font-display text-xl text-ink", className)} {...rest}>
+    <Tag className={cn("font-sans text-lg font-semibold text-ink", className)} {...rest}>
       {children}
     </Tag>
   );

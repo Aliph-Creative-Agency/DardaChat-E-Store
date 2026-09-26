@@ -45,7 +45,7 @@ export default async function DesignSystemPage({ params }: PageProps<"/[locale]/
             <p className="font-display text-display text-brand">{t("specimen.display")}</p>
             <p className="font-display text-3xl">{t("specimen.h1")}</p>
             <p className="font-display text-2xl">{t("specimen.h2")}</p>
-            <p className="font-display text-xl">{t("specimen.h3")}</p>
+            <p className="text-xl font-semibold">{t("specimen.h3")}</p>
           </div>
           <div className="flex flex-col gap-3 rounded-card bg-surface p-6 shadow-card">
             <p className="text-xs font-medium text-ink-soft">{t("type.bodyLabel")}</p>

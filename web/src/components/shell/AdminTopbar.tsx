@@ -24,7 +24,7 @@ export function AdminTopbar({ viewer, drawer }: AdminTopbarProps) {
           <div aria-hidden className="stitch-rule-quiet" />
           <LocaleSwitcher />
         </MobileMenu>
-        <p className="font-display text-lg text-brand lg:hidden">{t("admin.backOffice")}</p>
+        <p className="text-lg font-semibold text-brand lg:hidden">{t("admin.backOffice")}</p>
 
         <div className="ms-auto flex items-center gap-1 sm:gap-2">
           <Link

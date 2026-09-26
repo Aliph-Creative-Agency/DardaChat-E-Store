@@ -28,7 +28,9 @@ export function EmptyState({ icon, title, description, action, headingLevel = 2,
       {icon ? (
         <span className="flex size-14 items-center justify-center rounded-pill bg-brand-soft text-brand">{icon}</span>
       ) : null}
-      <Heading className="font-display text-xl text-ink">{title}</Heading>
+      <Heading className={cn("text-ink", headingLevel <= 2 ? "font-display text-xl" : "font-sans text-lg font-semibold")}>
+        {title}
+      </Heading>
       {description ? <p className="max-w-prose text-ink-soft">{description}</p> : null}
       {action ? <div className="mt-2 flex flex-wrap justify-center gap-3">{action}</div> : null}
     </div>
