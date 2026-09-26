@@ -29,7 +29,7 @@ export interface SeedProduct {
 const RAMADAN_1448 = {
   startsOn: "2027-01-15",
   endsOn: "2027-03-12",
-  returnsNoteAr: "منتج موسمي: يُقبل الإرجاع خلال ٧ أيام من الاستلام وقبل نهاية الموسم.",
+  returnsNoteAr: "منتج موسمي: يُقبل الإرجاع خلال 7 أيام من الاستلام وقبل نهاية الموسم.",
   returnsNoteEn: "Seasonal item: returns accepted within 7 days of delivery and before the season ends.",
 };
 
@@ -43,7 +43,7 @@ export const SEED_PRODUCTS: readonly SeedProduct[] = [
     descriptionEn:
       "A family question game for the evenings after iftar: questions about memories, traditions and Ramadan food that bring young and old around one table.",
     playInstructionsAr:
-      "اقسموا أنفسكم إلى فريقين. يسحب كل فريق بطاقة ويقرأ السؤال بصوت عالٍ، ومن يجيب بقصة حقيقية يربح البطاقة. يفوز الفريق الذي يجمع ١٠ بطاقات أولاً.",
+      "اقسموا أنفسكم إلى فريقين. يسحب كل فريق بطاقة ويقرأ السؤال بصوت عالٍ، ومن يجيب بقصة حقيقية يربح البطاقة. يفوز الفريق الذي يجمع 10 بطاقات أولاً.",
     playInstructionsEn:
       "Split into two teams. Each team draws a card and reads the question aloud; answer with a true story to win the card. The first team to collect 10 cards wins.",
     group: "family",
@@ -187,14 +187,14 @@ export const SEED_POLICIES = [
     kind: "returns",
     titleAr: "سياسة الإرجاع",
     titleEn: "Returns policy",
-    bodyAr: `يمكن إرجاع اللعبة غير المفتوحة خلال ١٤ يوماً من الاستلام. للمنتجات الموسمية شروط خاصة تظهر في صفحة المنتج. ${PLACEHOLDER_AR}`,
+    bodyAr: `يمكن إرجاع اللعبة غير المفتوحة خلال 14 يوماً من الاستلام. للمنتجات الموسمية شروط خاصة تظهر في صفحة المنتج. ${PLACEHOLDER_AR}`,
     bodyEn: `Unopened games can be returned within 14 days of delivery. Seasonal items have special terms shown on their product page. ${PLACEHOLDER_EN}`,
   },
   {
     kind: "delivery",
     titleAr: "سياسة التوصيل",
     titleEn: "Delivery policy",
-    bodyAr: `نوصل إلى محافظات الضفة الغربية خلال ١–٣ أيام عمل، ورسوم التوصيل تظهر قبل تأكيد الطلب. الدفع عند الاستلام متاح في معظم المناطق. ${PLACEHOLDER_AR}`,
+    bodyAr: `نوصل إلى محافظات الضفة الغربية خلال 1–3 أيام عمل، ورسوم التوصيل تظهر قبل تأكيد الطلب. الدفع عند الاستلام متاح في معظم المناطق. ${PLACEHOLDER_AR}`,
     bodyEn: `We deliver across the West Bank governorates within 1–3 working days; the delivery fee is shown before you confirm. Cash on delivery is available in most areas. ${PLACEHOLDER_EN}`,
   },
 ] as const;
@@ -232,7 +232,7 @@ export const SEED_FAQ = [
     topic: "returns",
     questionAr: "كيف أُرجع لعبة؟",
     questionEn: "How do I return a game?",
-    answerAr: "تواصل معنا عبر واتساب خلال ١٤ يوماً من الاستلام مع رقم الطلب، وسنرتّب الاستلام.",
+    answerAr: "تواصل معنا عبر واتساب خلال 14 يوماً من الاستلام مع رقم الطلب، وسنرتّب الاستلام.",
     answerEn: "Message us on WhatsApp within 14 days of delivery with your order number and we will arrange a pickup.",
   },
   {
