@@ -217,6 +217,53 @@
       "privacy": "Privacy policy",
       "returns": "Returns policy",
       "delivery": "Delivery policy"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "reports": "Reports",
+      "orders": "Orders",
+      "picking": "Picking and dispatch",
+      "returns": "Returns",
+      "deliveries": "Delivery outcomes",
+      "remittances": "COD remittances",
+      "products": "Products",
+      "collections": "Collections",
+      "pages": "Pages",
+      "faq": "FAQ",
+      "policies": "Policies",
+      "stock": "Stock",
+      "purchaseOrders": "Purchase orders",
+      "suppliers": "Suppliers",
+      "payments": "Payments",
+      "invoices": "Invoices",
+      "refunds": "Refunds",
+      "eInvoicing": "E-invoicing",
+      "customers": "Customers",
+      "templates": "Message templates",
+      "campaigns": "Campaigns",
+      "conversations": "Conversations",
+      "escalations": "Escalations",
+      "knowledge": "Knowledge base",
+      "journey": "Journey results",
+      "users": "Users and roles",
+      "zones": "Delivery zones",
+      "vat": "VAT",
+      "store": "Store settings",
+      "privacy": "Privacy requests",
+      "audit": "Audit log",
+      "health": "System health"
+    },
+    "adminGroup": {
+      "overview": "Overview",
+      "sales": "Orders and delivery",
+      "catalog": "Catalogue and content",
+      "inventory": "Stock and purchasing",
+      "finance": "Payments and invoices",
+      "customers": "Customers and messaging",
+      "assistant": "Assistant",
+      "journey": "The Journey",
+      "settings": "Settings",
+      "system": "System"
     }
   },
   "shell": {
@@ -235,5 +282,27 @@
     "contactSoon": "Contact channels and social accounts are coming soon.",
     "language": "Site language",
     "copyright": "© {year} DardaChat. All rights reserved."
+  },
+  "admin": {
+    "backOffice": "Back office",
+    "nav": "Back office menu",
+    "viewStore": "View store",
+    "account": "Signed-in account",
+    "roles": {
+      "owner": "Owner",
+      "staff": "Staff"
+    },
+    "devViewer": "Development account",
+    "home": {
+      "eyebrow": "Back office",
+      "title": "Welcome, {name}",
+      "body": "Choose a section from the menu. Each section opens here once its team has built it.",
+      "sections": "Sections"
+    },
+    "notFound": {
+      "title": "This section is not ready yet",
+      "body": "The page you asked for does not exist or has not been built yet. Pick another section from the menu, or go back to the dashboard.",
+      "action": "Back to the dashboard"
+    }
   }
 }

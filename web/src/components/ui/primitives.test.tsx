@@ -51,7 +51,7 @@ describe("icons", () => {
       expect(html, name).toContain('stroke="currentColor"');
       expect(html, name).toContain('focusable="false"');
       const mirrors = html.includes("rtl:-scale-x-100");
-      expect(mirrors, name).toBe(/Forward|Back|External/.test(name));
+      expect(mirrors, name).toBe(/Forward|Back|External|Truck|Return|Megaphone/.test(name));
     }
   });
 

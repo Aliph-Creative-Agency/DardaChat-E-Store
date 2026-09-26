@@ -13,11 +13,11 @@ function StitchMark({ className }: { className?: string }) {
 }
 
 /** Brand name as a home link. The visible name is the link text (the store name in the current locale). */
-export function Wordmark({ className }: { className?: string }) {
+export function Wordmark({ className, href = "/" }: { className?: string; href?: string }) {
   const t = useTranslations("common.meta");
   return (
     <Link
-      href="/"
+      href={href}
       className={cn(
         "inline-flex min-h-11 items-center gap-2 rounded-control font-display text-2xl leading-none text-brand",
         className,

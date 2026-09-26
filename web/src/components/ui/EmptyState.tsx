@@ -11,7 +11,7 @@ export type EmptyStateProps = {
   /** Primary way out, usually a `<Button href>`. */
   action?: ReactNode;
   /** Heading level for the title so it fits the surrounding outline. */
-  headingLevel?: 2 | 3 | 4;
+  headingLevel?: 1 | 2 | 3 | 4;
   className?: string;
 };
 
