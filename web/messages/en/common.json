@@ -134,11 +134,70 @@
       "storyBody": "Born around a family table: questions that turn a quiet evening into stories nobody had told before.",
       "contentsBody": "120 question cards, 10 blank cards to write your own, and a cloth pouch.",
       "deliveryBody": "Delivered across the West Bank within 2 to 4 working days."
+    },
+    "table": {
+      "heading": "Tables",
+      "note": "A wide table scrolls sideways inside its own frame only; numeric columns align to the end of the line.",
+      "caption": "Latest orders",
+      "ref": "Order",
+      "customer": "Customer",
+      "city": "City",
+      "status": "Status",
+      "items": "Items",
+      "total": "Total",
+      "placed": "Date",
+      "customer1": "Salma",
+      "customer2": "Yousef",
+      "customer3": "Layan",
+      "city1": "Ramallah",
+      "city2": "Nablus",
+      "city3": "Hebron",
+      "delivered": "Delivered",
+      "onTheWay": "Out for delivery",
+      "failed": "Payment failed"
+    },
+    "pagination": {
+      "heading": "Pagination",
+      "note": "Chevrons mirror in Arabic; links keep the filters in the URL."
+    },
+    "empty": {
+      "heading": "Empty state",
+      "note": "Says what is missing and suggests the next step.",
+      "title": "Your cart is empty",
+      "description": "Pick a game that brings your people around the table, and we will bring it to your door.",
+      "action": "Browse games"
+    },
+    "skeleton": {
+      "heading": "Loading skeletons",
+      "note": "Announce loading once; the pulse stops when reduced motion is preferred."
+    },
+    "price": {
+      "heading": "Prices",
+      "note": "The old price is struck through, with hidden now/was words for screen readers.",
+      "regular": "Regular price",
+      "sale": "Sale price"
+    },
+    "locale": {
+      "heading": "Language switcher",
+      "note": "Takes you to the same page in the other language, keeps the query, and remembers your choice."
     }
   },
   "ui": {
     "close": "Close",
     "dismiss": "Dismiss notification",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "loading": "Loading…",
+    "language": "Language",
+    "price": {
+      "now": "Now",
+      "was": "Was"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}",
+      "status": "Page {page} of {count}"
+    }
   }
 }
