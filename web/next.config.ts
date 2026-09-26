@@ -1,10 +1,9 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
-const nextConfig: NextConfig = {
-  async redirects() {
-    // Phase 0 placeholder; W3 (shell) moves locale negotiation into proxy.ts with next-intl.
-    return [{ source: "/", destination: "/ar", permanent: false }];
-  },
-};
+// Locale negotiation lives in src/proxy.ts (next-intl); messages load through src/lib/i18n/request.ts.
+const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 
-export default nextConfig;
+const nextConfig: NextConfig = {};
+
+export default withNextIntl(nextConfig);
