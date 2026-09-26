@@ -199,5 +199,41 @@
       "page": "Page {page}",
       "status": "Page {page} of {count}"
     }
+  },
+  "nav": {
+    "cartCount": "Items in cart: {count}",
+    "store": {
+      "home": "Home",
+      "shop": "Shop",
+      "ramadan": "Ramadan collection",
+      "journey": "The Journey",
+      "about": "About us",
+      "faq": "FAQ",
+      "account": "My account",
+      "cart": "Cart"
+    },
+    "footer": {
+      "terms": "Terms and conditions",
+      "privacy": "Privacy policy",
+      "returns": "Returns policy",
+      "delivery": "Delivery policy"
+    }
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "mainNav": "Main menu",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "help": "Help"
+  },
+  "footer": {
+    "tagline": "Conversation games in a box, gathering loved ones around questions that open hearts.",
+    "shop": "Shop",
+    "policies": "Policies",
+    "contact": "Contact us",
+    "contactSoon": "Contact channels and social accounts are coming soon.",
+    "language": "Site language",
+    "copyright": "© {year} DardaChat. All rights reserved."
   }
 }
