@@ -10,8 +10,8 @@ export function testDatabaseUrl(): string {
 }
 
 /** A fresh client on the test DB. Call `close()` in afterAll. */
-export function createTestDb(): { db: Db; close: () => Promise<void> } {
-  const { db, client } = createDb(testDatabaseUrl(), { max: 5 });
+export function createTestDb(max = 5): { db: Db; close: () => Promise<void> } {
+  const { db, client } = createDb(testDatabaseUrl(), { max });
   return { db, close: () => client.end() };
 }
 
