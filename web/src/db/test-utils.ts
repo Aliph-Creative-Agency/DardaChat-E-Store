@@ -30,3 +30,22 @@ export async function truncateAll(db: Db): Promise<void> {
     await tx.execute(sql.raw(`truncate ${names.join(", ")} restart identity cascade`));
   });
 }
+
+/**
+ * Await a query that must fail on a named constraint. Drizzle wraps driver errors ("Failed query: …"), so the
+ * constraint name lives on `error.cause.constraint_name` (postgres.js PostgresError).
+ */
+export async function expectConstraintViolation(query: PromiseLike<unknown>, constraint: string): Promise<void> {
+  let error: unknown;
+  try {
+    await query;
+  } catch (e) {
+    error = e;
+  }
+  if (!error) throw new Error(`expected a violation of ${constraint}, but the query succeeded`);
+  const cause = (error as { cause?: { constraint_name?: string; message?: string } }).cause;
+  const name = cause?.constraint_name ?? "";
+  if (name !== constraint) {
+    throw new Error(`expected a violation of ${constraint}, got ${name || cause?.message || String(error)}`);
+  }
+}

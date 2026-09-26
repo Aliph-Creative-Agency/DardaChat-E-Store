@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { boolean, check, index, integer, jsonb, pgEnum, pgTable, primaryKey, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { boolean, check, index, integer, jsonb, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { createdAt, id, localeEnum, tstz, updatedAt } from "../../db/columns";
 
 export const staffStatusEnum = pgEnum("auth_staff_status", ["active", "suspended", "revoked"]);
@@ -41,6 +41,7 @@ export const permissions = pgTable("permissions", {
 export const rolePermissions = pgTable(
   "role_permissions",
   {
+    id: id(),
     roleId: uuid()
       .notNull()
       .references(() => roles.id, { onDelete: "cascade" }),
@@ -48,12 +49,14 @@ export const rolePermissions = pgTable(
       .notNull()
       .references(() => permissions.id, { onDelete: "cascade" }),
   },
-  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
+  // surrogate id + unique pair: drizzle-kit 0.31 push re-creates composite PKs on every run (see DECISIONS.md)
+  (t) => [uniqueIndex("role_permissions_uq").on(t.roleId, t.permissionId)],
 );
 
 export const userRoles = pgTable(
   "user_roles",
   {
+    id: id(),
     userId: uuid()
       .notNull()
       .references(() => staffUsers.id, { onDelete: "cascade" }),
@@ -61,7 +64,7 @@ export const userRoles = pgTable(
       .notNull()
       .references(() => roles.id, { onDelete: "restrict" }),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
+  (t) => [uniqueIndex("user_roles_uq").on(t.userId, t.roleId)],
 );
 
 export const subjectTypeEnum = pgEnum("auth_subject_type", ["customer", "staff"]);
