@@ -14,7 +14,12 @@
     "db:push": "drizzle-kit push --force",
     "db:setup": "tsx scripts/db-setup.ts",
     "db:seed": "tsx scripts/db-seed.ts",
-    "db:reset": "tsx scripts/db-setup.ts --reset --seed"
+    "db:reset": "tsx scripts/db-setup.ts --reset --seed",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:int": "vitest run --project integration",
+    "test:e2e": "playwright test",
+    "verify": "npm run typecheck && npm run lint && npm test"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
