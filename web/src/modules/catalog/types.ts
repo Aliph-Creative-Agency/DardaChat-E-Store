@@ -45,6 +45,12 @@ export interface VariantInfo {
   /** Variant label, falling back to the product name. */
   nameAr: string;
   nameEn: string;
+  /** Product name (order-line snapshots). */
+  productNameAr: string;
+  productNameEn: string;
+  /** The variant's own label, null when it has none. */
+  variantNameAr: string | null;
+  variantNameEn: string | null;
   /** Agorot, VAT-inclusive. */
   price: number;
   compareAtPrice: number | null;
