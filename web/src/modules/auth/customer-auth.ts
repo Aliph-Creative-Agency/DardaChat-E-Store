@@ -2,24 +2,15 @@ import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import type { DbOrTx } from "../../db/connection";
 import { withActor } from "../../db/guards";
+import { normalizePhone } from "../../lib/phone";
 import { customers } from "../engagement/schema";
-import {
-  dummyVerify,
-  hashPassword,
-  needsRehash,
-  verifyPassword,
-} from "./crypto";
+import { dummyVerify, hashPassword, needsRehash, verifyPassword } from "./crypto";
 import type { Locale } from "./guards";
-import {
-  checkPasswordWithSettings,
-  type PasswordProblem,
-} from "./password-policy";
+import { issueOtp, verifyOtp } from "./otp";
+import type { OtpDelivery } from "./otp-delivery";
+import { checkPasswordWithSettings, type PasswordProblem } from "./password-policy";
 import { DbRateLimitStore, LIMITS, rateLimitAll } from "./rate-limit";
-import {
-  createSession,
-  revokeSessionByToken,
-  type SessionMeta,
-} from "./session";
+import { createSession, revokeSessionByToken, type SessionMeta } from "./session";
 
 /**
  * Customer email + password (FR-ACC-001, FR-ACC-005, NFR-SEC-004). Auth writes only the identity columns of
@@ -37,11 +28,7 @@ export type AuthFailure =
 
 export type SignedIn = { ok: true; token: string; customerId: string };
 
-export const emailSchema = z
-  .string()
-  .trim()
-  .toLowerCase()
-  .pipe(z.email().max(254));
+export const emailSchema = z.string().trim().toLowerCase().pipe(z.email().max(254));
 
 export function normaliseEmail(input: unknown): string | null {
   const r = emailSchema.safeParse(input);
@@ -66,10 +53,7 @@ export async function registerCustomer(
     return {
       ok: false,
       error: "invalid_input",
-      fields: [
-        ...(email ? [] : ["email"]),
-        ...(typeof input.password === "string" ? [] : ["password"]),
-      ],
+      fields: [...(email ? [] : ["email"]), ...(typeof input.password === "string" ? [] : ["password"])],
     };
   }
   const limited = await rateLimitAll(
@@ -114,12 +98,7 @@ export async function registerCustomer(
     .onConflictDoNothing()
     .returning({ id: customers.id });
   if (!inserted[0]) return { ok: false, error: "email_taken" };
-  const { token } = await createSession(
-    db,
-    { type: "customer", id: inserted[0].id },
-    meta,
-    now,
-  );
+  const { token } = await createSession(db, { type: "customer", id: inserted[0].id }, meta, now);
   return { ok: true, token, customerId: inserted[0].id };
 }
 
@@ -130,11 +109,7 @@ export async function signInCustomer(
   now: Date = new Date(),
 ): Promise<SignedIn | AuthFailure> {
   const email = normaliseEmail(input.email);
-  if (
-    !email ||
-    typeof input.password !== "string" ||
-    input.password.length > 1024
-  ) {
+  if (!email || typeof input.password !== "string" || input.password.length > 1024) {
     return { ok: false, error: "invalid_credentials" };
   }
   const limited = await rateLimitAll(
@@ -165,31 +140,89 @@ export async function signInCustomer(
     return { ok: false, error: "invalid_credentials" };
   }
   const valid = await verifyPassword(c.passwordHash, input.password);
-  if (!valid || c.status !== "active")
-    return { ok: false, error: "invalid_credentials" };
+  if (!valid || c.status !== "active") return { ok: false, error: "invalid_credentials" };
 
-  const rehash = needsRehash(c.passwordHash)
-    ? await hashPassword(input.password)
-    : undefined;
+  const rehash = needsRehash(c.passwordHash) ? await hashPassword(input.password) : undefined;
   await withActor(db, { type: "customer", id: c.id }, (tx) =>
     tx
       .update(customers)
       .set({ lastLoginAt: now, ...(rehash ? { passwordHash: rehash } : {}) })
       .where(eq(customers.id, c.id)),
   );
-  const { token } = await createSession(
-    db,
-    { type: "customer", id: c.id },
-    meta,
-    now,
-  );
+  const { token } = await createSession(db, { type: "customer", id: c.id }, meta, now);
   return { ok: true, token, customerId: c.id };
 }
 
-export async function signOut(
-  db: DbOrTx,
-  token: string | null | undefined,
-  now: Date = new Date(),
-): Promise<void> {
+export async function signOut(db: DbOrTx, token: string | null | undefined, now: Date = new Date()): Promise<void> {
   if (token) await revokeSessionByToken(db, token, now);
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Phone + OTP sign-in (FR-ACC-002, CON-05). The first successful verification creates the account (no password).
+// ---------------------------------------------------------------------------------------------------------------
+
+export type PhoneRequestResult =
+  | { ok: true; expiresAt: Date }
+  | { ok: false; error: "invalid_phone" }
+  | { ok: false; error: "rate_limited"; retryAfterMs: number }
+  | { ok: false; error: "delivery_failed" };
+
+export type PhoneVerifyResult =
+  SignedIn | { ok: false; error: "invalid_phone" | "invalid_code" | "expired" | "locked" | "account_disabled" };
+
+/** Same response whether or not an account exists for the number (the code is what proves ownership). */
+export async function requestPhoneSignIn(
+  db: DbOrTx,
+  phoneInput: string,
+  meta: Meta & { locale?: Locale },
+  deps: { delivery: OtpDelivery },
+  now: Date = new Date(),
+): Promise<PhoneRequestResult> {
+  const phone = normalizePhone(phoneInput);
+  if (!phone.ok) return { ok: false, error: "invalid_phone" };
+  const r = await issueOtp(
+    db,
+    { target: { phoneE164: phone.e164 }, purpose: "login", locale: meta.locale ?? "ar", ip: meta.ip },
+    deps,
+    now,
+  );
+  return r.ok ? { ok: true, expiresAt: r.expiresAt } : r;
+}
+
+export async function verifyPhoneSignIn(
+  db: DbOrTx,
+  phoneInput: string,
+  code: string,
+  meta: Meta & { locale?: Locale },
+  now: Date = new Date(),
+): Promise<PhoneVerifyResult> {
+  const phone = normalizePhone(phoneInput);
+  if (!phone.ok) return { ok: false, error: "invalid_phone" };
+  const v = await verifyOtp(db, { target: { phoneE164: phone.e164 }, purpose: "login", code }, now);
+  if (!v.ok) return v;
+
+  const find = () =>
+    db
+      .select({ id: customers.id, status: customers.status, phoneVerifiedAt: customers.phoneVerifiedAt })
+      .from(customers)
+      .where(eq(customers.phoneE164, phone.e164));
+  let [c] = await find();
+  if (!c) {
+    await db
+      .insert(customers)
+      .values({ phoneE164: phone.e164, phoneVerifiedAt: now, locale: meta.locale ?? "ar", lastLoginAt: now })
+      .onConflictDoNothing();
+    [c] = await find();
+    if (!c) return { ok: false, error: "invalid_code" };
+  }
+  if (c.status !== "active") return { ok: false, error: "account_disabled" };
+  const id = c.id;
+  await withActor(db, { type: "customer", id }, (tx) =>
+    tx
+      .update(customers)
+      .set({ lastLoginAt: now, isGuest: false, ...(c.phoneVerifiedAt ? {} : { phoneVerifiedAt: now }) })
+      .where(eq(customers.id, id)),
+  );
+  const { token } = await createSession(db, { type: "customer", id }, meta, now);
+  return { ok: true, token, customerId: id };
 }
