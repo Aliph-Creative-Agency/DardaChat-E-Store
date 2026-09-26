@@ -1,24 +1,145 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * DardaChat design tokens (SHL-05). Brand: a boxed conversation game: question cards passed around a table, tea,
+ * family gatherings, Ramadan evenings. Palette drawn from Palestinian tatreez embroidery on linen: madder red
+ * ("brand"), indigo thread ("info" / focus), olive, saffron, on a blush-sand card stock with aubergine ink.
+ * Tailwind's default colour palette is switched off on purpose (`static`: every token is emitted as a CSS variable even if no utility uses it): use these tokens (bg-paper, text-ink, bg-brand …) so
+ * every team's screens stay in one visual language. Light theme only in Prototype 1.
+ * Contrast pairs are verified by src/components/ui/tokens.test.ts. Keep hex values here (the test parses them).
+ */
+@theme static {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Surfaces */
+  --color-paper: #f7f0eb; /* page background: blush-sand card stock */
+  --color-paper-deep: #eee2d8; /* sunken areas, table stripes, footer */
+  --color-surface: #fffbf8; /* cards, dialogs, inputs */
+  --color-overlay: rgb(34 22 56 / 0.45); /* dialog backdrop */
+
+  /* Ink */
+  --color-ink: #221638; /* body text, aubergine-black */
+  --color-ink-soft: #54486a; /* secondary text, hints */
+  --color-line: #e2d3ca; /* hairlines, dividers (decorative only) */
+  --color-line-strong: #8c7a86; /* control borders (>=3:1 on surface) */
+
+  /* Brand: tatreez madder red */
+  --color-brand: #a8203e;
+  --color-brand-strong: #85172f;
+  --color-brand-soft: #f7dde3;
+  --color-on-brand: #fffbf8;
+
+  /* Accents */
+  --color-saffron: #e3a13a; /* highlight fill (with ink text) */
+  --color-olive: #4e6425;
+
+  /* Semantic (always paired with an icon + text, never colour alone: NFR-USA-004) */
+  --color-success: #3f5a1c;
+  --color-success-soft: #e4ebd3;
+  --color-warning: #7a4e00;
+  --color-warning-soft: #fbebcb;
+  --color-danger: #9e1b1b;
+  --color-danger-soft: #f8dcd8;
+  --color-info: #2b3c8c;
+  --color-info-soft: #dee3f6;
+  --color-focus: #2b3c8c;
+
+  /* Type */
+  --font-sans: var(--font-plex-arabic), var(--font-plex-latin), system-ui, "Segoe UI", Tahoma, sans-serif;
+  --font-display: var(--font-reem-kufi), var(--font-plex-arabic), system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --text-display: 3rem;
+  --text-display--line-height: 1.15;
+
+  /* Shape */
+  --radius-control: 0.75rem;
+  --radius-card: 1.125rem;
+  --radius-pill: 999px;
+
+  /* Depth: a card resting on a table, not a floating SaaS panel */
+  --shadow-card: 0 1px 0 rgb(34 22 56 / 0.06), 0 10px 24px -14px rgb(34 22 56 / 0.28);
+  --shadow-lift: 0 2px 0 rgb(34 22 56 / 0.06), 0 18px 36px -16px rgb(34 22 56 / 0.35);
+  --shadow-inset: inset 0 1px 2px rgb(34 22 56 / 0.08);
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 360ms;
+
+  /* Layout */
+  --container-page: 76rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+/* English pages put the Latin face first; Arabic pages (default) the Arabic face. */
+:root:lang(en) {
+  --font-sans: var(--font-plex-latin), var(--font-plex-arabic), system-ui, "Segoe UI", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  :root:lang(ar) body {
+    line-height: 1.8; /* Arabic ascenders, descenders and tashkeel need more room */
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  /* NFR-USA-003: always-visible keyboard focus, indigo thread ring (>=3:1 on every surface). */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-saffron);
+    color: var(--color-ink);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, "Segoe UI", Tahoma, Arial, sans-serif;
+/* Signature: a cross-stitch rule, like the embroidered border of a tatreez panel. Decorative (aria-hidden). */
+@utility stitch-rule {
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M3 1.5l6 7M9 1.5l-6 7' stroke='%23a8203e' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+@utility stitch-rule-quiet {
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M3 1.5l6 7M9 1.5l-6 7' stroke='%238c7a86' stroke-width='1.2' stroke-linecap='round' opacity='.55'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

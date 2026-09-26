@@ -6,5 +6,31 @@
   "placeholder": {
     "title": "DardaChat",
     "body": "The prototype is under construction."
+  },
+  "devUi": {
+    "eyebrow": "Design system",
+    "title": "DardaChat components",
+    "intro": "Developer-only page: every token and component in one place, in Arabic and English.",
+    "type": {
+      "heading": "Typefaces",
+      "displayLabel": "Display: Reem Kufi",
+      "bodyLabel": "Text: IBM Plex Sans Arabic + IBM Plex Sans",
+      "numeralsLabel": "Numerals: Latin in both languages"
+    },
+    "colour": {
+      "heading": "Colours",
+      "note": "Every semantic colour is paired with an icon and text; colour is never the only signal.",
+      "tokenLabel": "Colour token"
+    },
+    "specimen": {
+      "display": "Ask, listen, draw closer",
+      "h1": "Questions that open hearts",
+      "h2": "A conversation game in a box",
+      "h3": "Family evenings in Ramadan",
+      "body": "DardaChat is a card game that gathers family and friends around simple questions that open long conversations. Every card is an invitation to hear a story not yet told.",
+      "diacritics": "دَرْدَشَةٌ مَعَ الأَحِبَّةِ",
+      "latin": "Questions that open hearts. 0123456789",
+      "numerals": "Price {price}, order {ref}"
+    }
   }
 }

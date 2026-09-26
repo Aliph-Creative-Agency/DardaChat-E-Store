@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { localeDir, routing } from "@/lib/i18n/routing";
+import { fontVariables } from "@/lib/shell/fonts";
 import "../globals.css";
 
 export const dynamicParams = false;
@@ -27,8 +28,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   setRequestLocale(locale);
 
   return (
-    <html lang={locale} dir={localeDir(locale)}>
-      <body className="min-h-dvh antialiased">
+    <html lang={locale} dir={localeDir(locale)} className={fontVariables}>
+      <body className="min-h-dvh bg-paper font-sans text-ink antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
