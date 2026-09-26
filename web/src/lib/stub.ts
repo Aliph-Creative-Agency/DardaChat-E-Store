@@ -1,5 +1,7 @@
 /** Phase 0 contract stubs call `stubWarn("<module>.<fn>")` so a dev log shows each fake path once per process. */
-const warned = new Set<string>();
+// On globalThis so the separate Next module graphs of one process share it (/dev/services lists it).
+const g = globalThis as unknown as { __dardachatStubWarned?: Set<string> };
+const warned = (g.__dardachatStubWarned ??= new Set<string>());
 
 export function stubWarn(name: string): void {
   if (warned.has(name)) return;

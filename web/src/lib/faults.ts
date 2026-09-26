@@ -16,10 +16,12 @@ const faultMapSchema = z.record(z.string(), z.enum(FAULT_MODES));
 type FaultMap = Partial<Record<ServiceName, FaultMode>>;
 
 const CACHE_MS = 2000;
-let cache: { at: number; value: FaultMap } | null = null;
+// On globalThis so every bundle of this module in one process (Next compiles route handlers, RSC and server actions
+// into separate module graphs) shares the cache and a toggle at /dev/services is seen by all of them at once.
+const g = globalThis as unknown as { __dardachatFaultCache?: { at: number; value: FaultMap } | null };
 
 export function clearFaultCache(): void {
-  cache = null;
+  g.__dardachatFaultCache = null;
 }
 
 export function parseFaultsEnv(raw: string | undefined): FaultMap {
@@ -34,9 +36,10 @@ export function parseFaultsEnv(raw: string | undefined): FaultMap {
 }
 
 async function settingsFaults(ctx?: ServiceContext): Promise<FaultMap> {
+  const cache = g.__dardachatFaultCache;
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.value;
   const value = (await getSetting(FAULTS_SETTING, faultMapSchema, {}, ctx)) as FaultMap;
-  cache = { at: Date.now(), value };
+  g.__dardachatFaultCache = { at: Date.now(), value };
   return value;
 }
 
