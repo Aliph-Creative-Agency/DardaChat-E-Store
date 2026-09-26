@@ -40,6 +40,21 @@ const MANIFEST: Manifest = {
     ],
     value: ["storage", "SERVICES", "FAULT_MODES", "httpStatus", "systemActor"],
   },
+  catalog: {
+    fn: [
+      "getProduct",
+      "listProducts",
+      "search",
+      "getVariants",
+      "getVariantBySku",
+      "getProductComponents",
+      "resolveSlugRedirect",
+      "isInSeason",
+      "getPolicy",
+      "listFaq",
+      "getStaticPage",
+    ],
+  },
   insights: { fn: ["recordBusinessEvent", "listBusinessEvents"] },
   assistant: {},
   journey: {},
@@ -48,6 +63,7 @@ const MANIFEST: Manifest = {
 
 const loaders: Record<string, () => Promise<Record<string, unknown>>> = {
   core: () => import("./core"),
+  catalog: () => import("./catalog"),
   insights: () => import("./insights"),
   assistant: () => import("./assistant"),
   journey: () => import("./journey"),
