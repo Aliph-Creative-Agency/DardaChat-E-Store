@@ -8,3 +8,6 @@ export * from "../modules/inventory/schema";
 export * from "../modules/storefront/schema";
 export * from "../modules/orders/schema";
 export * from "../modules/payments/schema";
+export * from "../modules/insights/schema";
+export * from "../modules/assistant/schema";
+export * from "../modules/journey/schema";
