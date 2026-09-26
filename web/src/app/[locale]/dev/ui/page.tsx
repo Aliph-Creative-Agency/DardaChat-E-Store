@@ -5,6 +5,7 @@ import { ltr } from "@/lib/i18n/bidi";
 import { formatMoney } from "@/lib/i18n/format";
 import { routing } from "@/lib/i18n/routing";
 import { agorot } from "@/lib/money";
+import { PrimitivesGallery } from "./Primitives";
 import { GallerySection } from "./Section";
 
 /** Design-system gallery (dev only): every token and component, in both locales. */
@@ -84,6 +85,10 @@ export default async function DesignSystemPage({ params }: PageProps<"/[locale]/
           ))}
         </div>
       </GallerySection>
+
+      <div aria-hidden className="stitch-rule-quiet" />
+
+      <PrimitivesGallery />
     </main>
   );
 }

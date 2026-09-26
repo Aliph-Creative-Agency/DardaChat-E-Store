@@ -31,6 +31,73 @@
       "diacritics": "دَرْدَشَةٌ مَعَ الأَحِبَّةِ",
       "latin": "Questions that open hearts. 0123456789",
       "numerals": "Price {price}, order {ref}"
+    },
+    "icons": {
+      "heading": "Icons",
+      "note": "Inline SVG in the text colour, hidden from screen readers. Icons marked as directional mirror on Arabic pages.",
+      "directional": "directional"
+    },
+    "buttons": {
+      "heading": "Buttons",
+      "note": "Medium and large buttons meet the 44px touch target. Loading keeps the label and announces busy.",
+      "primary": "Add to cart",
+      "secondary": "Save for later",
+      "ghost": "View details",
+      "danger": "Cancel order",
+      "loading": "Saving",
+      "small": "Edit",
+      "large": "Checkout",
+      "link": "Browse the games",
+      "next": "Continue",
+      "back": "Back",
+      "disabled": "Sold out",
+      "add": "Add a card"
+    },
+    "fields": {
+      "heading": "Form fields",
+      "note": "Every control has a visible label. Hints and errors are linked to the control; errors pair an icon with text.",
+      "nameLabel": "Full name",
+      "nameHint": "As it should appear on the delivery label.",
+      "emailLabel": "Email",
+      "emailError": "This email is missing an @. Check it and try again.",
+      "phoneLabel": "Mobile number",
+      "phoneHint": "We send delivery updates to this number.",
+      "cityLabel": "City",
+      "cityPlaceholder": "Choose a city",
+      "cityRamallah": "Ramallah",
+      "cityNablus": "Nablus",
+      "cityHebron": "Hebron",
+      "cityBethlehem": "Bethlehem",
+      "messageLabel": "Gift message",
+      "messagePlaceholder": "Write a few words to go with the box",
+      "termsLabel": "I agree to the terms of sale",
+      "termsHint": "Read the returns policy before ordering.",
+      "newsLabel": "Tell me about new question decks",
+      "newsError": "Choose whether you want news before continuing.",
+      "disabledLabel": "Gift wrapping (unavailable)"
+    },
+    "cards": {
+      "heading": "Cards",
+      "note": "Cards rest on the table: raised, sunken, outlined or brand-tinted.",
+      "raisedTitle": "Family edition",
+      "raisedBody": "120 question cards for evenings with parents, grandparents and cousins.",
+      "sunkenTitle": "Order summary",
+      "sunkenBody": "Sunken cards group secondary information.",
+      "outlineTitle": "Delivery",
+      "outlineBody": "Outlined cards sit quietly inside forms.",
+      "brandTitle": "Ramadan collection",
+      "brandBody": "Questions for long evenings after iftar.",
+      "action": "Read more"
+    },
+    "badges": {
+      "heading": "Badges",
+      "note": "Status is always text plus an icon, never colour alone.",
+      "neutral": "Draft",
+      "brand": "New",
+      "success": "Delivered",
+      "warning": "Low stock",
+      "danger": "Payment failed",
+      "info": "Out for delivery"
     }
   }
 }

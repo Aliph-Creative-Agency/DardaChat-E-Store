@@ -48,6 +48,8 @@ const PAIRS: Array<[string, string, number]> = [
   ["warning", "surface", TEXT],
   ["danger", "danger-soft", TEXT],
   ["danger", "surface", TEXT],
+  ["danger", "paper", TEXT], // Field error line on the page background
+  ["white", "danger", TEXT], // danger Button
   ["info", "info-soft", TEXT],
   ["info", "surface", TEXT],
   ["line-strong", "surface", UI],
