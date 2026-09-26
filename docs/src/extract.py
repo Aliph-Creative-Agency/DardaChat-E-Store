@@ -1,0 +1,10 @@
+﻿import re, io, collections
+t = io.open('build-srs.js', encoding='utf-8').read()
+rows = re.findall(r"\['((?:FR|NFR|UI|CI)-[A-Z]*-?\d{3})', '((?:[^']|\\')*)', '([MSCW])'\]", t)
+print("total rows:", len(rows))
+c = collections.Counter(r[2] for r in rows)
+print("priority:", dict(c), " Must share: %.0f%%" % (100*c['M']/len(rows)))
+g = collections.Counter(r[0].rsplit('-',1)[0] for r in rows)
+print("groups:", len(g))
+io.open('ids.txt','w',encoding='utf-8').write("\n".join(r[0] for r in rows))
+print("first/last:", rows[0][0], rows[-1][0])
