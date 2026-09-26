@@ -55,6 +55,19 @@ const MANIFEST: Manifest = {
       "getStaticPage",
     ],
   },
+  inventory: {
+    fn: [
+      "getAvailability",
+      "reserve",
+      "release",
+      "listLocations",
+      "commitDispatch",
+      "restoreOnReceipt",
+      "writeOff",
+      "recordShortfall",
+      "requestBackInStock",
+    ],
+  },
   insights: { fn: ["recordBusinessEvent", "listBusinessEvents"] },
   assistant: {},
   journey: {},
@@ -64,6 +77,7 @@ const MANIFEST: Manifest = {
 const loaders: Record<string, () => Promise<Record<string, unknown>>> = {
   core: () => import("./core"),
   catalog: () => import("./catalog"),
+  inventory: () => import("./inventory"),
   insights: () => import("./insights"),
   assistant: () => import("./assistant"),
   journey: () => import("./journey"),
