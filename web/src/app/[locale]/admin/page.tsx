@@ -8,6 +8,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { routing } from "@/lib/i18n/routing";
 import { ADMIN_NAV, filterNav, groupNav } from "@/lib/nav/admin-nav";
 import { getShellViewer } from "@/lib/shell/viewer";
+import { requireStaff } from "@/modules/auth";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/admin">): Promise<Metadata> {
   const { locale } = await params;
@@ -21,6 +22,7 @@ export default async function AdminHomePage({ params }: PageProps<"/[locale]/adm
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  await requireStaff("dashboard.view", { locale, next: `/${locale}/admin` });
   const viewer = await getShellViewer();
   if (!viewer) notFound();
   const t = await getTranslations("common");

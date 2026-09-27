@@ -6,12 +6,22 @@ import { findJsxLiterals, isTsx, listFiles } from "./guard-scan";
 
 const ROOT = path.resolve(__dirname, "../../..");
 
+/**
+ * Dev-only QA tools (platform contracts lane, CI-004): English-only by decision (DECISIONS.md, platform merge PLM-04).
+ * They 404 in production and are never shown to shoppers or staff. `/dev/ui` is NOT listed: it stays translated.
+ */
+const DEV_ONLY_ENGLISH = [
+  "src/app/[locale]/dev/devtools.tsx",
+  "src/app/[locale]/dev/outbox/",
+  "src/app/[locale]/dev/services/",
+];
+
 function scannedFiles(): string[] {
   return [
     ...listFiles(ROOT, "src/app", isTsx),
     ...listFiles(ROOT, "src/components", isTsx),
     ...listFiles(ROOT, "src/modules", isTsx).filter((f) => f.includes("/ui/")),
-  ];
+  ].filter((f) => !DEV_ONLY_ENGLISH.some((p) => f.startsWith(p)));
 }
 
 describe("no JSX string literals (NFR-LOC-001)", () => {
