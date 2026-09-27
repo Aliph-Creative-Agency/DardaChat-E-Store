@@ -27,7 +27,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8" dir="ltr" lang="en">
-      <DevNav locale={locale} current="services" />
+      <DevNav current="services" />
       <h1 className="mb-1 text-2xl font-bold">Services</h1>
       <p className="mb-4 text-sm text-neutral-600">
         Degradation registry (<code>service_health</code>) and fault injection for QA. A fault applies to every call made

@@ -1,5 +1,5 @@
 import { and, desc, eq, isNull, type SQL } from "drizzle-orm";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { notFound } from "next/navigation";
 import { deadLetters } from "@/modules/core/schema";
 import { messages } from "@/modules/engagement/schema";
@@ -18,9 +18,8 @@ function one(v: string | string[] | undefined): string | undefined {
 }
 
 /** Dev only: every mock email / WhatsApp / SMS the app has "sent" (the outbox), newest first, plus open dead letters. */
-export default async function DevOutboxPage({ params, searchParams }: PageProps<"/[locale]/dev/outbox">) {
+export default async function DevOutboxPage({ searchParams }: PageProps<"/[locale]/dev/outbox">) {
   if (!assertDevOnly()) notFound();
-  const { locale } = await params;
   const sp = await searchParams;
   const channel = one(sp.channel);
   const status = one(sp.status);
@@ -53,7 +52,7 @@ export default async function DevOutboxPage({ params, searchParams }: PageProps<
     if (s) q.set("status", s);
     if (to) q.set("to", to);
     const qs = q.toString();
-    return `/${locale}/dev/outbox${qs ? `?${qs}` : ""}`;
+    return `/dev/outbox${qs ? `?${qs}` : ""}`;
   };
   const chip = (label: string, target: string, active: boolean) => (
     <Link
@@ -67,7 +66,7 @@ export default async function DevOutboxPage({ params, searchParams }: PageProps<
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8" dir="ltr" lang="en">
-      <DevNav locale={locale} current="outbox" />
+      <DevNav current="outbox" />
       <h1 className="mb-1 text-2xl font-bold">Outbox</h1>
       <p className="mb-4 text-sm text-neutral-600">
         Newest 200 messages from <code>messages</code> (mock WhatsApp / SMS / email). Retries run in job{" "}

@@ -2,17 +2,17 @@
  * Shared bits for the dev-only pages under /[locale]/dev (outbox, services). English only, plain and readable;
  * these pages 404 in production. Logical CSS properties only (ps/pe/text-start) so they work in rtl and ltr.
  */
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import type { ReactNode } from "react";
 
 export function assertDevOnly(): boolean {
   return process.env.NODE_ENV !== "production";
 }
 
-export function DevNav({ locale, current }: { locale: string; current: "outbox" | "services" }) {
+export function DevNav({ current }: { current: "outbox" | "services" }) {
   const item = (key: "outbox" | "services", label: string) => (
     <Link
-      href={`/${locale}/dev/${key}`}
+      href={`/dev/${key}`}
       className={`rounded px-3 py-1 text-sm ${current === key ? "bg-neutral-900 text-white" : "bg-neutral-100 hover:bg-neutral-200"}`}
       aria-current={current === key ? "page" : undefined}
     >
@@ -24,7 +24,7 @@ export function DevNav({ locale, current }: { locale: string; current: "outbox" 
       <span className="pe-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Dev tools</span>
       {item("outbox", "Outbox")}
       {item("services", "Services")}
-      <Link href={`/${locale}`} className="ms-auto text-sm underline">
+      <Link href="/" className="ms-auto text-sm underline">
         Back to site
       </Link>
     </nav>
