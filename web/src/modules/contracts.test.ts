@@ -139,7 +139,7 @@ const MANIFEST: Manifest = {
       "staffAction",
       "staffRoute",
       "can",
-      "setSubjectLocale",
+      "permissionsOf",
       "grantsFor",
       "isKnownPermission",
       "audit",

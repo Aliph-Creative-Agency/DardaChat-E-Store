@@ -90,6 +90,17 @@ export async function can(db: DbOrTx, staffId: string, permission: string): Prom
   return rows.length > 0;
 }
 
+/** Every registered permission granted to the user through their roles (sorted). Same rule as `can()`, one query. */
+export async function permissionsOf(db: DbOrTx, staffId: string): Promise<Permission[]> {
+  const rows = await db
+    .selectDistinct({ key: permissions.key })
+    .from(userRoles)
+    .innerJoin(rolePermissions, eq(rolePermissions.roleId, userRoles.roleId))
+    .innerJoin(permissions, eq(permissions.id, rolePermissions.permissionId))
+    .where(eq(userRoles.userId, staffId));
+  return rows.map((r) => r.key).filter(isKnownPermission).sort();
+}
+
 export type StaffDecision =
   | { ok: true; ctx: StaffContext }
   | { ok: false; reason: StaffDenyReason; ctx?: StaffContext };
@@ -116,11 +127,6 @@ export async function decideStaff(
 }
 
 /** UI-003: remember the chosen language on the account. */
-export async function setSubjectLocale(db: DbOrTx, subject: { type: "customer" | "staff"; id: string }, locale: Locale) {
-  if (subject.type === "staff") await db.update(staffUsers).set({ locale }).where(eq(staffUsers.id, subject.id));
-  else await db.update(customers).set({ locale }).where(eq(customers.id, subject.id));
-}
-
 /** Read one cookie from a Request's `cookie` header (route handlers; no next/headers needed). */
 export function readCookie(req: Request, name: string): string | null {
   const header = req.headers.get("cookie");

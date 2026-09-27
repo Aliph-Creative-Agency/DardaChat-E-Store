@@ -44,11 +44,11 @@ Mutations that must be audited go through `auditedMutation(db, { id: staff.id },
 | `staffRoute(permission, handler)`, `staffAction(permission, fn)`, `AuthError` | admin route handlers / server actions |
 | `StaffDenyReason` | `unauthenticated` \| `two_factor_required` \| `password_change_required` \| `forbidden` (`AuthError.reason`) |
 | `requireCustomer({ locale, next })`, `getCurrentCustomer()`, `customerRoute(handler)` | storefront account pages / APIs |
-| `can(db, staffId, permission)`, `PERMISSIONS`, `PERMISSION_KEYS`, `isKnownPermission`, `grantsFor` | RBAC queries (deny by default) |
+| `can(db, staffId, permission)`, `permissionsOf(db, staffId)`, `PERMISSIONS`, `PERMISSION_KEYS`, `isKnownPermission`, `grantsFor` | RBAC queries (deny by default) |
 | `audit`, `auditedMutation`, `changed`, `listAuditEntries` | append-only audit log (secrets redacted) |
 | `rateLimit`, `rateLimitAll`, `DbRateLimitStore`, `LIMITS`, `clientIp` | rate limiting (e.g. `LIMITS.assistantPerSession`) |
 | `issueOtp`, `verifyOtp`, `outboxOtpDelivery`, `outboxResetLinkDelivery` | one-time codes + delivery port |
-| `revokeAllSessions`, `setSubjectLocale`, `setSessionCookie`, `clearSessionCookie`, `requestMeta`, `safeNext` | session helpers |
+| `revokeAllSessions`, `setSessionCookie`, `clearSessionCookie`, `requestMeta`, `safeNext` | session helpers |
 
 Phone numbers: `src/lib/phone.ts` (`normalizePhone`, `formatPhoneForDisplay`, `maskPhone`; E.164, PS default).
 

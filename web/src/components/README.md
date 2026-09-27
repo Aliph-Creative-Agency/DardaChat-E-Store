@@ -116,7 +116,7 @@ Layouts learn who is looking only through `getShellViewer()` (staff: name, role,
 and `getShellSubject()` (a signed-in staff member or customer → locale persistence). Phase 0 stub: a dev Owner with
 every nav permission outside production, `null` in production, and a `null` subject. At merge these are wired to
 auth's session. `rememberLocale(locale)` (a server action in `src/lib/i18n/actions.ts`) calls
-`persistLocalePreference(subject, locale)` when there is a subject, which writes `staff_users.locale` /
+`persistLocalePreference(subject, locale)` (the ONE locale-preference writer; auth's `setSubjectLocale` was removed at the merge) when there is a subject, which writes `staff_users.locale` /
 `customers.locale` inside `withActor`.
 
 ## 9. Errors and not-found

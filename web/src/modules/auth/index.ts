@@ -19,7 +19,7 @@ export {
 } from "./next";
 export {
   can,
-  setSubjectLocale,
+  permissionsOf,
   type CurrentCustomer,
   type CurrentStaff,
   type Locale,
