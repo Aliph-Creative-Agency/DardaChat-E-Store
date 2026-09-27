@@ -6,7 +6,7 @@ import { hasConfirmedTotp } from "@/modules/auth/staff-auth";
 import { AuthShell } from "@/modules/auth/ui/shell";
 import { TwoFactorChallengeForm } from "@/modules/auth/ui/staff-forms";
 import { staffNext, withNextParam } from "@/modules/auth/ui/staff-pages";
-import { authT } from "@/modules/auth/ui/t";
+import { getTranslations } from "next-intl/server";
 
 export default async function TwoFactorPage({ params, searchParams }: PageProps<"/[locale]/staff/two-factor">) {
   const { locale } = await params;
@@ -16,7 +16,7 @@ export default async function TwoFactorPage({ params, searchParams }: PageProps<
   if (!ctx) redirect(withNextParam(`/${locale}/staff/sign-in`, next));
   if (ctx.staff.secondFactorDone) redirect(next);
   if (!(await hasConfirmedTotp(db, ctx.staff.id))) redirect(withNextParam(`/${locale}/staff/two-factor/setup`, next));
-  const t = authT(locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
   return (
     <AuthShell title={t("staff.twoFactor.title")}>
       <p>{t("staff.twoFactor.intro")}</p>

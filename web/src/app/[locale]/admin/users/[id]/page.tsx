@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db/client";
@@ -8,7 +8,7 @@ import { listAuditEntries } from "@/modules/auth/audit";
 import { getStaffUser, listRoleKeys, listStaffUsers } from "@/modules/auth/staff-users";
 import { formatDateTime, roleLabel, statusBadgeCls } from "@/modules/auth/ui/admin-format";
 import { StaffUserActions } from "@/modules/auth/ui/admin-users";
-import { authT } from "@/modules/auth/ui/t";
+import { getTranslations } from "next-intl/server";
 
 /** One back-office user: details, actions and that user's audit history (FR-ACC-011, FR-ACC-014). */
 export default async function AdminUserPage({ params }: PageProps<"/[locale]/admin/users/[id]">) {
@@ -18,7 +18,7 @@ export default async function AdminUserPage({ params }: PageProps<"/[locale]/adm
   if (!z.uuid().safeParse(id).success) notFound();
   const user = await getStaffUser(db, id);
   if (!user) notFound();
-  const t = authT(locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
   const [roles, history, everyone] = await Promise.all([
     listRoleKeys(db),
     listAuditEntries(db, { targetId: id, limit: 200 }),
@@ -32,8 +32,8 @@ export default async function AdminUserPage({ params }: PageProps<"/[locale]/adm
   const th = "px-3 py-2 text-start font-semibold";
   const td = "px-3 py-2 align-top";
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-10">
-      <Link className="underline" href={`/${locale}/admin/users`}>
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
+      <Link className="underline" href={`/admin/users`}>
         {t("staff.users.detail.back")}
       </Link>
       <header className="flex flex-col gap-2">
@@ -60,7 +60,7 @@ export default async function AdminUserPage({ params }: PageProps<"/[locale]/adm
         </dl>
       </header>
 
-      <StaffUserActions locale={locale} user={user} roles={roles} isSelf={user.id === staff.id} showRole />
+      <StaffUserActions user={user} roles={roles} isSelf={user.id === staff.id} showRole />
 
       <section aria-labelledby="history-title" className="flex flex-col gap-3">
         <h2 id="history-title" className="text-lg font-semibold">
@@ -95,6 +95,6 @@ export default async function AdminUserPage({ params }: PageProps<"/[locale]/adm
           </div>
         )}
       </section>
-    </main>
+    </div>
   );
 }

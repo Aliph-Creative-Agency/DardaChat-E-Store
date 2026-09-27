@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { notFound } from "next/navigation";
 import { db } from "@/db/client";
 import { isLocale } from "@/i18n-locales";
@@ -7,19 +7,19 @@ import { listRoleKeys, listStaffUsers } from "@/modules/auth/staff-users";
 import { formatDateTime, roleLabel, statusBadgeCls } from "@/modules/auth/ui/admin-format";
 import { CreateStaffUserForm, StaffUserActions } from "@/modules/auth/ui/admin-users";
 import { SignOutButton } from "@/modules/auth/ui/forms";
-import { authT } from "@/modules/auth/ui/t";
+import { getTranslations } from "next-intl/server";
 
 /** Back-office Users (FR-ACC-013/014): list, status, create, suspend/reinstate/revoke/reset 2FA. W3's admin layout wraps it. */
 export default async function AdminUsersPage({ params }: PageProps<"/[locale]/admin/users">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const staff = await requireStaff("users.manage", { locale, next: `/${locale}/admin/users` });
-  const t = authT(locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
   const [users, roles] = await Promise.all([listStaffUsers(db), listRoleKeys(db)]);
   const th = "px-3 py-2 text-start font-semibold";
   const td = "px-3 py-2 align-top";
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10">
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="font-display text-2xl font-bold">{t("staff.users.title")}</h1>
@@ -29,7 +29,7 @@ export default async function AdminUsersPage({ params }: PageProps<"/[locale]/ad
           <p data-testid="staff-identity" className="text-sm text-ink-soft">
             {t("staff.signedInAs", { name: staff.name })}
           </p>
-          <SignOutButton locale={locale} endpoint="/api/auth/staff/sign-out" redirectTo={`/${locale}/staff/sign-in`} />
+          <SignOutButton endpoint="/api/auth/staff/sign-out" redirectTo={`/${locale}/staff/sign-in`} />
         </div>
       </header>
 
@@ -51,7 +51,7 @@ export default async function AdminUsersPage({ params }: PageProps<"/[locale]/ad
             {users.map((u) => (
               <tr key={u.id} data-testid="staff-user-row" data-email={u.email} className="border-b border-line-strong last:border-b-0">
                 <td className={td}>
-                  <Link className="font-medium underline" href={`/${locale}/admin/users/${u.id}`}>
+                  <Link className="font-medium underline" href={`/admin/users/${u.id}`}>
                     {u.name}
                   </Link>
                   {u.id === staff.id ? <span className="ms-1 text-ink-soft">{t("staff.users.you")}</span> : null}
@@ -71,7 +71,7 @@ export default async function AdminUsersPage({ params }: PageProps<"/[locale]/ad
                 <td className={td}>{u.twoFactorEnabled ? t("staff.users.twoFactorOn") : t("staff.users.twoFactorOff")}</td>
                 <td className={td}>{formatDateTime(locale, u.lastLoginAt) ?? t("staff.users.never")}</td>
                 <td className={td}>
-                  <StaffUserActions locale={locale} user={u} roles={roles} isSelf={u.id === staff.id} />
+                  <StaffUserActions user={u} roles={roles} isSelf={u.id === staff.id} />
                 </td>
               </tr>
             ))}
@@ -79,7 +79,7 @@ export default async function AdminUsersPage({ params }: PageProps<"/[locale]/ad
         </table>
       </div>
 
-      <CreateStaffUserForm locale={locale} roles={roles} />
-    </main>
+      <CreateStaffUserForm roles={roles} />
+    </div>
   );
 }

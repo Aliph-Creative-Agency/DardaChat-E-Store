@@ -4,13 +4,13 @@ import { formatPhoneForDisplay } from "@/lib/phone";
 import { requireCustomer } from "@/modules/auth";
 import { SignOutButton } from "@/modules/auth/ui/forms";
 import { AuthShell } from "@/modules/auth/ui/shell";
-import { authT } from "@/modules/auth/ui/t";
+import { getTranslations } from "next-intl/server";
 
 export default async function AccountPage({ params }: PageProps<"/[locale]/account">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const customer = await requireCustomer({ locale, next: `/${locale}/account` });
-  const t = authT(locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
   return (
     <AuthShell title={t("account.title")}>
       <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2" data-testid="account-identity">
@@ -25,7 +25,7 @@ export default async function AccountPage({ params }: PageProps<"/[locale]/accou
           <bdi dir="ltr">{customer.phoneE164 ? formatPhoneForDisplay(customer.phoneE164) : t("account.noPhone")}</bdi>
         </dd>
       </dl>
-      <SignOutButton locale={locale} endpoint="/api/auth/customer/sign-out" redirectTo={`/${locale}/sign-in`} />
+      <SignOutButton endpoint="/api/auth/customer/sign-out" redirectTo={`/${locale}/sign-in`} />
     </AuthShell>
   );
 }

@@ -71,6 +71,7 @@ Phone numbers: `src/lib/phone.ts` (`normalizePhone`, `formatPhoneForDisplay`, `m
   (`event_key` `auth.otp` / `auth.password_reset`) directly. Rebind `outboxOtpDelivery` / `outboxResetLinkDelivery`
   to the core messaging contract; the `OtpDelivery` / `ResetLinkDelivery` ports stay the same.
   Channel policy: phone → WhatsApp, SMS when `auth.otp_whatsapp_enabled` is false or WhatsApp throws; email → email.
-- `ui/t.ts` (`SHIM(platform-merge)`): `authT(locale)` reads `messages/<locale>/auth.json`; swap for next-intl
-  `getTranslations("auth")` / `useTranslations("auth")` — same dotted keys and `{var}` syntax.
+- UI copy: next-intl `auth` namespace (`getTranslations({ locale, namespace: "auth" })` in pages,
+  `useTranslations("auth")` in client forms; `t.has()` for optional keys). Customer pages render inside the store
+  layout, `/staff/**` inside `app/[locale]/staff/layout.tsx` (centred, no sidebar), admin Users inside the AdminShell.
 - Staff auth pages live under `/{locale}/staff/**`; the admin layout/nav should link Users at `/{locale}/admin/users`.

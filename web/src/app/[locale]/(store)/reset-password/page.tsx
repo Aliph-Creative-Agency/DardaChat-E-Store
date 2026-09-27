@@ -4,13 +4,13 @@ import { isLocale } from "@/i18n-locales";
 import { getPasswordMinLength } from "@/modules/auth/password-policy";
 import { ResetForm } from "@/modules/auth/ui/forms";
 import { AuthShell } from "@/modules/auth/ui/shell";
-import { authT } from "@/modules/auth/ui/t";
+import { getTranslations } from "next-intl/server";
 
 export default async function ResetPasswordPage({ params, searchParams }: PageProps<"/[locale]/reset-password">) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const sp = await searchParams;
-  const t = authT(locale);
+  const t = await getTranslations({ locale, namespace: "auth" });
   return (
     <AuthShell title={t("reset.title")}>
       <ResetForm

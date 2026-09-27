@@ -1,14 +1,19 @@
 "use client";
 
+import { Link } from "@/lib/i18n/navigation";
+// next/navigation (not @/lib/i18n/navigation): targets are already-localised paths (`next`, safeNext output).
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useId, useState } from "react";
 import type { Locale } from "../guards";
-import { authT, type AuthT } from "./t";
+import { useTranslations } from "next-intl";
 
 /**
  * Minimal, accessible auth forms (FR-ACC-001/002/006). They post JSON to /api/auth/* and navigate on success.
  * STOREFRONT / W3 restyle them later; only logical CSS (start/end) is used so rtl and ltr both work.
  */
+
+/** The `auth` namespace translator (next-intl `useTranslations("auth")` / `getTranslations("auth")`). */
+export type AuthT = { (key: string, values?: Record<string, string | number>): string; has(key: string): boolean };
 
 export type ApiResult = { ok?: boolean; error?: string; retryAfterMs?: number; problems?: string[]; [k: string]: unknown };
 
@@ -30,8 +35,7 @@ export function errorText(t: AuthT, r: ApiResult): string {
   const code = r.error ?? "unknown";
   if (code === "weak_password" && r.problems?.length) return r.problems.map((p) => t(`errors.${p}`)).join(" ");
   if (code === "rate_limited") return t("errors.rate_limited", { minutes: Math.max(1, Math.ceil((r.retryAfterMs ?? 60_000) / 60_000)) });
-  const text = t(`errors.${code}`);
-  return text === `errors.${code}` ? t("errors.unknown") : text;
+  return t.has(`errors.${code}`) ? t(`errors.${code}`) : t("errors.unknown");
 }
 
 export const inputCls =
@@ -112,8 +116,8 @@ export function useSubmit() {
   return { busy, error, setError, run };
 }
 
-function EmailSignIn({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+function EmailSignIn({ next }: { next: string }) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -137,15 +141,15 @@ function EmailSignIn({ locale, next }: { locale: Locale; next: string }) {
       <button type="submit" className={buttonCls} disabled={s.busy}>
         {s.busy ? t("common.working") : t("signIn.submit")}
       </button>
-      <a className="underline" href={`/${locale}/forgot-password`}>
+      <Link className="underline" href={`/forgot-password`}>
         {t("signIn.forgot")}
-      </a>
+      </Link>
     </form>
   );
 }
 
 function PhoneSignIn({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
@@ -206,7 +210,7 @@ function PhoneSignIn({ locale, next }: { locale: Locale; next: string }) {
 }
 
 export function SignInForms({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const [tab, setTab] = useState<"email" | "phone">("email");
   const tabs = [
     { key: "email", label: t("signIn.tabEmail") },
@@ -231,14 +235,14 @@ export function SignInForms({ locale, next }: { locale: Locale; next: string }) 
         ))}
       </div>
       <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
-        {tab === "email" ? <EmailSignIn locale={locale} next={next} /> : <PhoneSignIn locale={locale} next={next} />}
+        {tab === "email" ? <EmailSignIn next={next} /> : <PhoneSignIn locale={locale} next={next} />}
       </div>
     </div>
   );
 }
 
 export function SignUpForm({ locale, next, minLength }: { locale: Locale; next: string; minLength: number }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -278,8 +282,8 @@ export function SignUpForm({ locale, next, minLength }: { locale: Locale; next: 
 }
 
 /** Used by the customer and the staff "forgot password" pages. */
-export function ForgotForm({ locale, endpoint }: { locale: Locale; endpoint: string }) {
-  const t = authT(locale);
+export function ForgotForm({ endpoint }: { endpoint: string }) {
+  const t = useTranslations("auth");
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const s = useSubmit();
@@ -306,7 +310,7 @@ export function ForgotForm({ locale, endpoint }: { locale: Locale; endpoint: str
 
 /** Used by the customer and the staff "reset password" pages. */
 export function ResetForm(props: { locale: Locale; endpoint: string; token: string; minLength: number; signInHref: string }) {
-  const t = authT(props.locale);
+  const t = useTranslations("auth");
   const [password, setPassword] = useState("");
   const [done, setDone] = useState(false);
   const s = useSubmit();
@@ -349,8 +353,8 @@ export function ResetForm(props: { locale: Locale; endpoint: string; token: stri
   );
 }
 
-export function SignOutButton({ locale, endpoint, redirectTo }: { locale: Locale; endpoint: string; redirectTo: string }) {
-  const t = authT(locale);
+export function SignOutButton({ endpoint, redirectTo }: { endpoint: string; redirectTo: string }) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   return (

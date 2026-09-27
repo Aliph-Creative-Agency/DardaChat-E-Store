@@ -1,10 +1,11 @@
 "use client";
 
+import { Link } from "@/lib/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "../guards";
 import { Alert, buttonCls, errorText, Field, postJson, useSubmit } from "./forms";
-import { authT } from "./t";
+import { useTranslations } from "next-intl";
 
 /**
  * Back-office auth forms (FR-ACC-012, FR-ACC-015): password → (first time) authenticator enrolment + recovery
@@ -14,7 +15,7 @@ import { authT } from "./t";
 const withNext = (path: string, next: string) => `${path}?next=${encodeURIComponent(next)}`;
 
 export function StaffSignInForm({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,9 +38,9 @@ export function StaffSignInForm({ locale, next }: { locale: Locale; next: string
       <button type="submit" className={buttonCls} disabled={s.busy}>
         {s.busy ? t("common.working") : t("staff.signIn.submit")}
       </button>
-      <a className="underline" href={`/${locale}/staff/forgot-password`}>
+      <Link className="underline" href={`/staff/forgot-password`}>
         {t("signIn.forgot")}
-      </a>
+      </Link>
     </form>
   );
 }
@@ -49,7 +50,7 @@ function afterSecondFactor(locale: Locale, next: string, mustChange: unknown): s
 }
 
 export function TwoFactorChallengeForm({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const [code, setCode] = useState("");
   const s = useSubmit();
@@ -77,7 +78,7 @@ export function TwoFactorChallengeForm({ locale, next }: { locale: Locale; next:
 type Enrolment = { otpauthUri: string; groupedSecret: string };
 
 export function TotpSetup({ locale, next }: { locale: Locale; next: string }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const started = useRef(false);
   const [enrolment, setEnrolment] = useState<Enrolment | null>(null);
@@ -157,8 +158,8 @@ export function TotpSetup({ locale, next }: { locale: Locale; next: string }) {
   );
 }
 
-export function ChangePasswordForm({ locale, next, minLength }: { locale: Locale; next: string; minLength: number }) {
-  const t = authT(locale);
+export function ChangePasswordForm({ next, minLength }: { next: string; minLength: number }) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [currentPassword, setCurrent] = useState("");
   const [newPassword, setNew] = useState("");

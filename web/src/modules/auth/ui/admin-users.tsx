@@ -2,10 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, type SyntheticEvent, useId, useState } from "react";
-import type { Locale } from "../guards";
 import { roleLabel } from "./admin-format";
 import { Alert, buttonCls, errorText, Field, inputCls, postJson, useSubmit } from "./forms";
-import { authT } from "./t";
+import { useTranslations } from "next-intl";
 
 /**
  * Back-office Users controls (FR-ACC-013/014). They post JSON to /api/admin/users/** (every route is
@@ -17,8 +16,8 @@ const secondaryCls =
 const dangerCls =
   "inline-flex items-center justify-center rounded-control border border-danger bg-surface px-3 py-1.5 text-sm font-medium text-danger hover:bg-danger-soft disabled:opacity-60";
 
-export function CreateStaffUserForm({ locale, roles }: { locale: Locale; roles: string[] }) {
-  const t = authT(locale);
+export function CreateStaffUserForm({ roles }: { roles: string[] }) {
+  const t = useTranslations("auth");
   const router = useRouter();
   const roleId = useId();
   const [name, setName] = useState("");
@@ -125,19 +124,17 @@ export interface ActionUser {
 
 /** Row/detail action buttons. Nothing is offered on your own account or on a revoked one. */
 export function StaffUserActions({
-  locale,
   user,
   roles,
   isSelf,
   showRole = false,
 }: {
-  locale: Locale;
   user: ActionUser;
   roles: string[];
   isSelf: boolean;
   showRole?: boolean;
 }) {
-  const t = authT(locale);
+  const t = useTranslations("auth");
   const router = useRouter();
   const roleId = useId();
   const [role, setRole] = useState(user.roles[0] ?? "");
