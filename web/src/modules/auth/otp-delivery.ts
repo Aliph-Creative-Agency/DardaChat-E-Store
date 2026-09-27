@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
 import type { DbOrTx } from "../../db/connection";
 import { settings } from "../core/schema";
-import { messages } from "../engagement/schema";
+import { sendMessage } from "../core";
+import { AppError } from "../../lib/errors";
 import { TTL } from "./config";
 import type { Locale } from "./guards";
 
@@ -65,18 +66,27 @@ export function otpText(locale: Locale, code: string): string {
     : `رمز التحقق الخاص بك في دردشة هو ${code}. صالح لمدة ${MINUTES} دقائق. لا تشاركه مع أي شخص.`;
 }
 
-// SHIM(platform-merge): rebind to the core messaging contract
-/** Lane shim: writes the OTP into the `messages` outbox (event `auth.otp`); the outbox worker/mock delivers it. */
+/**
+ * OTP port bound to core messaging (`sendMessage`, event `auth.otp`): one channel per call so `deliverOtp` keeps the
+ * WhatsApp -> SMS policy. A send that ends `failed` throws, which makes `deliverOtp` fall back to SMS.
+ */
 export function outboxOtpDelivery(db: DbOrTx): OtpDelivery {
   return {
     async send(m) {
-      await db.insert(messages).values({
-        channel: m.channel,
-        to: m.to,
-        eventKey: "auth.otp",
-        locale: m.locale,
-        payload: { code: m.code, purpose: m.purpose, text: otpText(m.locale, m.code) },
-      });
+      const result = await sendMessage(
+        {
+          channels: [m.channel],
+          to: m.channel === "email" ? { email: m.to } : { phone: m.to },
+          eventKey: "auth.otp",
+          locale: m.locale,
+          text: otpText(m.locale, m.code),
+          payload: { code: m.code, purpose: m.purpose },
+        },
+        { db },
+      );
+      if (result.status === "failed") {
+        throw new AppError("unavailable", `otp ${m.channel} delivery failed`, { messageId: result.messageId });
+      }
     },
   };
 }
@@ -110,18 +120,23 @@ export function resetLinkText(locale: Locale, url: string): { subject: string; t
       };
 }
 
-// SHIM(platform-merge): rebind to the core messaging contract
-/** Lane shim: queues the reset email in the `messages` outbox (event `auth.password_reset`). */
+/** Reset-link port bound to core messaging (`sendMessage`, email, event `auth.password_reset`). */
 export function outboxResetLinkDelivery(db: DbOrTx): ResetLinkDelivery {
   return {
     async sendResetLink(m) {
-      await db.insert(messages).values({
-        channel: "email",
-        to: m.to,
-        eventKey: "auth.password_reset",
-        locale: m.locale,
-        payload: { url: m.url, subjectType: m.subjectType, ...resetLinkText(m.locale, m.url) },
-      });
+      const { subject, text } = resetLinkText(m.locale, m.url);
+      await sendMessage(
+        {
+          channels: ["email"],
+          to: { email: m.to },
+          eventKey: "auth.password_reset",
+          locale: m.locale,
+          subject,
+          text,
+          payload: { url: m.url, subjectType: m.subjectType },
+        },
+        { db },
+      );
     },
   };
 }

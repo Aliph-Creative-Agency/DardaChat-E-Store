@@ -65,11 +65,11 @@ Phone numbers: `src/lib/phone.ts` (`normalizePhone`, `formatPhoneForDisplay`, `m
 - Passwords: argon2id (m=19456, t=2, p=1); min length from settings `auth.staff_password_min_length` (12) and
   `auth.customer_password_min_length` (8); bundled breached-password list; no identity in the password.
 
-## Shims to rebind at the platform merge
+## Wiring after the platform merge
 
-- `otp-delivery.ts` (`SHIM(platform-merge)`): OTP codes and reset links are written to the `messages` outbox
-  (`event_key` `auth.otp` / `auth.password_reset`) directly. Rebind `outboxOtpDelivery` / `outboxResetLinkDelivery`
-  to the core messaging contract; the `OtpDelivery` / `ResetLinkDelivery` ports stay the same.
+- `otp-delivery.ts`: `outboxOtpDelivery` / `outboxResetLinkDelivery` send through core messaging
+  (`sendMessage` from `modules/core`, events `auth.otp` / `auth.password_reset`, payload keys `code` / `url`);
+  rows appear on `/dev/outbox`. One channel per `sendMessage` call; a `failed` result throws so the policy falls back.
   Channel policy: phone → WhatsApp, SMS when `auth.otp_whatsapp_enabled` is false or WhatsApp throws; email → email.
 - UI copy: next-intl `auth` namespace (`getTranslations({ locale, namespace: "auth" })` in pages,
   `useTranslations("auth")` in client forms; `t.has()` for optional keys). Customer pages render inside the store
