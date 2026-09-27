@@ -38,11 +38,25 @@ Stop the database when you are done: `npm run db:stop`. Data survives a stop/sta
 | `db:reset` | Drop and recreate the `public` schema, then setup and seed (dev DB) |
 | `test` | vitest: `unit` project (`src/**/*.test.ts`, no DB) + `integration` project (`src/**/*.int.test.ts`) |
 | `test:unit` / `test:int` | One vitest project only |
-| `test:e2e` | Playwright (chromium) specs in `tests/e2e/**`; starts `npm run dev` or reuses a running server |
+| `test:e2e` | Playwright (chromium) specs in `tests/e2e/**`; starts `npm run dev` or reuses a running server; `tests/e2e/global-setup.ts` warms every route serially first |
+| `jobs` | Background job runner (outbox dispatch, …) as its own process; only needed when `JOBS_MODE` is set (default: jobs run inside the Next server) |
 | `verify` | `typecheck` + `lint` + `test` — must be green before every commit |
 
 Integration tests and `verify` need the DB running (`npm run db:start`). The test database `dardachat_test` is
 rebuilt by the vitest globalSetup (`src/test/global-setup-db.ts`) on every run; never point tests at `dardachat`.
+
+## Pages for development
+
+| URL | What |
+|---|---|
+| `/ar`, `/en` | Storefront (store shell); `/ar/sign-in`, `/sign-up`, `/forgot-password`, `/account` for customers (email + password or phone + OTP) |
+| `/ar/staff/sign-in` | Back-office sign-in → TOTP enrolment on first sign-in (`/staff/two-factor/setup`, base32 key for any authenticator app), then the TOTP challenge on every sign-in |
+| `/ar/admin` | Back office (AdminShell; sidebar filtered by the user's permissions); `/ar/admin/users` staff users (Owner) |
+| `/ar/dev/outbox` | Dev only: every message the mock WhatsApp/SMS/email channels "sent" (OTP codes, reset links) + dead letters; JSON at `/api/dev/outbox?to=` |
+| `/ar/dev/services` | Dev only: service health, fault injection (down/slow/flaky) per service, job locks, contract stubs hit |
+| `/ar/dev/ui` | Dev only: component gallery (tokens, primitives, shell pieces) in both directions |
+
+Dev pages return 404 when `NODE_ENV=production`. Admin e2e specs sign in with `tests/e2e/support/owner-session.ts`.
 
 ## Environment and ports
 
