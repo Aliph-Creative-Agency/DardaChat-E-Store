@@ -7,6 +7,8 @@ import { COOKIE_NAMES } from "./config";
 import { can, decideStaff, getRouteMeta, makeStaffRoute, readCookie, resolveCustomer } from "./guards";
 import { staffUsers } from "./schema";
 import { createSession, markSecondFactor } from "./session";
+import { changeOwnPassword } from "./staff-auth";
+import { createStaffUser } from "./staff-users";
 
 const { db, close } = createTestDb();
 const staffRoute = makeStaffRoute(() => db);
@@ -96,6 +98,36 @@ describe("guards", () => {
     const ok = await handler(req(ownerToken));
     expect(ok.status).toBe(200);
     expect(await ok.json()).toEqual({ id: ownerId });
+  });
+
+  it("temp password: 2FA done but unchanged → password_change_required (403) until changed (NFR-SEC-003)", async () => {
+    const created = await createStaffUser(db, { id: ownerId }, { email: "temp@g.test", name: "Temp Clerk", role: "staff" });
+    if (!created.ok) throw new Error(created.error);
+    const pending = (await createSession(db, { type: "staff", id: created.id })).token;
+    const token = await fullSession(created.id);
+    // 2FA still comes first; then the temp password blocks even a permission the role holds
+    expect(await decideStaff(db, pending, "orders.write")).toMatchObject({ ok: false, reason: "two_factor_required" });
+    const d = await decideStaff(db, token, "orders.write");
+    expect(d).toMatchObject({ ok: false, reason: "password_change_required", ctx: { staff: { mustChangePassword: true } } });
+    expect(await decideStaff(db, token, "users.manage")).toMatchObject({ ok: false, reason: "password_change_required" });
+
+    const route = staffRoute("orders.write", async () => Response.json({ ok: true }));
+    const req = () => new Request("http://x/api/admin/orders", { headers: { cookie: `${COOKIE_NAMES.staff}=${token}` } });
+    const denied = await route(req());
+    expect(denied.status).toBe(403);
+    expect(await denied.json()).toEqual({ error: "password_change_required" });
+
+    const changed = await changeOwnPassword(
+      db,
+      d.ctx!.session,
+      { currentPassword: created.tempPassword!, newPassword: "quiet-meadow-harbour-guard-71" },
+      { ip: "192.0.2.9" },
+    );
+    expect(changed).toEqual({ ok: true });
+    // the same session now gets exactly what its role grants
+    expect(await decideStaff(db, token, "orders.write")).toMatchObject({ ok: true });
+    expect(await decideStaff(db, token, "users.manage")).toMatchObject({ ok: false, reason: "forbidden" });
+    expect((await route(req())).status).toBe(200);
   });
 
   it("readCookie", () => {

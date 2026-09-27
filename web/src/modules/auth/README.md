@@ -20,7 +20,8 @@ export const GET = staffRoute("orders.read", async (req, { staff, params, ip }) 
 export const POST = staffRoute<{ id: string }>("orders.write", async (req, { staff, params }) => { … });
 ```
 
-No session → 401 `unauthenticated`, 2FA pending → 401 `two_factor_required`, missing permission → 403 `forbidden`.
+No session → 401 `unauthenticated`, 2FA pending → 401 `two_factor_required`, Owner-issued temporary password not
+yet changed → 403 `password_change_required`, missing permission → 403 `forbidden` (checked in that order).
 Map business refusals with `fail()` from `./http` when inside this module.
 
 **3. An admin page** — `src/app/[locale]/admin/<area>/page.tsx`:
@@ -29,7 +30,8 @@ Map business refusals with `fail()` from `./http` when inside this module.
 const staff = await requireStaff("orders.read", { locale, next: `/${locale}/admin/orders` });
 ```
 
-Redirects to `/{locale}/staff/sign-in?next=`, `/{locale}/staff/two-factor?next=` or `/{locale}/staff/forbidden`.
+Redirects to `/{locale}/staff/sign-in?next=`, `/{locale}/staff/two-factor?next=`,
+`/{locale}/staff/change-password?next=` (temporary password, enforced on the server) or `/{locale}/staff/forbidden`.
 **A server action** (`"use server"` file under an `admin` folder): every export is
 `export const doIt = staffAction("orders.write", async (ctx, input) => …)`; it throws `AuthError` when refused.
 Mutations that must be audited go through `auditedMutation(db, { id: staff.id }, { action, target }, fn)`.
@@ -38,8 +40,9 @@ Mutations that must be audited go through `auditedMutation(db, { id: staff.id },
 
 | Export | Use |
 | --- | --- |
-| `requireStaff(permission, { locale, next })`, `getCurrentStaff()`, `getStaffContext()` | back-office pages (Server Components) |
+| `requireStaff(permission, { locale, next })`, `getCurrentStaff()`, `getStaffContext()` | back-office pages (Server Components); `getCurrentStaff()` still returns a user with `mustChangePassword: true` (the shell may render, but every guarded page redirects) |
 | `staffRoute(permission, handler)`, `staffAction(permission, fn)`, `AuthError` | admin route handlers / server actions |
+| `StaffDenyReason` | `unauthenticated` \| `two_factor_required` \| `password_change_required` \| `forbidden` (`AuthError.reason`) |
 | `requireCustomer({ locale, next })`, `getCurrentCustomer()`, `customerRoute(handler)` | storefront account pages / APIs |
 | `can(db, staffId, permission)`, `PERMISSIONS`, `PERMISSION_KEYS`, `isKnownPermission`, `grantsFor` | RBAC queries (deny by default) |
 | `audit`, `auditedMutation`, `changed`, `listAuditEntries` | append-only audit log (secrets redacted) |
@@ -53,7 +56,9 @@ Phone numbers: `src/lib/phone.ts` (`normalizePhone`, `formatPhoneForDisplay`, `m
 
 - Cookies: customer `dc_session`, staff `dc_staff_session` (httpOnly, SameSite=Lax, `Secure` in production, path `/`).
   Only the SHA-256 of the token is stored; the token rotates on sign-in and on second factor.
-- Staff: idle 12 h, absolute 7 d, usable only after TOTP (password-only session = `two_factor_required`, both roles).
+- Staff: idle 12 h, absolute 7 d, usable only after TOTP (password-only session = `two_factor_required`, both roles)
+  and, for a user created with a temporary password, only after changing it (`password_change_required`; only the
+  change-password page/API, 2FA pages and sign-out work meanwhile).
   Customer: idle 30 d, absolute 90 d. OTP 5 min, 5 attempts. Reset link 60 min, single use.
 - Rate limits (`LIMITS`): OTP 10/h per target and per IP; sign-in 10/15 min per identity, 50/15 min per IP; reset
   5/h per identity, 20/h per IP; TOTP 5/15 min per user; assistant 30/10 min per session, 60/10 min per IP.

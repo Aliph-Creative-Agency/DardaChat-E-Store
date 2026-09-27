@@ -14,6 +14,7 @@ import {
   resolveStaff,
   STAFF_ACTION,
   type StaffContext,
+  type StaffDenyReason,
 } from "./guards";
 import type { Permission } from "./permissions";
 import { clientIp } from "./rate-limit";
@@ -59,7 +60,8 @@ export async function requireCustomer(opts: { locale?: Locale; next?: string } =
 }
 
 /**
- * Page guard for the back office. No session → staff sign-in; 2FA pending → two-factor page; missing permission →
+ * Page guard for the back office. No session → staff sign-in; 2FA pending → two-factor page; temporary password not
+ * yet changed → change-password page (server-side, NFR-SEC-003); missing permission →
  * the 403 page (`/{locale}/staff/forbidden`; Next's forbidden() needs a next.config flag this lane does not own).
  */
 export async function requireStaff(permission: Permission, opts: { locale?: Locale; next?: string } = {}): Promise<CurrentStaff> {
@@ -69,6 +71,7 @@ export async function requireStaff(permission: Permission, opts: { locale?: Loca
   if (d.ok) return d.ctx.staff;
   if (d.reason === "unauthenticated") redirect(withNext(`/${locale}/staff/sign-in`, opts.next));
   if (d.reason === "two_factor_required") redirect(withNext(`/${locale}/staff/two-factor`, opts.next));
+  if (d.reason === "password_change_required") redirect(withNext(`/${locale}/staff/change-password`, opts.next));
   redirect(`/${locale}/staff/forbidden`);
 }
 
@@ -77,7 +80,7 @@ export const staffRoute = makeStaffRoute(() => db);
 export const customerRoute = makeCustomerRoute(() => db);
 
 export class AuthError extends Error {
-  constructor(readonly reason: "unauthenticated" | "two_factor_required" | "forbidden") {
+  constructor(readonly reason: StaffDenyReason) {
     super(reason);
   }
 }

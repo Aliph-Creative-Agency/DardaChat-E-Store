@@ -92,7 +92,14 @@ export async function can(db: DbOrTx, staffId: string, permission: string): Prom
 
 export type StaffDecision =
   | { ok: true; ctx: StaffContext }
-  | { ok: false; reason: "unauthenticated" | "two_factor_required" | "forbidden"; ctx?: StaffContext };
+  | { ok: false; reason: StaffDenyReason; ctx?: StaffContext };
+
+/**
+ * Why a staff request was refused, in the order they are checked. `password_change_required`: 2FA is done but the
+ * account still carries an Owner-issued temporary password (FR-ACC-013/015, NFR-SEC-003) — only the change-password
+ * page/API, 2FA pages and sign-out work until it is changed.
+ */
+export type StaffDenyReason = "unauthenticated" | "two_factor_required" | "password_change_required" | "forbidden";
 
 export async function decideStaff(
   db: DbOrTx,
@@ -103,6 +110,7 @@ export async function decideStaff(
   const ctx = await resolveStaff(db, token, now);
   if (!ctx) return { ok: false, reason: "unauthenticated" };
   if (!ctx.staff.secondFactorDone) return { ok: false, reason: "two_factor_required", ctx };
+  if (ctx.staff.mustChangePassword) return { ok: false, reason: "password_change_required", ctx };
   if (!(await can(db, ctx.staff.id, permission))) return { ok: false, reason: "forbidden", ctx };
   return { ok: true, ctx };
 }
@@ -150,8 +158,17 @@ type RouteCtx<P> = { params: Promise<P> };
 const json = (status: number, error: string) =>
   new Response(JSON.stringify({ error }), { status, headers: { "content-type": "application/json" } });
 
+/** HTTP status per deny reason: 401 = sign in again, 403 = signed in but not allowed (yet). */
+export const STAFF_DENY_STATUS: Record<StaffDenyReason, 401 | 403> = {
+  unauthenticated: 401,
+  two_factor_required: 401,
+  password_change_required: 403,
+  forbidden: 403,
+};
+
 /**
- * Wrap an admin route handler: 401 without a fully authenticated (2FA) staff session, 403 without the permission.
+ * Wrap an admin route handler: 401 without a fully authenticated (2FA) staff session, 403 while a temporary password
+ * is still unchanged (`password_change_required`) or without the permission (`forbidden`).
  * `getDb` is resolved per request so tests can inject the test DB.
  */
 export function makeStaffRoute(getDb: () => DbOrTx) {
@@ -161,7 +178,7 @@ export function makeStaffRoute(getDb: () => DbOrTx) {
   ) {
     const wrapped = async (req: Request, routeCtx?: RouteCtx<P>): Promise<Response> => {
       const d = await decideStaff(getDb(), readCookie(req, COOKIE_NAMES.staff), permission);
-      if (!d.ok) return d.reason === "forbidden" ? json(403, "forbidden") : json(401, d.reason);
+      if (!d.ok) return json(STAFF_DENY_STATUS[d.reason], d.reason);
       const params = (routeCtx?.params ? await routeCtx.params : {}) as P;
       return handler(req, { ...d.ctx, params, ip: clientIp(req.headers) });
     };

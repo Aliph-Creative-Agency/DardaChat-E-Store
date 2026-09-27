@@ -21,6 +21,7 @@ const STATUS: Record<string, number> = {
   unknown_role: 400,
   account_disabled: 403,
   forbidden: 403,
+  password_change_required: 403,
   not_found: 404,
   email_taken: 409,
   self_action: 409,

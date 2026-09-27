@@ -17,7 +17,15 @@ export {
   staffAction,
   staffRoute,
 } from "./next";
-export { can, setSubjectLocale, type CurrentCustomer, type CurrentStaff, type Locale, type StaffContext } from "./guards";
+export {
+  can,
+  setSubjectLocale,
+  type CurrentCustomer,
+  type CurrentStaff,
+  type Locale,
+  type StaffContext,
+  type StaffDenyReason,
+} from "./guards";
 export {
   grantsFor,
   isKnownPermission,

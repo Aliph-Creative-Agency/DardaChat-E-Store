@@ -66,6 +66,18 @@ test("owner creates a staff user; that staff session gets 403 from the admin API
   await expect(row().getByTestId("staff-user-status")).toHaveText("Active");
 
   await signInAndEnrol(staffCtx.request, STAFF_EMAIL, tempPassword);
+  // NFR-SEC-003: until the Owner-issued temp password is changed, the server refuses admin pages and APIs
+  const pending = await staffCtx.request.get("/api/admin/users");
+  expect(pending.status()).toBe(403);
+  expect(await pending.json()).toEqual({ error: "password_change_required" });
+  await staffPage.goto("/en/admin/users");
+  await expect(staffPage).toHaveURL(/\/en\/staff\/change-password\?next=%2Fen%2Fadmin%2Fusers$/, NAV);
+  await staffPage.getByLabel("Current password", { exact: true }).fill(tempPassword);
+  // the new password must not contain the name/email (they carry the run id)
+  await staffPage.getByLabel("New password", { exact: true }).fill("amber-quarry-willow-lantern-58");
+  await staffPage.getByRole("button", { name: "Save password" }).click();
+  // FR-ACC-009: now a plain Staff session — the admin users page and API are forbidden by permission
+  await expect(staffPage).toHaveURL(/\/en\/staff\/forbidden$/, NAV);
   const api = await staffCtx.request.get("/api/admin/users");
   expect(api.status()).toBe(403);
   expect(await api.json()).toEqual({ error: "forbidden" });
@@ -102,7 +114,7 @@ test("suspend → the staff user's next request is rejected; reinstate; revoke �
   await row().getByRole("link", { name: STAFF_NAME }).click();
   await expect(owner.getByRole("heading", { level: 1 })).toHaveText(STAFF_NAME, NAV);
   const history = owner.getByTestId("audit-history");
-  for (const action of ["staff.create", "auth.staff_sign_in", "auth.2fa_enrolled", "staff.suspend", "staff.reinstate", "staff.revoke"]) {
+  for (const action of ["staff.create", "auth.staff_sign_in", "auth.2fa_enrolled", "auth.password_changed", "staff.suspend", "staff.reinstate", "staff.revoke"]) {
     await expect(history.locator(`tr[data-action="${action}"]`).first()).toBeVisible();
   }
   await expect(history.locator('tr[data-action="staff.revoke"]')).toContainText("Revoked");
