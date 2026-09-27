@@ -29,7 +29,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
     <main className="mx-auto max-w-7xl px-4 py-8" dir="ltr" lang="en">
       <DevNav current="services" />
       <h1 className="mb-1 text-2xl font-bold">Services</h1>
-      <p className="mb-4 text-sm text-neutral-600">
+      <p className="mb-4 text-sm text-ink-soft">
         Degradation registry (<code>service_health</code>) and fault injection for QA. A fault applies to every call made
         through <code>callExternal()</code>; status changes after the next call fails or succeeds.
         {envFaults ? (
@@ -63,7 +63,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
                     id={`fault-${h.service}`}
                     name="mode"
                     defaultValue={fault}
-                    className="rounded border border-neutral-300 px-2 py-1 text-sm"
+                    className="rounded border border-line-strong px-2 py-1 text-sm"
                   >
                     <option value="">none</option>
                     {FAULT_MODES.map((m) => (
@@ -72,7 +72,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
                       </option>
                     ))}
                   </select>
-                  <button type="submit" className="rounded bg-neutral-900 px-3 py-1 text-xs text-white">
+                  <button type="submit" className="rounded bg-ink px-3 py-1 text-xs text-white">
                     Apply
                   </button>
                 </form>
@@ -82,7 +82,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
                   <form action={markUpAction}>
                     <input type="hidden" name="service" value={h.service} />
                     <input type="hidden" name="locale" value={locale} />
-                    <button type="submit" className="rounded border border-neutral-300 px-3 py-1 text-xs">
+                    <button type="submit" className="rounded border border-line-strong px-3 py-1 text-xs">
                       Mark up
                     </button>
                   </form>
@@ -94,7 +94,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
       </DevTable>
 
       <h2 className="mt-10 mb-2 text-xl font-semibold">Scheduled jobs</h2>
-      <p className="mb-2 text-sm text-neutral-600">
+      <p className="mb-2 text-sm text-ink-soft">
         From <code>job_locks</code>. Run one by hand: <code>npm run jobs -- --once &lt;name&gt;</code>.
       </p>
       <DevTable head={["Job", "Last run (UTC)", "Last status", "Last error", "Locked until", "Locked by"]} empty={jobs.length === 0}>
@@ -114,7 +114,7 @@ export default async function DevServicesPage({ params }: PageProps<"/[locale]/d
 
       <h2 className="mt-10 mb-2 text-xl font-semibold">Contract stubs hit by this server</h2>
       {stubs.length === 0 ? (
-        <p className="text-sm text-neutral-500">None yet in this process.</p>
+        <p className="text-sm text-ink-soft">None yet in this process.</p>
       ) : (
         <ul className="list-disc ps-6 font-mono text-xs">
           {stubs.map((s) => (

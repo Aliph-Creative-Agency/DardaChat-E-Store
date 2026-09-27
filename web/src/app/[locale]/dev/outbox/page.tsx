@@ -58,7 +58,7 @@ export default async function DevOutboxPage({ searchParams }: PageProps<"/[local
     <Link
       key={label + target}
       href={target}
-      className={`rounded-full border px-3 py-0.5 text-xs ${active ? "border-neutral-900 bg-neutral-900 text-white" : "border-neutral-300"}`}
+      className={`rounded-full border px-3 py-0.5 text-xs ${active ? "border-ink bg-ink text-white" : "border-line-strong"}`}
     >
       {label}
     </Link>
@@ -68,18 +68,18 @@ export default async function DevOutboxPage({ searchParams }: PageProps<"/[local
     <main className="mx-auto max-w-7xl px-4 py-8" dir="ltr" lang="en">
       <DevNav current="outbox" />
       <h1 className="mb-1 text-2xl font-bold">Outbox</h1>
-      <p className="mb-4 text-sm text-neutral-600">
+      <p className="mb-4 text-sm text-ink-soft">
         Newest 200 messages from <code>messages</code> (mock WhatsApp / SMS / email). Retries run in job{" "}
         <code>core.outbox.dispatch</code>. JSON: <code>/api/dev/outbox?to=…</code>
       </p>
 
       <div className="mb-2 flex flex-wrap items-center gap-2">
-        <span className="w-16 text-xs text-neutral-500">Channel</span>
+        <span className="w-16 text-xs text-ink-soft">Channel</span>
         {chip("all", href({ channel: undefined }), !channel)}
         {CHANNELS.map((c) => chip(c, href({ channel: c }), channel === c))}
       </div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="w-16 text-xs text-neutral-500">Status</span>
+        <span className="w-16 text-xs text-ink-soft">Status</span>
         {chip("all", href({ status: undefined }), !status)}
         {STATUSES.map((s) => chip(s, href({ status: s }), status === s))}
         {to ? <span className="text-xs">to = <code>{to}</code></span> : null}
