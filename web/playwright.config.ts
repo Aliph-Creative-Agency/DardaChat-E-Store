@@ -10,6 +10,8 @@ const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  // Serial warm-up of the dev server before the (parallel) workers start.
+  globalSetup: "./tests/e2e/global-setup.ts",
   fullyParallel: false,
   retries: 0,
   reporter: [["list"]],

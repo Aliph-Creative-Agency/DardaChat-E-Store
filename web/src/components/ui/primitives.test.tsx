@@ -19,7 +19,8 @@ import {
 
 // next-intl's navigation build imports "next/navigation" without an extension, which plain-Node ESM (vitest's
 // externalised deps) cannot resolve. Stand in for the locale-aware Link: prefix with the provider's locale.
-// The real Link is exercised in the browser (gallery + e2e). CR filed to inline next-intl in vitest.config.ts.
+// The real Link is exercised in the browser (gallery + e2e); next-intl is inlined in vitest.config.mts, the mock keeps
+// these tests independent of the router.
 vi.mock("@/lib/i18n/navigation", async () => {
   const { useLocale } = await import("next-intl");
   function Link({ href, ...rest }: { href: string } & Record<string, unknown>) {

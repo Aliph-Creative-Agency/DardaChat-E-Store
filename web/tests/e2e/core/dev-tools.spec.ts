@@ -20,8 +20,13 @@ async function setFaultInUi(page: Page, service: string, mode: string) {
   await page.goto("/ar/dev/services");
   const row = page.locator(`tr[data-service="${service}"]`);
   await row.locator("select[name=mode]").selectOption(mode);
-  await row.getByRole("button", { name: "Apply" }).click();
-  await expect(row.locator("select[name=mode]")).toHaveValue(mode);
+  // The select already shows the new value client-side: wait for the server action to persist it, then re-read.
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === "POST" && r.url().includes("/dev/services")),
+    row.getByRole("button", { name: "Apply" }).click(),
+  ]);
+  await page.reload();
+  await expect(page.locator(`tr[data-service="${service}"] select[name=mode]`)).toHaveValue(mode);
 }
 
 test("a test message posted to /api/dev/outbox shows on /ar/dev/outbox", async ({ page, request }) => {

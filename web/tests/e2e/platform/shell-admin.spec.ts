@@ -1,4 +1,5 @@
-import { expect, test, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "../support/owner-session";
 
 /** SHL-10 admin shell: sidebar on the start side, active item, drawer on small screens, no sideways scroll. */
 

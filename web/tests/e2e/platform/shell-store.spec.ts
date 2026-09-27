@@ -72,7 +72,7 @@ for (const locale of LOCALES) {
       await button.click();
       await menu.getByRole("button").click();
       await expect(menu).toBeHidden();
-      expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+      await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe("");
     });
 
     test("no horizontal scroll from 320 to 1440", async ({ page }) => {
