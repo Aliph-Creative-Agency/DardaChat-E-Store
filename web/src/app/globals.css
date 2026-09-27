@@ -94,6 +94,13 @@
     overflow-wrap: anywhere;
   }
 
+  /* `anywhere` also shrinks min-content, so auto-layout tables squeeze columns until Arabic words split mid-letter
+     ("نش/ط"). Cells break long tokens only when a whole word cannot fit; wide tables scroll in their wrapper. */
+  th,
+  td {
+    overflow-wrap: break-word;
+  }
+
   :root:lang(ar) body {
     line-height: 1.8; /* Arabic ascenders, descenders and tashkeel need more room */
   }

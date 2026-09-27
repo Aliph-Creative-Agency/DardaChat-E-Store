@@ -45,8 +45,10 @@ test("owner: sign in → forced enrolment → recovery codes → admin; sign out
   const codes = page.getByTestId("recovery-codes").getByRole("listitem");
   await expect(codes).toHaveCount(10, NAV);
   await page.getByRole("button", { name: "I have saved them — continue" }).click();
-  await expect(page).toHaveURL(/\/en\/admin\/users$/, NAV);
-  await expect(page.getByTestId("staff-identity")).toBeVisible();
+  // no ?next= on the setup page → default landing = the dashboard (every role has dashboard.view)
+  await expect(page).toHaveURL(/\/en\/admin$/, NAV);
+  await page.goto("/en/admin/users");
+  await expect(page.getByTestId("staff-identity")).toBeVisible(NAV);
 
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/en\/staff\/sign-in$/, NAV);
@@ -62,7 +64,7 @@ test("owner: sign in → forced enrolment → recovery codes → admin; sign out
   // next time step (inside the ±1 window, after the step used at enrolment → no replay)
   await field.fill(await generate({ secret: key, epoch: Math.floor(Date.now() / 1000) + 30 }));
   await page.getByRole("button", { name: "Verify" }).click();
-  await expect(page).toHaveURL(/\/en\/admin\/users$/, NAV);
+  await expect(page).toHaveURL(/\/en\/admin$/, NAV);
 });
 
 test("a password-only session cookie gets 401 from an admin API", async ({ request }) => {
