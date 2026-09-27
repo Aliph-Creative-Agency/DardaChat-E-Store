@@ -48,6 +48,12 @@ export async function listStaffUsers(db: DbOrTx): Promise<StaffUserRow[]> {
   }));
 }
 
+/** Role keys an Owner can assign (for the admin forms). */
+export async function listRoleKeys(db: DbOrTx): Promise<string[]> {
+  const rows = await db.select({ key: roles.key }).from(roles).orderBy(asc(roles.key));
+  return rows.map((r) => r.key);
+}
+
 export async function getStaffUser(db: DbOrTx, id: string): Promise<StaffUserRow | null> {
   return (await listStaffUsers(db)).find((u) => u.id === id) ?? null;
 }
@@ -140,7 +146,7 @@ export async function createStaffUser(
         .returning({ id: staffUsers.id });
       if (!u) return { result: null };
       await tx.insert(userRoles).values({ userId: u.id, roleId: rid });
-      return { result: u.id, after: { id: u.id, email, name, role: input.role, status: "active" } };
+      return { result: u.id, targetId: u.id, after: { id: u.id, email, name, role: input.role, status: "active" } };
     },
   );
   if (!id) return { ok: false, error: "email_taken" };

@@ -86,17 +86,19 @@ export async function listAuditEntries(
 
 /**
  * Run a mutation attributed to `actor` (row journal via `withActor`) and write its action entry in the same
- * transaction, so the journal and the audit log always agree. `fn` returns `{ result, before?, after? }`.
+ * transaction, so the journal and the audit log always agree. `fn` returns `{ result, before?, after?, targetId? }`
+ * (`targetId` names a row the mutation itself created, e.g. a new user's id).
  */
 export async function auditedMutation<T>(
   db: DbOrTx,
   actor: Actor,
   meta: { action: string; target: { type: string; id?: string | null }; ip?: string | null },
-  fn: (tx: Tx) => Promise<{ result: T; before?: unknown; after?: unknown }>,
+  fn: (tx: Tx) => Promise<{ result: T; before?: unknown; after?: unknown; targetId?: string }>,
 ): Promise<T> {
   return withActor(db, actor, async (tx) => {
-    const { result, before, after } = await fn(tx);
-    await audit(tx, { actor, ...meta, before, after });
+    const { result, before, after, targetId } = await fn(tx);
+    const target = targetId ? { ...meta.target, id: targetId } : meta.target;
+    await audit(tx, { actor, ...meta, target, before, after });
     return result;
   });
 }

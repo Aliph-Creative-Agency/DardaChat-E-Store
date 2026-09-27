@@ -53,7 +53,7 @@ describe("createStaffUser", () => {
     const s = await signInStaff(db, { email: "new.clerk@u.test", password: r.tempPassword! }, meta);
     expect(s).toMatchObject({ ok: true, next: "enrol", mustChangePassword: true });
     const [e] = await listAuditEntries(db, { actorId: owner.id, limit: 1 });
-    expect(e).toMatchObject({ action: "staff.create", actorType: "staff", actorId: owner.id });
+    expect(e).toMatchObject({ action: "staff.create", actorType: "staff", actorId: owner.id, targetType: "staff_user", targetId: r.id });
     expect(e!.after).toMatchObject({ email: "new.clerk@u.test", role: "staff" });
     expect(JSON.stringify(e)).not.toContain(r.tempPassword);
   });
@@ -101,7 +101,7 @@ describe("suspend / reinstate / revoke", () => {
 
     const history = await listAuditEntries(db, { targetId: r.id });
     expect(history.map((e) => e.action).sort()).toEqual(
-      ["staff.reinstate", "staff.revoke", "staff.suspend"].sort(),
+      ["staff.create", "staff.reinstate", "staff.revoke", "staff.suspend"].sort(),
     );
     const revoke = history.find((e) => e.action === "staff.revoke")!;
     expect(revoke).toMatchObject({ actorId: owner.id, targetType: "staff_user", ip: meta.ip });

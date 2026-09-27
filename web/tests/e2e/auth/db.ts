@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { createDb, defaultDatabaseUrl } from "../../../src/db/connection";
+import { hashPassword } from "../../../src/modules/auth/crypto";
 import { messages } from "../../../src/modules/engagement/schema";
 
 /** E2E DB helper: reads what the mock channels "sent" from the `messages` outbox (never from logs). */
@@ -41,4 +42,15 @@ export function randomIp(): string {
 export async function resetStaffTwoFactor(email: string): Promise<void> {
   await client`delete from rate_limit_hits where key like ${"totp:%"} or key = ${`signin:staff:${email}`}`;
   await client`delete from totp_secrets where user_id = (select id from staff_users where lower(email) = ${email.toLowerCase()})`;
+}
+
+/**
+ * A throwaway Owner for specs that must not share the seeded owner's 2FA state with specs running in parallel
+ * workers (staff.spec resets and re-enrols the seeded owner).
+ */
+export async function createOwner(email: string, name: string, password: string): Promise<void> {
+  const passwordHash = await hashPassword(password);
+  const [u] = await client`insert into staff_users (email, name, password_hash, must_change_password)
+    values (${email.toLowerCase()}, ${name}, ${passwordHash}, false) returning id`;
+  await client`insert into user_roles (user_id, role_id) select ${u!.id}, id from roles where key = 'owner'`;
 }
