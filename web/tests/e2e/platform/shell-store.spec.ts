@@ -55,10 +55,13 @@ for (const locale of LOCALES) {
       await expect(menu).toBeVisible();
       await expect(button).toHaveAttribute("aria-expanded", "true");
       await expect(menu.getByTestId("mobile-nav").getByRole("link")).toHaveCount(7);
-      // sheet enters from the start edge
-      const box = (await menu.boundingBox())!;
-      if (locale === "ar") expect(Math.round(box.x + box.width)).toBe(375);
-      else expect(Math.round(box.x)).toBe(0);
+      // sheet enters from the start edge (poll: it slides in, and a cold dev server can catch it mid-animation)
+      await expect
+        .poll(async () => {
+          const box = (await menu.boundingBox())!;
+          return locale === "ar" ? Math.round(box.x + box.width) : Math.round(box.x);
+        })
+        .toBe(locale === "ar" ? 375 : 0);
 
       await page.keyboard.press("Escape");
       await expect(menu).toBeHidden();

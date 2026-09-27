@@ -63,9 +63,13 @@ for (const locale of LOCALES) {
       const links = drawer.getByTestId("admin-drawer-nav").getByRole("link");
       await expect(links).toHaveCount(33);
       expect((await links.first().boundingBox())!.height).toBeGreaterThanOrEqual(44);
-      const box = (await drawer.boundingBox())!;
-      if (locale === "ar") expect(Math.round(box.x + box.width)).toBe(375);
-      else expect(Math.round(box.x)).toBe(0);
+      // poll: the drawer slides in, and a cold dev server can catch it mid-animation
+      await expect
+        .poll(async () => {
+          const box = (await drawer.boundingBox())!;
+          return locale === "ar" ? Math.round(box.x + box.width) : Math.round(box.x);
+        })
+        .toBe(locale === "ar" ? 375 : 0);
 
       await page.keyboard.press("Escape");
       await expect(drawer).toBeHidden();
