@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "title": "DardaChat",
+    "description": "DardaChat: boxed conversation games that gather people around questions that open hearts."
+  },
+  "placeholder": {
+    "title": "DardaChat",
+    "body": "The prototype is under construction."
+  },
+  "devUi": {
+    "eyebrow": "Design system",
+    "title": "DardaChat components",
+    "intro": "Developer-only page: every token and component in one place, in Arabic and English.",
+    "type": {
+      "heading": "Typefaces",
+      "displayLabel": "Display: Reem Kufi",
+      "bodyLabel": "Text: IBM Plex Sans Arabic + IBM Plex Sans",
+      "numeralsLabel": "Numerals: Latin in both languages"
+    },
+    "colour": {
+      "heading": "Colours",
+      "note": "Every semantic colour is paired with an icon and text; colour is never the only signal.",
+      "tokenLabel": "Colour token"
+    },
+    "specimen": {
+      "display": "Ask, listen, draw closer",
+      "h1": "Questions that open hearts",
+      "h2": "A conversation game in a box",
+      "h3": "Family evenings in Ramadan",
+      "body": "DardaChat is a card game that gathers family and friends around simple questions that open long conversations. Every card is an invitation to hear a story not yet told.",
+      "diacritics": "دَرْدَشَةٌ مَعَ الأَحِبَّةِ",
+      "latin": "Questions that open hearts. 0123456789",
+      "numerals": "Price {price}, order {ref}"
+    },
+    "icons": {
+      "heading": "Icons",
+      "note": "Inline SVG in the text colour, hidden from screen readers. Icons marked as directional mirror on Arabic pages.",
+      "directional": "directional"
+    },
+    "buttons": {
+      "heading": "Buttons",
+      "note": "Medium and large buttons meet the 44px touch target. Loading keeps the label and announces busy.",
+      "primary": "Add to cart",
+      "secondary": "Save for later",
+      "ghost": "View details",
+      "danger": "Cancel order",
+      "loading": "Saving",
+      "small": "Edit",
+      "large": "Checkout",
+      "link": "Browse the games",
+      "next": "Continue",
+      "back": "Back",
+      "disabled": "Sold out",
+      "add": "Add a card"
+    },
+    "fields": {
+      "heading": "Form fields",
+      "note": "Every control has a visible label. Hints and errors are linked to the control; errors pair an icon with text.",
+      "nameLabel": "Full name",
+      "nameHint": "As it should appear on the delivery label.",
+      "emailLabel": "Email",
+      "emailError": "This email is missing an @. Check it and try again.",
+      "phoneLabel": "Mobile number",
+      "phoneHint": "We send delivery updates to this number.",
+      "cityLabel": "City",
+      "cityPlaceholder": "Choose a city",
+      "cityRamallah": "Ramallah",
+      "cityNablus": "Nablus",
+      "cityHebron": "Hebron",
+      "cityBethlehem": "Bethlehem",
+      "messageLabel": "Gift message",
+      "messagePlaceholder": "Write a few words to go with the box",
+      "termsLabel": "I agree to the terms of sale",
+      "termsHint": "Read the returns policy before ordering.",
+      "newsLabel": "Tell me about new question decks",
+      "newsError": "Choose whether you want news before continuing.",
+      "disabledLabel": "Gift wrapping (unavailable)"
+    },
+    "cards": {
+      "heading": "Cards",
+      "note": "Cards rest on the table: raised, sunken, outlined or brand-tinted.",
+      "raisedTitle": "Family edition",
+      "raisedBody": "120 question cards for evenings with parents, grandparents and cousins.",
+      "sunkenTitle": "Order summary",
+      "sunkenBody": "Sunken cards group secondary information.",
+      "outlineTitle": "Delivery",
+      "outlineBody": "Outlined cards sit quietly inside forms.",
+      "brandTitle": "Ramadan collection",
+      "brandBody": "Questions for long evenings after iftar.",
+      "action": "Read more"
+    },
+    "badges": {
+      "heading": "Badges",
+      "note": "Status is always text plus an icon, never colour alone.",
+      "neutral": "Draft",
+      "brand": "New",
+      "success": "Delivered",
+      "warning": "Low stock",
+      "danger": "Payment failed",
+      "info": "Out for delivery"
+    },
+    "dialog": {
+      "heading": "Dialog",
+      "note": "Native modal: Esc or the close button closes it and focus returns to the button that opened it.",
+      "open": "Remove from cart",
+      "title": "Remove this game from your cart?",
+      "description": "You can add it again at any time.",
+      "body": "The Family edition will leave your cart. Your other items stay as they are.",
+      "cancel": "Keep it",
+      "confirm": "Remove",
+      "confirmed": "Removed from your cart"
+    },
+    "toast": {
+      "heading": "Notifications",
+      "note": "Short messages at the end of the screen. They pause while hovered or focused; errors are announced immediately.",
+      "info": "Show info",
+      "success": "Show success",
+      "warning": "Show warning",
+      "error": "Show error",
+      "infoTitle": "Your order is being prepared",
+      "successTitle": "Saved",
+      "successBody": "Your address was updated.",
+      "warningTitle": "Only 3 boxes left",
+      "errorTitle": "Payment did not go through",
+      "errorBody": "Check the card details or choose cash on delivery."
+    },
+    "tabs": {
+      "heading": "Tabs",
+      "note": "Arrow keys follow the reading direction: on Arabic pages the left arrow moves to the next tab.",
+      "label": "Game details",
+      "story": "The story",
+      "contents": "In the box",
+      "delivery": "Delivery",
+      "storyBody": "Born around a family table: questions that turn a quiet evening into stories nobody had told before.",
+      "contentsBody": "120 question cards, 10 blank cards to write your own, and a cloth pouch.",
+      "deliveryBody": "Delivered across the West Bank within 2 to 4 working days."
+    },
+    "table": {
+      "heading": "Tables",
+      "note": "A wide table scrolls sideways inside its own frame only; numeric columns align to the end of the line.",
+      "caption": "Latest orders",
+      "ref": "Order",
+      "customer": "Customer",
+      "city": "City",
+      "status": "Status",
+      "items": "Items",
+      "total": "Total",
+      "placed": "Date",
+      "customer1": "Salma",
+      "customer2": "Yousef",
+      "customer3": "Layan",
+      "city1": "Ramallah",
+      "city2": "Nablus",
+      "city3": "Hebron",
+      "delivered": "Delivered",
+      "onTheWay": "Out for delivery",
+      "failed": "Payment failed"
+    },
+    "pagination": {
+      "heading": "Pagination",
+      "note": "Chevrons mirror in Arabic; links keep the filters in the URL."
+    },
+    "empty": {
+      "heading": "Empty state",
+      "note": "Says what is missing and suggests the next step.",
+      "title": "Your cart is empty",
+      "description": "Pick a game that brings your people around the table, and we will bring it to your door.",
+      "action": "Browse games"
+    },
+    "skeleton": {
+      "heading": "Loading skeletons",
+      "note": "Announce loading once; the pulse stops when reduced motion is preferred."
+    },
+    "price": {
+      "heading": "Prices",
+      "note": "The old price is struck through, with hidden now/was words for screen readers.",
+      "regular": "Regular price",
+      "sale": "Sale price"
+    },
+    "locale": {
+      "heading": "Language switcher",
+      "note": "Takes you to the same page in the other language, keeps the query, and remembers your choice."
+    },
+    "boom": {
+      "title": "Error boundary test",
+      "recovered": "Recovered: the page rendered after trying again."
+    }
+  },
+  "ui": {
+    "close": "Close",
+    "dismiss": "Dismiss notification",
+    "notifications": "Notifications",
+    "loading": "Loading…",
+    "language": "Language",
+    "price": {
+      "now": "Now",
+      "was": "Was"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {page}",
+      "status": "Page {page} of {count}"
+    }
+  },
+  "nav": {
+    "cartCount": "Items in cart: {count}",
+    "store": {
+      "home": "Home",
+      "shop": "Shop",
+      "ramadan": "Ramadan collection",
+      "journey": "The Journey",
+      "about": "About us",
+      "faq": "FAQ",
+      "account": "My account",
+      "cart": "Cart"
+    },
+    "footer": {
+      "terms": "Terms and conditions",
+      "privacy": "Privacy policy",
+      "returns": "Returns policy",
+      "delivery": "Delivery policy"
+    },
+    "admin": {
+      "dashboard": "Dashboard",
+      "reports": "Reports",
+      "orders": "Orders",
+      "picking": "Picking and dispatch",
+      "returns": "Returns",
+      "deliveries": "Delivery outcomes",
+      "remittances": "COD remittances",
+      "products": "Products",
+      "collections": "Collections",
+      "pages": "Pages",
+      "faq": "FAQ",
+      "policies": "Policies",
+      "stock": "Stock",
+      "purchaseOrders": "Purchase orders",
+      "suppliers": "Suppliers",
+      "payments": "Payments",
+      "invoices": "Invoices",
+      "refunds": "Refunds",
+      "eInvoicing": "E-invoicing",
+      "customers": "Customers",
+      "templates": "Message templates",
+      "campaigns": "Campaigns",
+      "conversations": "Conversations",
+      "escalations": "Escalations",
+      "knowledge": "Knowledge base",
+      "journey": "Journey results",
+      "users": "Users and roles",
+      "zones": "Delivery zones",
+      "vat": "VAT",
+      "store": "Store settings",
+      "privacy": "Privacy requests",
+      "audit": "Audit log",
+      "health": "System health"
+    },
+    "adminGroup": {
+      "overview": "Overview",
+      "sales": "Orders and delivery",
+      "catalog": "Catalogue and content",
+      "inventory": "Stock and purchasing",
+      "finance": "Payments and invoices",
+      "customers": "Customers and messaging",
+      "assistant": "Assistant",
+      "journey": "The Journey",
+      "settings": "Settings",
+      "system": "System"
+    }
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "mainNav": "Main menu",
+    "menu": "Menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "help": "Help"
+  },
+  "footer": {
+    "tagline": "Conversation games in a box, gathering loved ones around questions that open hearts.",
+    "shop": "Shop",
+    "policies": "Policies",
+    "contact": "Contact us",
+    "contactSoon": "Contact channels and social accounts are coming soon.",
+    "language": "Site language",
+    "copyright": "© {year} DardaChat. All rights reserved."
+  },
+  "admin": {
+    "backOffice": "Back office",
+    "nav": "Back office menu",
+    "viewStore": "View store",
+    "account": "Signed-in account",
+    "roles": {
+      "owner": "Owner",
+      "staff": "Staff"
+    },
+    "devViewer": "Development account",
+    "home": {
+      "eyebrow": "Back office",
+      "title": "Welcome, {name}",
+      "body": "Choose a section from the menu. Each section opens here once its team has built it.",
+      "sections": "Sections"
+    },
+    "notFound": {
+      "title": "This section is not ready yet",
+      "body": "The page you asked for does not exist or has not been built yet. Pick another section from the menu, or go back to the dashboard.",
+      "action": "Back to the dashboard"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "We couldn't find this page",
+      "body": "The link may have changed or the page was removed. Go back to the home page or browse the shop.",
+      "home": "Back to home",
+      "shop": "Browse the shop"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "body": "We couldn't finish loading this page. Try again, and if it keeps happening, go back to the home page.",
+      "retry": "Try again",
+      "home": "Back to home",
+      "reference": "Reference: {digest}"
+    },
+    "codes": {
+      "notFound": "We couldn't find what you were looking for. Check the link or search again.",
+      "unauthorized": "You're signed out or your session ended. Sign in and try again.",
+      "forbidden": "You don't have permission to do this. Ask the store owner for access.",
+      "validation": "Some details need fixing. Correct the highlighted fields and submit again.",
+      "conflict": "This changed since you opened it. Refresh the page and review the changes before continuing.",
+      "rateLimited": "Too many attempts in a short time. Wait a minute, then try again.",
+      "network": "We couldn't connect. Check your internet connection and try again.",
+      "unavailable": "This service is temporarily unavailable. Try again in a few minutes.",
+      "server": "Something went wrong on our side. Try again shortly, and contact us if it keeps happening."
+    }
+  }
+}

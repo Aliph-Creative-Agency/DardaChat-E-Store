@@ -1,0 +1,20 @@
+/** Design-system primitives (PLATFORM-owned). Import from "@/components/ui" or "@/components/ui/<Name>". */
+export * from "./icons";
+export { Bdi, type BdiProps } from "./Bdi";
+export { Button, buttonClasses, type ButtonProps, type ButtonSize, type ButtonVariant } from "./Button";
+export { Input, controlClasses, type InputProps } from "./Input";
+export { Textarea, type TextareaProps } from "./Textarea";
+export { Select, type SelectOption, type SelectProps } from "./Select";
+export { Checkbox, type CheckboxProps } from "./Checkbox";
+export { Field, FieldError, type FieldControlProps, type FieldProps } from "./Field";
+export { Card, CardDescription, CardFooter, CardHeader, CardTitle, type CardProps } from "./Card";
+export { Badge, type BadgeProps, type BadgeTone } from "./Badge";
+export { Dialog, type DialogProps } from "./Dialog";
+export { ToastProvider, useToast, type ToastOptions, type ToastTone } from "./Toast";
+export { Tabs, type TabItem, type TabsProps } from "./Tabs";
+export { Table, type TableColumn, type TableProps } from "./Table";
+export { Pagination, pageHref, pageWindow, type PaginationProps } from "./Pagination";
+export { EmptyState, type EmptyStateProps } from "./EmptyState";
+export { Skeleton, SkeletonBlock, type SkeletonProps } from "./Skeleton";
+export { PriceTag, type PriceTagProps } from "./PriceTag";
+export { LocaleSwitcher, LOCALE_ENDONYM, type LocaleSwitcherProps } from "./LocaleSwitcher";
