@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 import { Link } from "@/lib/i18n/navigation";
 import { IconSpinner } from "./icons";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 type CommonProps = {
@@ -36,7 +36,10 @@ const base =
   "aria-disabled:opacity-55 aria-busy:cursor-progress";
 
 const variants: Record<ButtonVariant, string> = {
+  /** Blue: the default action. */
   primary: "bg-brand text-on-brand shadow-card hover:bg-brand-strong",
+  /** Red with white text: the one key call to action on a screen (add to cart, checkout, book on WhatsApp). */
+  cta: "bg-accent text-on-accent shadow-card hover:bg-accent-strong",
   secondary: "border border-line-strong bg-surface text-ink hover:border-ink-soft hover:bg-paper-deep",
   ghost: "text-brand hover:bg-brand-soft hover:text-brand-strong",
   danger: "bg-danger text-white shadow-card hover:brightness-90",

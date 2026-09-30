@@ -40,8 +40,17 @@ const PAIRS: Array<[string, string, number]> = [
   ["brand-strong", "brand-soft", TEXT],
   ["on-brand", "brand", TEXT],
   ["on-brand", "brand-strong", TEXT],
-  ["ink", "saffron", TEXT],
+  ["ink", "pink", TEXT],
+  ["ink", "sky", TEXT],
   ["ink", "brand-soft", TEXT],
+  ["ink-soft", "sky", TEXT],
+  ["brand", "sky", TEXT],
+  ["brand-strong", "sky", TEXT],
+  ["brand", "paper-deep", TEXT],
+  ["on-accent", "accent", TEXT], // cta Button: white on red
+  ["on-accent", "accent-strong", TEXT],
+  ["ink", "info-soft", TEXT],
+  ["accent", "paper", 3.5], // large-text / decoration only (>= 24px): see DESIGN.md contrast rule
   ["success", "success-soft", TEXT],
   ["success", "surface", TEXT],
   ["warning", "warning-soft", TEXT],
@@ -58,6 +67,17 @@ const PAIRS: Array<[string, string, number]> = [
   ["focus", "surface", UI],
   ["focus", "paper-deep", UI],
   ["focus", "brand-soft", UI],
+  ["focus", "pink", UI],
+];
+
+// DESIGN.md §2 pairs, asserted with the client's exact hex values (the brand is the spec, not the token names).
+const BRAND_PAIRS: Array<[string, string, string, string, number]> = [
+  ["blue", "#1a4999", "cream", "#eeeae1", 7],
+  ["white", "#ffffff", "red", "#e32328", 4.5],
+  ["white", "#ffffff", "blue", "#1a4999", 7],
+  ["navy body text", "#13284f", "cream", "#eeeae1", 7],
+  ["navy body text", "#13284f", "pink", "#ecc8ca", 7],
+  ["navy body text", "#13284f", "light blue", "#bbd3eb", 7],
 ];
 
 describe("design tokens contrast (WCAG 2.2 AA)", () => {
@@ -67,6 +87,20 @@ describe("design tokens contrast (WCAG 2.2 AA)", () => {
     expect(contrast("#000000", "#ffffff")).toBeCloseTo(21, 5);
     expect(contrast("#777777", "#ffffff")).toBeCloseTo(4.48, 2);
   });
+
+  it("holds the client palette (DESIGN.md §2)", () => {
+    expect(t.get("paper")).toBe("#eeeae1");
+    expect(t.get("brand")).toBe("#1a4999");
+    expect(t.get("accent")).toBe("#e32328");
+    expect(t.get("pink")).toBe("#ecc8ca");
+    expect(t.get("sky")).toBe("#bbd3eb");
+  });
+
+  for (const [fgName, fg, bgName, bg, min] of BRAND_PAIRS) {
+    it(`brand: ${fgName} ${fg} on ${bgName} ${bg} >= ${min}:1`, () => {
+      expect(contrast(fg, bg)).toBeGreaterThanOrEqual(min);
+    });
+  }
 
   for (const [fg, bg, min] of PAIRS) {
     it(`${fg} on ${bg} >= ${min}:1`, () => {

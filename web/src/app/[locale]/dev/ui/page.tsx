@@ -15,7 +15,8 @@ const SAMPLE_REF = "DC-7K3M-9QPT";
 const SWATCHES: Array<{ group: string; tokens: string[] }> = [
   { group: "surface", tokens: ["paper", "paper-deep", "surface", "line", "line-strong"] },
   { group: "ink", tokens: ["ink", "ink-soft"] },
-  { group: "brand", tokens: ["brand", "brand-strong", "brand-soft", "saffron", "olive"] },
+  { group: "brand", tokens: ["brand", "brand-strong", "brand-soft"] },
+  { group: "accent", tokens: ["accent", "accent-strong", "pink", "sky"] },
   {
     group: "semantic",
     tokens: ["success", "success-soft", "warning", "warning-soft", "danger", "danger-soft", "info", "info-soft"],

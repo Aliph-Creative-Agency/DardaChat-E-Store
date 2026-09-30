@@ -83,7 +83,10 @@ export async function PrimitivesGallery() {
       <GallerySection id="buttons" title={t("buttons.heading")} note={t("buttons.note")}>
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center gap-3">
-            <Button iconStart={<IconCart />}>{t("buttons.primary")}</Button>
+            <Button>{t("buttons.primary")}</Button>
+            <Button variant="cta" iconStart={<IconCart />}>
+              {t("buttons.cta")}
+            </Button>
             <Button variant="secondary">{t("buttons.secondary")}</Button>
             <Button variant="ghost">{t("buttons.ghost")}</Button>
             <Button variant="danger">{t("buttons.danger")}</Button>

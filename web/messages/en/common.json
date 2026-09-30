@@ -40,7 +40,8 @@
     "buttons": {
       "heading": "Buttons",
       "note": "Medium and large buttons meet the 44px touch target. Loading keeps the label and announces busy.",
-      "primary": "Add to cart",
+      "primary": "Save changes",
+      "cta": "Add to cart",
       "secondary": "Save for later",
       "ghost": "View details",
       "danger": "Cancel order",

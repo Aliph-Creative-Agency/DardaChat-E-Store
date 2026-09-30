@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 /*
- * DardaChat design tokens (SHL-05). Brand: a boxed conversation game: question cards passed around a table, tea,
- * family gatherings, Ramadan evenings. Palette drawn from Palestinian tatreez embroidery on linen: madder red
- * ("brand"), indigo thread ("info" / focus), olive, saffron, on a blush-sand card stock with aubergine ink.
+ * Dardachat design tokens (SHL-05, re-branded BRD-01 from .orchestration/DESIGN.md). Palette is the client's five
+ * colours: cream page, blue primary, red accent (CTA), pink and light-blue soft surfaces, plus a dark navy for body copy.
+ * Token NAMES are stable across the re-brand: `brand` is now the blue, `accent` the red, `paper` the cream.
  * Tailwind's default colour palette is switched off on purpose (`static`: every token is emitted as a CSS variable even if no utility uses it): use these tokens (bg-paper, text-ink, bg-brand …) so
  * every team's screens stay in one visual language. Light theme only in Prototype 1.
  * Contrast pairs are verified by src/components/ui/tokens.test.ts. Keep hex values here (the test parses them).
+ * Red as TEXT fails on cream/pink/light-blue below 24px (3.9:1): use it for buttons with white text, badges, decoration.
  */
 @theme static {
   --color-*: initial;
@@ -16,37 +17,47 @@
   --color-black: #000000;
 
   /* Surfaces */
-  --color-paper: #f7f0eb; /* page background: blush-sand card stock */
-  --color-paper-deep: #eee2d8; /* sunken areas, table stripes, footer */
-  --color-surface: #fffbf8; /* cards, dialogs, inputs */
-  --color-overlay: rgb(34 22 56 / 0.45); /* dialog backdrop */
+  --color-paper: #eeeae1; /* page background: client cream */
+  --color-paper-deep: #e3ddd0; /* sunken areas, table stripes, footer */
+  --color-surface: #fbf9f5; /* cards, dialogs, inputs */
+  --color-overlay: rgb(19 40 79 / 0.5); /* dialog backdrop */
 
   /* Ink */
-  --color-ink: #221638; /* body text, aubergine-black */
-  --color-ink-soft: #54486a; /* secondary text, hints */
-  --color-line: #e2d3ca; /* hairlines, dividers (decorative only) */
-  --color-line-strong: #8c7a86; /* control borders (>=3:1 on surface) */
+  --color-ink: #13284f; /* body text, dark navy (12:1 on cream) */
+  --color-ink-soft: #4a5878; /* secondary text, hints */
+  --color-line: #d5cebf; /* hairlines, dividers (decorative only) */
+  --color-line-strong: #6d7890; /* control borders (>=3:1 on surface and paper) */
 
-  /* Brand: tatreez madder red */
-  --color-brand: #a8203e;
-  --color-brand-strong: #85172f;
-  --color-brand-soft: #f7dde3;
-  --color-on-brand: #fffbf8;
+  /* Brand: client blue (primary buttons, links, headings, focus) */
+  --color-brand: #1a4999;
+  --color-brand-strong: #123675; /* hover / pressed */
+  --color-brand-soft: #bbd3eb; /* tinted panels, hover background, active nav */
+  --color-on-brand: #fbf9f5;
 
-  /* Accents */
-  --color-saffron: #e3a13a; /* highlight fill (with ink text) */
-  --color-olive: #4e6425;
+  /* Accent: client red (key CTA fill with white text, badges, decoration; never small text on cream) */
+  --color-accent: #e32328;
+  --color-accent-strong: #c21a1f; /* hover / pressed */
+  --color-accent-soft: #ecc8ca; /* pink: cards, section bands, chat bubbles, tags */
+  --color-on-accent: #ffffff;
 
-  /* Semantic (always paired with an icon + text, never colour alone: NFR-USA-004) */
-  --color-success: #3f5a1c;
-  --color-success-soft: #e4ebd3;
+  /* Soft surfaces named for what they are */
+  --color-pink: #ecc8ca;
+  --color-sky: #bbd3eb;
+
+  /* Retired Phase 0 accents, remapped so older components keep rendering: saffron = pink, olive = deep blue */
+  --color-saffron: #ecc8ca;
+  --color-olive: #123675;
+
+  /* Semantic (always paired with an icon + text, never colour alone: NFR-USA-004). Muted, distinct from the red accent. */
+  --color-success: #2f5d3a;
+  --color-success-soft: #dfe9dc;
   --color-warning: #7a4e00;
-  --color-warning-soft: #fbebcb;
+  --color-warning-soft: #f6e7c4;
   --color-danger: #9e1b1b;
-  --color-danger-soft: #f8dcd8;
-  --color-info: #2b3c8c;
-  --color-info-soft: #dee3f6;
-  --color-focus: #2b3c8c;
+  --color-danger-soft: #f4d6d3;
+  --color-info: #1a4999;
+  --color-info-soft: #dbe7f4;
+  --color-focus: #1a4999;
 
   /* Type */
   --font-sans: var(--font-plex-arabic), var(--font-plex-latin), system-ui, "Segoe UI", Tahoma, sans-serif;
@@ -61,9 +72,9 @@
   --radius-pill: 999px;
 
   /* Depth: a card resting on a table, not a floating SaaS panel */
-  --shadow-card: 0 1px 0 rgb(34 22 56 / 0.06), 0 10px 24px -14px rgb(34 22 56 / 0.28);
-  --shadow-lift: 0 2px 0 rgb(34 22 56 / 0.06), 0 18px 36px -16px rgb(34 22 56 / 0.35);
-  --shadow-inset: inset 0 1px 2px rgb(34 22 56 / 0.08);
+  --shadow-card: 0 1px 0 rgb(19 40 79 / 0.07), 0 10px 24px -14px rgb(19 40 79 / 0.26);
+  --shadow-lift: 0 2px 0 rgb(19 40 79 / 0.07), 0 18px 36px -16px rgb(19 40 79 / 0.32);
+  --shadow-inset: inset 0 1px 2px rgb(19 40 79 / 0.09);
 
   /* Motion */
   --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -130,36 +141,40 @@
     font-weight: 600;
   }
 
-  /* NFR-USA-003: always-visible keyboard focus, indigo thread ring (>=3:1 on every surface). */
+  /* NFR-USA-003: always-visible keyboard focus, blue ring (>=3:1 on every surface). */
   :focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--color-saffron);
+    background: var(--color-brand-soft);
     color: var(--color-ink);
   }
 }
 
-/* Signature: a cross-stitch rule, like the embroidered border of a tatreez panel. Decorative (aria-hidden). */
+/*
+ * Decorative rules and fields (aria-hidden). The utility names date from the Phase 0 embroidery motif and are kept so
+ * existing screens keep working; the artwork is now the brand's loose brush wave and sparkles (DESIGN.md §4).
+ * For brush-stroke shapes in markup use <BrushStroke /> from "@/lib/shell/BrushStroke".
+ */
 @utility stitch-rule {
-  height: 10px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M3 1.5l6 7M9 1.5l-6 7' stroke='%23a8203e' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='12'%3E%3Cpath d='M0 6Q8 0 16 6T32 6' fill='none' stroke='%23ecc8ca' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: center;
 }
 
 @utility stitch-rule-quiet {
   height: 10px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M3 1.5l6 7M9 1.5l-6 7' stroke='%238c7a86' stroke-width='1.2' stroke-linecap='round' opacity='.55'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='10'%3E%3Cpath d='M0 5Q7 0 14 5T28 5' fill='none' stroke='%236d7890' stroke-width='1.4' stroke-linecap='round' opacity='.45'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: center;
 }
 
-/* A sparse field of stitched diamonds for hero backgrounds, strongest at the logical end (away from the text). */
+/* A sparse field of pink blobs and small blue sparkles for hero backgrounds, strongest at the logical end. */
 @utility tatreez-field {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cg fill='none' stroke='%23a8203e' stroke-width='1.3' stroke-linecap='round' opacity='.22'%3E%3Cpath d='M28 16l12 12-12 12-12-12z'/%3E%3Cpath d='M25 25l6 6M31 25l-6 6'/%3E%3C/g%3E%3Cpath d='M2 2l4 4M6 2L2 6' stroke='%23e3a13a' stroke-width='1.2' stroke-linecap='round' opacity='.35'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cpath d='M18 26c6-9 20-8 24 1s-2 20-12 21-18-13-12-22z' fill='%23ecc8ca' opacity='.55'/%3E%3Cpath d='M70 60c7-4 16 1 15 9s-11 13-18 8-4-14 3-17z' fill='%23bbd3eb' opacity='.6'/%3E%3Cpath d='M74 14v10M69 19h10' stroke='%231a4999' stroke-width='1.6' stroke-linecap='round' opacity='.35'/%3E%3C/svg%3E");
   mask-image: linear-gradient(to left, black, transparent 70%);
   &:where([dir="rtl"] *) {
     mask-image: linear-gradient(to right, black, transparent 70%);
