@@ -1,0 +1,24 @@
+<!-- @dsCard group="Signature" height=330 -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><title>QuestionCard — preview</title></head>
+<body>
+<div class="dc-root dc-deal">
+  <button class="dc-qcard" type="button" aria-pressed="false" aria-label="اقلب البطاقة"><span class="dc-qcard__inner">
+    <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc">سؤال</span></span>
+    <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">سؤال</span><span class="dc-qcard__q">شو أكثر لحظة حسّيت فيها إنك مفهوم تمامًا؟</span></span>
+  </span></button>
+  <button class="dc-qcard" type="button" aria-pressed="false" aria-label="اقلب البطاقة"><span class="dc-qcard__inner">
+    <span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-qcard__disc">تحدّي</span></span>
+    <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">تحدّي</span><span class="dc-qcard__q">ارسم الشخص اللي على يمينك بثلاثين ثانية، وخلّيه يخمّن مين.</span></span>
+  </span></button>
+  <button class="dc-qcard" type="button" aria-pressed="false" aria-label="اقلب البطاقة"><span class="dc-qcard__inner">
+    <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc">مين فينا؟</span></span>
+    <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">مين فينا؟</span><span class="dc-qcard__q">مين فينا أول واحد بيضحك بالجمعة؟</span></span>
+  </span></button>
+</div>
+<script>
+document.querySelectorAll('.dc-qcard').forEach(c=>c.addEventListener('click',()=>{const on=c.classList.toggle('is-flipped');c.setAttribute('aria-pressed',String(on));}));
+</script>
+</body>
+</html>

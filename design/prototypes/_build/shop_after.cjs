@@ -1,0 +1,10 @@
+const { chromium } = require(require.resolve('@playwright/test', { paths: [process.cwd()] }));
+const http=require('http'),fs=require('fs'),path=require('path');const ROOT=path.resolve(__dirname,'..');
+const MT={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.png':'image/png'};
+const srv=http.createServer((q,r)=>{const f=path.join(ROOT,decodeURIComponent(q.url.split('?')[0]));fs.readFile(f,(e,d)=>{if(e){r.writeHead(404);return r.end()}r.writeHead(200,{'content-type':MT[path.extname(f)]||'application/octet-stream'});r.end(d)})});
+(async()=>{await new Promise(o=>srv.listen(0,'127.0.0.1',o));const port=srv.address().port;const b=await chromium.launch();
+const p=await (await b.newContext({viewport:{width:1280,height:800}})).newPage();
+await p.goto(`http://127.0.0.1:${port}/shop.html`,{waitUntil:'networkidle'});await p.waitForTimeout(800);
+await p.locator('.dc-shop-after').scrollIntoViewIfNeeded();await p.waitForTimeout(500);
+await p.locator('.dc-shop-after').screenshot({path:path.join(ROOT,'shots','shop-1280-ar-after.png')});
+await b.close();srv.close()})();

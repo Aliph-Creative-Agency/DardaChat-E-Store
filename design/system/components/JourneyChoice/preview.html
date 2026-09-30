@@ -1,0 +1,21 @@
+<!-- @dsCard group="Journey" height=330 -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><title>JourneyChoice — preview</title></head>
+<body>
+<div class="dc-root">
+  <div class="dc-journey">
+    <div class="dc-progress" aria-hidden="true"><i class="is-done"></i><i class="is-now"></i><i></i><i></i><i></i></div>
+    <p class="dc-journey__prompt">وصلت عالطاولة، وكل الناس ساكتين. شو بتعمل؟</p>
+    <div class="dc-journey__choices">
+      <button class="dc-choice" type="button"><b>أ</b>بسحب أول بطاقة وبقرأها بصوت عالي</button>
+      <button class="dc-choice" type="button"><b>ب</b>بسأل مين عنده قصة من هالأسبوع</button>
+      <button class="dc-choice" type="button"><b>ج</b>بستنى حدا غيري يبلّش وبراقب</button>
+    </div>
+  </div>
+</div>
+<script>
+const j=document.querySelector('.dc-journey');j.querySelectorAll('.dc-choice').forEach(b=>b.addEventListener('click',()=>{const same=b.classList.contains('is-picked');j.querySelectorAll('.dc-choice').forEach(x=>x.classList.remove('is-picked'));if(same){j.classList.remove('is-chosen');return;}b.classList.add('is-picked');j.classList.add('is-chosen');}));
+</script>
+</body>
+</html>

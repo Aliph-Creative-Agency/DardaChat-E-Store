@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-ar="دردشات · ألعاب حوار في صندوق" data-en="Dardachat · Conversation games in a box">دردشات · ألعاب حوار في صندوق</title>
+  <link rel="stylesheet" href="ds.css">
+  <script src="_shared.js" defer></script>
+  <style>
+    /* ==== home screen only. Tokens from ds.css; nothing hard-coded except geometry. ==== */
+
+    /* ---- header: same brand band as the other screens. On home the logo joins once the big lockup has scrolled away. ---- */
+    :root { --hh: 68px; }
+    .dc-home-top { position: sticky; inset-block-start: 0; z-index: 50; background: transparent; color: var(--on-band); transition: background var(--dur-base) var(--ease-out); }
+    /* the header is part of the band at the top of the page; it turns solid once the big lockup has scrolled away (or the menu is open) */
+    .dc-home-top.is-past-hero, .dc-home-top:has(nav.is-open) { background: var(--band); }
+    .dc-home-top .dc-header { max-width: 1200px; margin-inline: auto; background: transparent; color: var(--on-band); border-radius: 0;
+      padding-block: var(--space-2); padding-inline: var(--space-4); gap: var(--space-4); position: relative; }
+    @media (min-width: 768px) { .dc-home-top .dc-header { padding-inline: var(--space-5); gap: var(--space-5); } }
+    .dc-home-brand { display: block; line-height: 0; border-radius: var(--radius-sm); transition: opacity var(--dur-base) var(--ease-out); }
+    .dc-home-top .dc-header__logo { height: 52px; }
+    .dc-home-top:not(.is-past-hero) .dc-home-brand:not(:focus-visible) { opacity: 0; }
+    .dc-home-top nav a, .dc-home-top .dc-cart, .dc-home-menu { color: var(--on-band); }
+    .dc-home-actions { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-1); }
+    .dc-home-top .dc-cart { text-decoration: none; }
+    .dc-home-top .dc-cart:hover, .dc-home-menu:hover { background: rgb(255 255 255 / .12); }
+    .dc-home-top :focus-visible { outline-color: var(--on-band); }
+    .dc-home-menu { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; border-radius: 50%; cursor: pointer; }
+    .dc-home-menu svg { width: 24px; height: 24px; }
+    .dc-home-menu .i-close, .dc-home-menu[aria-expanded="true"] .i-open { display: none; }
+    .dc-home-menu[aria-expanded="true"] .i-close { display: block; }
+    .dc-home-top nav { position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--band); flex-direction: column; gap: 0;
+      padding: var(--space-2) var(--space-4) var(--space-4); visibility: hidden; opacity: 0; transform: translateY(-8px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+      box-shadow: var(--shadow-lift); border-block-start: 1px solid rgb(255 255 255 / .16); }
+    .dc-home-top nav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-home-top nav a { padding-block: 14px; font-size: 16px; }
+    .dc-home-top nav a::after { inset-block-end: 6px; }
+    @media (min-width: 900px) {
+      .dc-home-menu { display: none; }
+      .dc-home-top nav { position: static; visibility: visible; opacity: 1; transform: none; flex-direction: row; gap: var(--space-4); padding: 0; box-shadow: none; border: 0; background: none; flex-wrap: nowrap; }
+      .dc-home-top nav a { padding-block: 8px; font-size: 15px; }
+      .dc-home-top nav a::after { inset-block-end: 0; }
+      .dc-home-actions { margin-inline-start: 0; }
+    }
+
+    /* ---- hero: the logo band. Strokes paint on, the deck is dealt, the first card is drawn. ---- */
+    .dc-home-hero { position: relative; overflow: hidden; background: var(--band); color: var(--on-band); margin-block-start: calc(var(--hh) * -1);
+      border-end-start-radius: 40px; border-end-end-radius: 40px; isolation: isolate; }
+    .dc-home-brush { position: absolute; z-index: -1; pointer-events: none; height: auto; overflow: visible; }
+    .dc-home-brush path { stroke-width: 46; }
+    .dc-home-brush--a { display: none; inset-inline-end: -40px; inset-block-start: -30px; width: 300px; }
+    /* phone: the top stroke lives on the start side (the header icons sit on the end side) and hangs from the top edge */
+    .dc-home-brush--m { inset-inline-start: -12px; inset-block-start: 0; width: 150px; }
+    .dc-home-brush--b { inset-inline-end: -70px; inset-block-end: -60px; width: 210px; }
+    .dc-home-brush--c { display: none; inset-inline-start: -110px; inset-block-end: -40px; width: 240px; }
+    [dir="rtl"] .dc-home-brush { transform: scaleX(-1); }
+    .dc-home-hero > .dc-page { display: grid; gap: var(--space-6); padding-block: calc(var(--space-5) + var(--hh)) var(--space-7); align-items: center; }
+    .dc-home-lockup { width: 188px; height: auto; display: block; margin-inline-start: -6px; }
+    .dc-home-copy { display: grid; gap: var(--space-4); align-content: start; justify-items: start; }
+    .dc-home-copy h1 { font: 800 clamp(34px, 9.4vw, 44px)/1.3 var(--font-display); margin: 0; color: var(--on-band); text-wrap: balance; }
+    .dc-home-nw { white-space: nowrap; }
+    .dc-home-hl { position: relative; display: inline-block; white-space: nowrap; line-height: 1.1; }
+    .dc-home-hl svg { position: absolute; inset-inline: -2%; inset-block-end: -.2em; width: 104%; height: .36em; overflow: visible; }
+    .dc-home-hl svg path { stroke-width: 9; }
+    .dc-home-hl svg:not(.is-drawing) path { opacity: 0; }
+    .dc-home-copy p { font: var(--type-body-lg); margin: 0; max-width: 44ch; color: rgb(255 255 255 / .92); text-wrap: pretty; }
+    .dc-home-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-2); }
+    .dc-home-cta .dc-btn--cta { --_bd: var(--red); }
+    .dc-home-btn-line { --_bg: transparent; --_fg: var(--on-band); --_bd: rgb(255 255 255 / .75); }
+    .dc-home-btn-line:hover { background: rgb(255 255 255 / .14); }
+    .dc-home-rise { animation: dc-home-rise var(--dur-slow) var(--ease-out) both; animation-delay: var(--d, 0ms); }
+    @keyframes dc-home-rise { from { opacity: 0; transform: translateY(14px); } }
+    /* reduced motion cuts to the end state: no delayed blank copy, no dealt-in deck */
+    @media (prefers-reduced-motion: reduce) { .dc-home-rise, .dc-home-deck > i { animation: none; } }
+    html[data-motion="reduce"] .dc-home-rise, html[data-motion="reduce"] .dc-home-deck > i { animation: none; }
+    @media (min-width: 900px) {
+      .dc-home-hero > .dc-page { grid-template-columns: 1.08fr 1fr; gap: var(--space-7); padding-block: calc(var(--space-6) + var(--hh)) var(--space-8); min-height: calc(600px + var(--hh)); }
+      .dc-home-lockup { width: 250px; }
+      .dc-home-copy { gap: var(--space-5); }
+      .dc-home-copy h1 { font: var(--type-display-hero); font-size: clamp(46px, 4.4vw, 60px); line-height: 1.22; }
+      /* sits below the CTA row (box top >= 16px under the buttons at every width) so the main action stays clean; only its crest shows above the hero edge */
+      .dc-home-brush--c { display: block; inset-block-end: -168px; }
+      .dc-home-brush--a { display: block; }
+      .dc-home-brush--m { display: none; }
+      .dc-home-brush--b { inset-inline-end: -60px; inset-block-end: -50px; width: 340px; }
+    }
+
+    /* the table: deck on the start side, the drawn card beside it */
+    .dc-home-table { --card: min(300px, 50vw); --deck: calc(var(--card) * .62);
+      display: grid; justify-items: center; gap: var(--space-4); padding: var(--space-5) var(--space-4) var(--space-4);
+      background: rgb(255 255 255 / .09); border-radius: var(--radius-lg); }
+    @media (min-width: 900px) { .dc-home-table { --card: min(300px, 21vw); padding: var(--space-6) var(--space-5) var(--space-5); } }
+    .dc-home-stage { display: grid; grid-template-columns: var(--deck) var(--card); gap: var(--space-4); align-items: center; justify-content: center; }
+    .dc-home-deck { position: relative; width: var(--deck); height: var(--deck); border: 0; padding: 0; background: none; cursor: pointer; border-radius: var(--radius-md); color: inherit; }
+    .dc-home-deck > i { position: absolute; inset: 0; border-radius: var(--radius-md); box-shadow: var(--shadow-card); animation: dc-deal-in var(--dur-slow) var(--ease-spring) both; }
+    .dc-home-deck > i:nth-child(1) { background: var(--pink); transform: translate(5px, 9px) rotate(-3deg); animation-delay: 60ms; }
+    .dc-home-deck > i:nth-child(2) { background: var(--sky); transform: translate(-3px, 5px) rotate(4deg); animation-delay: 140ms; }
+    .dc-home-deck > i:nth-child(3) { background: var(--sky); display: grid; place-items: center; animation-delay: 220ms;
+      transition: transform var(--dur-base) var(--ease-spring); }
+    .dc-home-deck:hover > i:nth-child(3), .dc-home-deck:focus-visible > i:nth-child(3) { transform: translateY(-6px) rotate(-2deg); }
+    .dc-home-deck:active > i:nth-child(3) { transform: translateY(0) scale(.97); }
+    .dc-home-deck > i:nth-child(3) b { width: 46%; aspect-ratio: 1; border-radius: 50%; background: var(--red); color: var(--on-red); display: grid; place-items: center; }
+    .dc-home-deck > i:nth-child(3) svg { width: 52%; height: 52%; }
+    .dc-home-deck.is-empty > i:nth-child(3) { opacity: .9; }
+    .dc-home-slot { position: relative; width: var(--card); height: var(--card); }
+    .dc-home-slot::before { content: ""; position: absolute; inset: 0; border-radius: var(--radius-md); border: 2px dashed rgb(255 255 255 / .45); }
+    /* until the table scrolls into view the deck rests and the slot stays empty; the deal-in starts when it is seen */
+    .dc-home-table.is-wait .dc-home-deck > i { animation: none; }
+    .dc-home-slot .dc-qcard { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .dc-home-slot .dc-qcard__disc { width: 42%; height: auto; aspect-ratio: 1; font-size: clamp(14px, 4vw, 19px); text-align: center; line-height: 1.15; padding: 4px; }
+    .dc-home-slot .dc-qcard__face { padding: var(--space-3); }
+    .dc-home-slot .dc-qcard__q { font-size: clamp(14.5px, 3.9vw, 18px); line-height: 1.6; text-wrap: balance; }
+    .dc-home-slot .dc-qcard__kicker { font-size: 13px; }
+    .dc-home-slot .dc-qcard__back { gap: var(--space-1); }
+    .dc-home-card.is-tossed { transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--rot, 4deg)) scale(.96); transition: transform var(--dur-slow) var(--ease-spring), opacity var(--dur-base) var(--ease-out); pointer-events: none; }
+    .dc-home-card.is-gone { opacity: 0; }
+    .dc-home-lbl { display: inline-grid; justify-items: center; }
+    .dc-home-lbl > span { grid-area: 1 / 1; text-align: center; }
+    .dc-home-lbl__alt { visibility: hidden; }
+    .dc-home-add.is-added .dc-home-lbl > span:first-child { visibility: hidden; }
+    .dc-home-add.is-added .dc-home-lbl__alt { visibility: visible; }
+    /* white pill on the fixed brand band: colours are fixed (not theme tokens) so Night cannot turn the label invisible */
+    .dc-home-draw { --_bg: #fff; --_fg: #1a4999; --_bd: #fff; color: #1a4999; }
+    /* ds.css .dc-btn:hover is not media-gated, so touch browsers keep it after a tap: neutralise it here, lift only for real hover */
+    .dc-home-draw:hover, .dc-home-draw:active { background: #fff; color: #1a4999; box-shadow: none; transform: none; }
+    .dc-home-draw:active { transform: scale(.97); }
+    @media (hover: hover) { .dc-home-draw:hover { background: #dce8f5; color: #1a4999; box-shadow: var(--shadow-card); transform: translateY(-2px); } }
+    /* header cart badge stays hidden until the first add */
+    .dc-cart__count.is-empty { display: none; }
+    .dc-home-draw:focus-visible { outline-color: #fff; outline-offset: 3px; }
+    .dc-home-draw svg { width: 20px; height: 20px; }
+    .dc-home-drawrow { display: grid; justify-items: center; gap: var(--space-2); }
+    /* the "sample cards" tag reads as a caption under the button, not as a second button */
+    .dc-home-drawrow .dc-ph { background: transparent; box-shadow: none; color: rgb(255 255 255 / .85); font-size: 12.5px; font-weight: 500; padding: 0; }
+    .dc-home-live { min-height: 1px; }
+
+    /* ---- shared section rhythm ---- */
+    .dc-home-sec { padding-block: var(--space-8); }
+    @media (min-width: 900px) { .dc-home-sec { padding-block: var(--space-9); } }
+    .dc-home-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-3) var(--space-5); margin-block-end: var(--space-6); }
+    .dc-home-head h2 { font: var(--type-display-2); margin: 0; color: var(--ink); text-wrap: balance; }
+    .dc-home-head p { margin: var(--space-2) 0 0; color: var(--ink-soft); font: var(--type-body); max-width: 52ch; text-wrap: pretty; }
+    @media (min-width: 768px) { .dc-home-head h2 { font: var(--type-display-1); } .dc-home-head p { font: var(--type-body-lg); } }
+    .dc-home-more { color: var(--blue); font: var(--type-body-strong); text-underline-offset: 4px; display: inline-flex; align-items: center; gap: var(--space-2); }
+    .dc-home-more svg { width: 18px; height: 18px; transition: transform var(--dur-base) var(--ease-spring); }
+    [dir="rtl"] .dc-home-more svg { transform: scaleX(-1); }
+    .dc-home-more:hover svg { transform: translateX(4px); }
+    [dir="rtl"] .dc-home-more:hover svg { transform: scaleX(-1) translateX(4px); }
+    [data-reveal].is-pre { opacity: 0; transform: translateY(22px); }
+    [data-reveal] { transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); transition-delay: var(--d, 0ms); }
+
+    /* ---- the four boxes: one flagship, three on the shelf ---- */
+    .dc-home-boxes { display: grid; gap: var(--space-4); }
+    @media (min-width: 900px) { .dc-home-boxes { grid-template-columns: 1.05fr 1fr; gap: var(--space-5); align-items: stretch; } }
+    .dc-home-shelf { display: grid; gap: var(--space-3); grid-auto-rows: 1fr; }
+    @media (min-width: 900px) { .dc-home-shelf { gap: var(--space-4); } }
+    .dc-home-box { position: relative; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; display: grid; min-width: 0;
+      transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out), opacity var(--dur-slow) var(--ease-out) var(--d, 0ms); }
+    .dc-home-box:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+    .dc-home-box:hover .dc-product__lid, .dc-home-box:focus-within .dc-product__lid { transform: translateY(-10px) rotate(-8deg); }
+    .dc-home-box:hover .dc-product__peek, .dc-home-box:focus-within .dc-product__peek { transform: translateY(-18px); }
+    .dc-home-box .dc-product__art { aspect-ratio: auto; }
+    .dc-home-box__body { padding: var(--space-4); display: grid; gap: var(--space-2); align-content: start; min-width: 0; }
+    .dc-home-box .dc-product__name { font-size: 20px; }
+    .dc-home-box .dc-product__meta { font-size: 14px; }
+    .dc-home-box .dc-price .dc-ph { justify-self: start; font-size: 11.5px; padding: 3px 8px; }
+    .dc-home-box__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; margin-block-start: var(--space-2); }
+    .dc-home-box .dc-btn svg:not(.dc-heart) { width: 18px; height: 18px; }
+    .dc-home-stretch { color: inherit; text-decoration: none; }
+    .dc-home-stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+    .dc-home-stretch:focus-visible { outline: none; }
+    .dc-home-box:has(.dc-home-stretch:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .dc-home-stretch:hover { color: var(--blue); }
+    .dc-home-box .dc-btn { z-index: 2; }
+    /* flagship */
+    .dc-home-box--main { grid-template-rows: auto 1fr; }
+    .dc-home-box--main .dc-product__art { aspect-ratio: 16 / 10; }
+    .dc-home-box--main .dc-product__art svg { width: min(58%, 300px); }
+    .dc-home-box--main .dc-home-box__body { padding: var(--space-5); gap: var(--space-3); }
+    .dc-home-box--main .dc-product__name { font: var(--type-display-3); font-size: 26px; }
+    .dc-home-box--main .dc-product__meta { font-size: 15px; }
+    .dc-home-box--main .dc-price__now { font-size: 26px; }
+    .dc-home-count { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); margin: var(--space-1) 0 0; padding: 0; list-style: none; }
+    .dc-home-count li { background: var(--surface-sunk); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); display: grid; gap: 2px; }
+    .dc-home-count b { font: 700 22px/1.1 var(--font-sans); color: var(--blue); }
+    .dc-home-count span { font: 500 12.5px/1.4 var(--font-sans); color: var(--ink-soft); }
+    /* shelf rows */
+    .dc-home-box--row { grid-template-columns: 104px minmax(0, 1fr); }
+    .dc-home-box--row .dc-product__art { aspect-ratio: auto; min-height: 100%; }
+    .dc-home-box--row .dc-product__art svg { width: 92%; }
+    .dc-home-box--row .dc-home-box__body { padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3); padding-inline: var(--space-3) var(--space-4); }
+    .dc-home-box--row .dc-chip { font-size: 12px; padding-block: 5px; padding-inline: 10px; }
+    .dc-home-box--row .dc-row { gap: 6px; }
+    @media (min-width: 600px) { .dc-home-box--row { grid-template-columns: 148px minmax(0, 1fr); } .dc-home-box--row .dc-home-box__body { padding: var(--space-4) var(--space-5); } .dc-home-box--row .dc-product__name { font-size: 22px; } }
+    .dc-home-box.is-off { box-shadow: none; outline: 2px dashed var(--line-strong); outline-offset: -2px; }
+    .dc-home-box.is-off:hover { transform: none; }
+    .dc-home-box.is-off .dc-product__art { filter: saturate(.55); }
+    .dc-home-box.is-off .dc-product__peek { opacity: 0; }
+    .dc-home-box.is-off:hover .dc-product__lid, .dc-home-box.is-off:focus-within .dc-product__lid { transform: none; animation: dc-home-nudge 520ms var(--ease-spring); }
+    @keyframes dc-home-nudge { 30% { transform: translateY(-4px) rotate(-3deg); } 65% { transform: translateY(0) rotate(1.5deg); } }
+    .dc-home-box .dc-product__note { display: flex; align-items: center; gap: 6px; }
+    .dc-home-box .dc-product__note svg { width: 16px; height: 16px; flex: none; color: var(--red-text); }
+    .dc-home-box .dc-product__note { color: var(--ink-soft); } /* body-size note stays ink; only the clock is red (matches product.html) */
+    .dc-home-add.is-added .i-plus { display: none; }
+    .dc-home-add .i-tick { display: none; }
+    .dc-home-add.is-added .i-tick { display: block; }
+    main .dc-ph { color: #7a4f00; font-size: 11.5px; }
+    [data-theme="dark"] main .dc-ph { color: var(--warning); }
+    .dc-home-note { margin-block: var(--space-5) 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); font: var(--type-small); color: var(--ink-soft); }
+    .dc-home-note a { color: var(--blue); font-weight: 600; }
+
+    /* ---- services: a full-bleed pink band, three columns with dashed folds like a ticket strip ---- */
+    .dc-home-services { background: var(--pink); color: var(--on-soft); }
+    .dc-home-services .dc-home-head p { color: var(--ink); max-width: 62ch; text-wrap: balance; }
+    .dc-home-tickets { display: grid; gap: 0; }
+    @media (min-width: 900px) { .dc-home-tickets { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .dc-home-svc { display: grid; gap: var(--space-3); align-content: start; padding-block: var(--space-6); }
+    /* at three columns each ticket is a subgrid of six shared rows (art, title, text, facts, price, CTA) so every footer sits on one line */
+    @media (min-width: 900px) { .dc-home-svc { grid-row: span 6; grid-template-rows: subgrid; align-content: normal; } }
+    @supports not (grid-template-rows: subgrid) { @media (min-width: 900px) { .dc-home-svc { display: flex; flex-direction: column; } .dc-home-svc__price { margin-block-start: auto; } } }
+    .dc-home-svc + .dc-home-svc { border-block-start: 2px dashed var(--line-strong); }
+    @media (min-width: 900px) {
+      .dc-home-svc { padding-block: var(--space-2); padding-inline: var(--space-5); }
+      .dc-home-svc:first-child { padding-inline-start: 0; }
+      .dc-home-svc:last-child { padding-inline-end: 0; }
+      .dc-home-svc + .dc-home-svc { border-block-start: 0; border-inline-start: 2px dashed var(--line-strong); }
+    }
+    .dc-home-svc__art { width: 92px; height: 92px; }
+    .dc-home-svc h3 { font: var(--type-display-2); margin: 0; color: var(--blue); }
+    .dc-home-svc__desc { margin: 0; font: var(--type-body); color: var(--ink); text-wrap: pretty; }
+    .dc-home-svc__price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px var(--space-2); margin: var(--space-1) 0 0; }
+    .dc-home-svc__price b { font: var(--type-price); font-size: 26px; color: var(--ink); }
+    .dc-home-svc__price span { font: var(--type-small); color: var(--ink); }
+    .dc-home-svc__facts { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .dc-home-svc__facts li { font: var(--type-label); background: rgb(255 255 255 / .55); border-radius: var(--radius-pill); padding: 6px 12px; color: var(--ink); }
+    [data-theme="dark"] .dc-home-svc__facts li { background: rgb(255 255 255 / .1); }
+    .dc-home-svc__go { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin-block-start: var(--space-2); }
+    .dc-home-svc .dc-home-more { color: var(--blue-strong); }
+
+    /* ---- quote + about ---- */
+    .dc-home-about { display: grid; gap: var(--space-5); align-items: stretch; }
+    @media (min-width: 900px) { .dc-home-about { grid-template-columns: 1.05fr 1fr; gap: var(--space-7); } }
+    .dc-home-about .dc-banner { max-width: none; height: 100%; margin: 0; padding: var(--space-6) var(--space-5); border-radius: var(--radius-lg);
+      display: grid; gap: var(--space-4) var(--space-5); align-content: center; align-items: center; justify-items: start;
+      grid-template-columns: 1fr; grid-template-areas: "q" "s" "art"; }
+    .dc-home-about .dc-banner blockquote { grid-area: q; }
+    .dc-home-about .dc-banner__quote { font: var(--type-quote); font-size: clamp(24px, 6.4vw, 32px); line-height: 1.55; text-wrap: balance; }
+    .dc-home-about .dc-banner__sig { grid-area: s; margin: 0; font: 600 16px/1.2 var(--font-display); color: var(--ink-soft); }
+    .dc-home-art { grid-area: art; width: 168px; height: auto; overflow: visible; justify-self: start; }
+    .dc-home-art .dc-brush path { stroke: var(--blue); stroke-width: 9; }
+    .dc-home-art .dc-brush:not(.is-drawing) path { opacity: 0; }
+    .dc-home-art__c1 { fill: var(--sky); stroke: var(--blue); stroke-width: 3; }
+    .dc-home-art__c2 { fill: var(--pink); stroke: var(--blue); stroke-width: 3; }
+    .dc-home-art__dot { fill: var(--red); }
+    .dc-home-art__heart { fill: var(--red); }
+    @media (min-width: 900px) {
+      .dc-home-about .dc-banner { padding: var(--space-7); grid-template-columns: minmax(0, 1fr); grid-template-areas: "q" "s" "art"; align-content: center; }
+      .dc-home-about .dc-banner__quote { font-size: clamp(26px, 2.5vw, 32px); }
+      .dc-home-art { width: 150px; justify-self: end; }
+    }
+    .dc-home-text { display: grid; gap: var(--space-4); align-content: center; }
+    .dc-home-text h2 { font: var(--type-display-2); margin: 0; color: var(--ink); }
+    .dc-home-text p { margin: 0; font: var(--type-body-lg); color: var(--ink); text-wrap: pretty; }
+    .dc-home-pillars { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-1) 0 0; padding: 0; list-style: none; }
+    .dc-home-pillars li { font: 600 14px/1 var(--font-sans); padding: 9px 14px; border-radius: var(--radius-pill); background: var(--sky); color: var(--on-soft); }
+    .dc-home-pillars li:nth-child(even) { background: var(--pink); }
+
+    /* ---- footer ---- */
+    .dc-home-foot { background: var(--band); color: var(--on-band); }
+    .dc-home-foot .dc-page { display: grid; gap: var(--space-6); padding-block: var(--space-7); align-items: center; }
+    @media (min-width: 768px) { .dc-home-foot .dc-page { grid-template-columns: auto 1fr; gap: var(--space-7); } }
+    .dc-home-foot img { height: 84px; width: auto; }
+    .dc-home-foot address { font-style: normal; display: grid; gap: var(--space-3) var(--space-6); font: var(--type-small); }
+    @media (min-width: 768px) { .dc-home-foot address { grid-template-columns: repeat(2, auto); justify-content: start; } }
+    .dc-home-foot a { color: var(--on-band); text-underline-offset: 3px; }
+    .dc-home-foot :focus-visible { outline-color: var(--on-band); }
+    .dc-home-foot small { display: block; opacity: .85; margin-block-end: 2px; font-size: 12.5px; }
+    .dc-home-foot a.dc-btn { text-decoration: none; color: var(--band); }
+    .dc-home-foot__wa { grid-column: 1 / -1; }
+    .dc-home-foot__legal { grid-column: 1 / -1; border-block-start: 1px solid rgb(255 255 255 / .2); padding-block-start: var(--space-4); font: var(--type-small); opacity: .85; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); justify-content: space-between; }
+    .dc-home-foot__legal a { text-decoration: none; }
+
+    /* ---- flying heart from add button? no: heart pop is on the button itself. Toast for the cart. ---- */
+    .dc-home-toast { position: fixed; inset-block-start: 84px; inset-inline: var(--space-4); margin-inline: auto; width: max-content; max-width: calc(100% - 32px); z-index: 80;
+      background: var(--surface); color: var(--ink); border-radius: var(--radius-pill); box-shadow: var(--shadow-lift); padding: 10px 10px 10px 20px; padding-inline: 20px 10px;
+      display: flex; align-items: center; gap: var(--space-3); font: 600 14px/1.4 var(--font-sans);
+      visibility: hidden; opacity: 0; transform: translateY(-10px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    .dc-home-toast.is-on { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-home-toast svg { width: 18px; height: 18px; color: var(--red); flex: none; }
+  </style>
+</head>
+<body>
+  <a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+  <header class="dc-home-top" id="top">
+    <div class="dc-header">
+      <a class="dc-home-brand" href="home.html" data-ar-label="دردشات، الصفحة الرئيسية" data-en-label="Dardachat, home" aria-label="دردشات، الصفحة الرئيسية">
+        <img class="dc-header__logo" src="assets/dardachat-lockup-knockout.png" alt="">
+      </a>
+      <nav id="dc-nav" data-ar-label="القائمة الرئيسية" data-en-label="Main menu" aria-label="القائمة الرئيسية">
+        <a href="shop.html" data-ar="الصناديق" data-en="Boxes">الصناديق</a>
+        <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+        <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+        <a href="#about" data-ar="من نحن" data-en="About">من نحن</a>
+        <a href="#contact" data-ar="تواصل" data-en="Contact">تواصل</a>
+      </nav>
+      <div class="dc-home-actions">
+        <a class="dc-cart" href="cart-checkout.html" id="cartLink" data-ar-label="السلة" data-en-label="Cart" aria-label="السلة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="dc-cart__count dc-num is-empty" id="cartCount">0</span>
+        </a>
+        <button class="dc-home-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
+          <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dc-home-toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
+    <span id="toastText"></span>
+    <a class="dc-btn dc-btn--sm" href="cart-checkout.html" tabindex="-1" data-ar="عرض السلة" data-en="View cart">عرض السلة</a>
+  </div>
+
+  <!-- ============ HERO: the logo band ============ -->
+  <section class="dc-home-hero" aria-labelledby="hero-title">
+    <svg class="dc-home-brush dc-home-brush--a dc-brush" data-autodraw viewBox="0 0 300 260" aria-hidden="true">
+      <path d="M-20 60 C 70 10, 130 110, 60 150 S 30 240, 150 215 S 260 190, 320 230"/>
+    </svg>
+    <svg class="dc-home-brush dc-home-brush--m dc-brush" data-autodraw viewBox="0 0 300 260" aria-hidden="true">
+      <path d="M170 -40 C 190 30, 60 40, 50 100 S 140 150, -30 150"/>
+    </svg>
+    <svg class="dc-home-brush dc-home-brush--b dc-brush" data-autodraw viewBox="0 0 300 260" aria-hidden="true">
+      <path d="M-20 200 C 70 130, 140 250, 210 170 S 260 60, 330 40"/>
+    </svg>
+    <svg class="dc-home-brush dc-home-brush--c dc-brush" data-autodraw viewBox="0 0 300 260" aria-hidden="true">
+      <path d="M-10 90 C 80 20, 150 140, 230 90 S 300 30, 330 60"/>
+    </svg>
+
+    <div class="dc-page">
+      <div class="dc-home-copy">
+        <img class="dc-home-lockup dc-home-rise" id="heroLogo" src="assets/dardachat-lockup-knockout.png" alt="دردشات Dardachat" data-ar-alt="دردشات Dardachat" data-en-alt="Dardachat">
+        <h1 id="hero-title" class="dc-home-rise" style="--d:120ms"><span data-ar="ألعاب حوار في " data-en="Conversation games ">ألعاب حوار في </span><span class="dc-home-nw"><span data-ar="" data-en="in a "></span><span class="dc-home-hl"><span data-ar="صندوق" data-en="box">صندوق</span><svg class="dc-brush" id="hlBrush" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 12 C 40 4, 70 18, 110 10 S 170 6, 196 11"/></svg></span><span data-ar="،" data-en=",">،</span></span><span data-ar=" من قلب القدس" data-en=" from the heart of Jerusalem"> من قلب القدس</span></h1>
+        <p class="dc-home-rise" style="--d:220ms" data-ar="بطاقات أسئلة وتحدّيات لكل جلسة، وورشات وجلسات وليالي ألعاب تجمع الناس حول الطاولة." data-en="Question and challenge cards for every gathering, plus workshops, sessions and game nights that bring people around the table.">بطاقات أسئلة وتحدّيات لكل جلسة، وورشات وجلسات وليالي ألعاب تجمع الناس حول الطاولة.</p>
+        <div class="dc-home-cta dc-home-rise" style="--d:320ms">
+          <a class="dc-btn dc-btn--cta" href="shop.html" data-ar="تسوّق الصناديق" data-en="Shop the boxes">تسوّق الصناديق</a>
+          <a class="dc-btn dc-home-btn-line" href="services.html" data-ar="احجز ورشة أو جلسة" data-en="Book a workshop or session">احجز ورشة أو جلسة</a>
+        </div>
+      </div>
+
+      <!-- DRAW A CARD. The markup already holds one drawn, flipped card so the page reads without JS. -->
+      <div class="dc-home-table" role="group" data-ar-label="اسحب بطاقة من الطاولة" data-en-label="Draw a card from the table" aria-label="اسحب بطاقة من الطاولة">
+        <div class="dc-home-stage">
+          <button class="dc-home-deck" id="deck" type="button" tabindex="-1" aria-hidden="true">
+            <i></i><i></i><i><b><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></b></i>
+          </button>
+          <div class="dc-home-slot" id="slot">
+            <button class="dc-qcard dc-home-card is-current is-flipped" type="button" aria-pressed="true" data-idx="0" data-ar-label="اقلب البطاقة" data-en-label="Flip the card" aria-label="اقلب البطاقة"><span class="dc-qcard__inner">
+              <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc">سؤال</span></span>
+              <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">سؤال</span><span class="dc-qcard__q">شو أكثر لحظة حسّيت فيها إنك مفهوم تمامًا؟</span></span>
+            </span></button>
+          </div>
+        </div>
+        <div class="dc-home-drawrow">
+          <button class="dc-btn dc-home-draw" type="button" id="drawBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 10h6M9 14h4"/></svg><span class="dc-home-lbl"><span id="drawLabel" data-ar="اسحب بطاقة أخرى" data-en="Draw another card">اسحب بطاقة أخرى</span><span class="dc-home-lbl__alt" id="drawGhost" aria-hidden="true" data-ar="اسحب بطاقة أخرى" data-en="Draw another card">اسحب بطاقة أخرى</span></span></button>
+          <span class="dc-ph" data-ar="بطاقات نموذجية" data-en="Sample cards">بطاقات نموذجية</span>
+        </div>
+        <p class="dc-sr dc-home-live" id="live" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <main id="main">
+    <!-- ============ THE FOUR BOXES ============ -->
+    <section class="dc-home-sec dc-page" id="boxes" aria-labelledby="boxes-title">
+      <div class="dc-home-head" data-reveal>
+        <div>
+          <h2 id="boxes-title" data-ar="أربعة صناديق، لكل جلسة صندوقها" data-en="Four boxes, one for every gathering">أربعة صناديق، لكل جلسة صندوقها</h2>
+          <p data-ar="اختر حسب من يجلس معك على الطاولة: العائلة، الأصدقاء، أو شريك الحياة." data-en="Choose by who is sitting at your table: family, friends or your partner.">اختر حسب من يجلس معك على الطاولة: العائلة، الأصدقاء، أو شريك الحياة.</p>
+        </div>
+        <a class="dc-home-more" href="shop.html"><span data-ar="كل الصناديق" data-en="See all boxes">كل الصناديق</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></a>
+      </div>
+
+      <div class="dc-home-boxes">
+        <!-- flagship: صندوق دردشات -->
+        <article class="dc-home-box dc-home-box--main" data-reveal>
+          <div class="dc-product__art">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+              <g class="dc-product__peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/></g>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
+              <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+            </svg>
+          </div>
+          <div class="dc-home-box__body">
+            <div class="dc-row"><span class="dc-chip dc-chip--age dc-num" data-ar="+12" data-en="12+">+12</span><span class="dc-chip" data-ar="للجمعات العائلية والأصدقاء" data-en="Family gatherings &amp; friends">للجمعات العائلية والأصدقاء</span></div>
+            <h3 class="dc-product__name"><a class="dc-home-stretch" href="product.html?box=dardachat" data-ar="صندوق دردشات" data-en="Dardachat Box">صندوق دردشات</a></h3>
+            <p class="dc-product__meta" data-ar="بطاقات مليئة بالأسئلة والتحدّيات لجلسات حوار عميقة، ولوازم تحتاجها التحدّيات." data-en="Cards full of questions and challenges for deep conversation sessions, with the props the challenges need.">بطاقات مليئة بالأسئلة والتحدّيات لجلسات حوار عميقة، ولوازم تحتاجها التحدّيات.</p>
+            <ul class="dc-home-count" aria-label="محتويات الصندوق" data-ar-label="محتويات الصندوق" data-en-label="What is in the box">
+              <li><b class="dc-num">50</b><span data-ar="بطاقة أسئلة اجتماعية ونفسية" data-en="social and psychological question cards">بطاقة أسئلة اجتماعية ونفسية</span></li>
+              <li><b class="dc-num">25</b><span data-ar="بطاقة تحدّيات مرحة" data-en="fun, creative challenge cards">بطاقة تحدّيات مرحة</span></li>
+              <li><b class="dc-num">10</b><span data-ar="قطع لوازم للتحدّيات" data-en="props for the challenges">قطع لوازم للتحدّيات</span></li>
+            </ul>
+            <div class="dc-home-box__foot">
+              <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>149.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+              <button class="dc-btn dc-btn--cta dc-home-add" type="button" data-pop data-add data-name-ar="صندوق دردشات" data-name-en="Dardachat Box" data-ar-label="أضف صندوق دردشات إلى السلة" data-en-label="Add Dardachat Box to cart" aria-label="أضف صندوق دردشات إلى السلة"><svg class="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-home-lbl"><span data-ar="أضف إلى السلة" data-en="Add to cart">أضف إلى السلة</span><span class="dc-home-lbl__alt" aria-hidden="true" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </article>
+
+        <div class="dc-home-shelf">
+          <!-- مين فينا -->
+          <article class="dc-home-box dc-home-box--row" data-reveal style="--d:80ms">
+            <div class="dc-product__art dc-product__art--sky">
+              <svg viewBox="0 0 200 180" aria-hidden="true">
+                <g class="dc-product__peek"><rect x="48" y="44" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(-9 73 77)"/><rect x="100" y="42" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(8 125 75)"/><circle cx="125" cy="70" r="11" fill="var(--red)" transform="rotate(8 125 75)"/></g>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--pink)"/>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+                <circle cx="89" cy="126" r="4.2" fill="var(--on-red)"/><circle cx="100" cy="118" r="4.2" fill="var(--on-red)"/><circle cx="111" cy="126" r="4.2" fill="var(--on-red)"/>
+                <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+              </svg>
+            </div>
+            <div class="dc-home-box__body">
+              <div class="dc-row"><span class="dc-chip dc-chip--age dc-num" data-ar="+12" data-en="12+">+12</span><span class="dc-chip" data-ar="للعائلة والأصدقاء" data-en="Family &amp; friends">للعائلة والأصدقاء</span></div>
+              <h3 class="dc-product__name"><a class="dc-home-stretch" href="product.html?box=whoamong" data-ar="صندوق مين فينا" data-en="Who Among Us Box">صندوق مين فينا</a></h3>
+              <p class="dc-product__meta" data-ar-html="لعبة تقرّبنا وتكشف كيف نرى بعضنا بعفوية وخفة دم · <span class='dc-num'>45</span> بطاقة في <span class='dc-num'>3</span> مراحل" data-en-html="A game that brings us closer and shows how we see each other, spontaneously and humorously · <span class='dc-num'>45</span> cards in <span class='dc-num'>3</span> stages">لعبة تقرّبنا وتكشف كيف نرى بعضنا بعفوية وخفة دم · <span class="dc-num">45</span> بطاقة في <span class="dc-num">3</span> مراحل</p>
+              <div class="dc-home-box__foot">
+                <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>119.00</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+                <button class="dc-btn dc-btn--cta dc-btn--sm dc-home-add" type="button" data-pop data-add data-name-ar="صندوق مين فينا" data-name-en="Who Among Us Box" data-ar-label="أضف صندوق مين فينا إلى السلة" data-en-label="Add Who Among Us Box to cart" aria-label="أضف صندوق مين فينا إلى السلة"><svg class="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-home-lbl"><span data-ar="أضف" data-en="Add">أضف</span><span class="dc-home-lbl__alt" aria-hidden="true" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <!-- رمضان (out of season) -->
+          <article class="dc-home-box dc-home-box--row is-off" data-reveal style="--d:160ms">
+            <div class="dc-product__art">
+              <svg viewBox="0 0 200 180" aria-hidden="true">
+                <g class="dc-product__peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/></g>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+                <circle cx="100" cy="124" r="13.5" fill="var(--on-red)"/><circle cx="105.5" cy="121" r="11.5" fill="var(--red)"/>
+                <path d="M113 113l1.6 3.6 3.9.4-2.9 2.6.8 3.8-3.4-2-3.4 2 .8-3.8-2.9-2.6 3.9-.4z" fill="var(--on-red)" transform="translate(-1 -2) scale(.9)"/>
+                <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+              </svg>
+            </div>
+            <div class="dc-home-box__body">
+              <div class="dc-row"><span class="dc-chip dc-chip--age" data-ar="لكل الأعمار" data-en="All ages">لكل الأعمار</span><span class="dc-chip dc-chip--season" data-ar="موسمي · رمضان" data-en="Seasonal · Ramadan">موسمي · رمضان</span></div>
+              <h3 class="dc-product__name"><a class="dc-home-stretch" href="product.html?box=ramadan" data-ar="صندوق رمضان للعائلة" data-en="Ramadan Family Box">صندوق رمضان للعائلة</a></h3>
+              <p class="dc-product__meta" data-ar-html="عائلتك حول لحظات دافئة وذكريات ومعلومات بعد الإفطار · <span class='dc-num'>45</span> بطاقة" data-en-html="Your family around warm moments, memories and knowledge after iftar · <span class='dc-num'>45</span> cards">عائلتك حول لحظات دافئة وذكريات ومعلومات بعد الإفطار · <span class="dc-num">45</span> بطاقة</p>
+              <p class="dc-product__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-ar="يرجع مع بداية رمضان · غير متوفر الآن" data-en="Back when Ramadan begins · not available now">يرجع مع بداية رمضان · غير متوفر الآن</span></p>
+            </div>
+          </article>
+
+          <!-- مع الحب -->
+          <article class="dc-home-box dc-home-box--row" data-reveal style="--d:240ms">
+            <div class="dc-product__art dc-product__art--sky">
+              <svg viewBox="0 0 200 180" aria-hidden="true">
+                <g class="dc-product__peek">
+                  <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--red)" transform="translate(-12 -22) scale(.85)"/>
+                  <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--surface)" transform="translate(30 -30) scale(.7)"/>
+                  <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--red)" transform="translate(58 -18) scale(.6)"/>
+                </g>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--pink)"/>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
+                <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+              </svg>
+            </div>
+            <div class="dc-home-box__body">
+              <div class="dc-row"><span class="dc-chip dc-chip--age dc-num" data-ar="+18" data-en="18+">+18</span><span class="dc-chip dc-chip--pink" data-ar="للأزواج" data-en="For couples">للأزواج</span></div>
+              <h3 class="dc-product__name"><a class="dc-home-stretch" href="product.html?box=love" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</a></h3>
+              <p class="dc-product__meta" data-ar-html="لتقوية العلاقة وتجديد المشاعر · <span class='dc-num'>63</span> سؤالًا و<span class='dc-num'>16</span> تحدّيًا لشخصين و<span class='dc-num'>20</span> قلبًا كريستاليًا" data-en-html="To strengthen the relationship and renew feelings · <span class='dc-num'>63</span> questions, <span class='dc-num'>16</span> duo challenges and <span class='dc-num'>20</span> crystal hearts">لتقوية العلاقة وتجديد المشاعر · <span class="dc-num">63</span> سؤالًا و<span class="dc-num">16</span> تحدّيًا لشخصين و<span class="dc-num">20</span> قلبًا كريستاليًا</p>
+              <div class="dc-home-box__foot">
+                <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>169.00</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+                <button class="dc-btn dc-btn--cta dc-btn--sm dc-home-add" type="button" data-pop data-add data-name-ar="صندوق دردشات مع الحب" data-name-en="Dardachat with Love Box" data-ar-label="أضف صندوق دردشات مع الحب إلى السلة" data-en-label="Add Dardachat with Love Box to cart" aria-label="أضف صندوق دردشات مع الحب إلى السلة"><svg class="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-home-lbl"><span data-ar="أضف" data-en="Add">أضف</span><span class="dc-home-lbl__alt" aria-hidden="true" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <p class="dc-home-note">
+        <span class="dc-ph" data-ar="تجريبي" data-en="Placeholder">تجريبي</span>
+        <span data-ar-html="الرسوم والأسعار مؤقتة إلى أن نستلم صور الصناديق والأسعار النهائية. لست متأكدًا أي صندوق يناسبك؟ <a href='assistant.html'>اسأل مساعد دردشات</a>."
+              data-en-html="Artwork and prices are stand-ins until we receive the real box photos and final prices. Not sure which box suits you? <a href='assistant.html'>Ask the Dardachat assistant</a>.">الرسوم والأسعار مؤقتة إلى أن نستلم صور الصناديق والأسعار النهائية. لست متأكدًا أي صندوق يناسبك؟ <a href="assistant.html">اسأل مساعد دردشات</a>.</span>
+      </p>
+    </section>
+
+    <!-- ============ SERVICES TEASER ============ -->
+    <section class="dc-home-services dc-home-sec" id="services" aria-labelledby="svc-title">
+      <div class="dc-page">
+        <div class="dc-home-head" data-reveal>
+          <div>
+            <h2 id="svc-title" data-ar="نلعب معكم وجهًا لوجه" data-en="We play with you, face to face">نلعب معكم وجهًا لوجه</h2>
+            <p data-ar="جلسات وورشات وليالي ألعاب من القدس. تحجزون بمحادثة على واتساب، بلا دفع على الموقع." data-en="Sessions, workshops and game nights from Jerusalem. You book with a chat on WhatsApp, with no payment on the site.">جلسات وورشات وليالي ألعاب من القدس. تحجزون بمحادثة على واتساب، بلا دفع على الموقع.</p>
+          </div>
+          <a class="dc-home-more" href="services.html"><span data-ar="كل الخدمات" data-en="All services">كل الخدمات</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></a>
+        </div>
+
+        <div class="dc-home-tickets">
+          <!-- sessions -->
+          <article class="dc-home-svc" data-reveal>
+            <svg class="dc-home-svc__art" viewBox="0 0 96 96" aria-hidden="true">
+              <path d="M10 22a10 10 0 0 1 10-10h34a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H34L20 64V52h0a10 10 0 0 1-10-10z" fill="var(--surface)"/>
+              <path d="M36 44a10 10 0 0 1 10-10h32a10 10 0 0 1 10 10v20a10 10 0 0 1-10 10H70v12L54 74H46a10 10 0 0 1-10-10z" fill="var(--sky)" stroke="var(--blue)" stroke-width="2.5"/>
+              <path d="M62 62c0-4 3-6 5.5-6 1.7 0 3 .9 3.7 2.2.7-1.300 2-2.200 3.700-2.200 2.500 0 5.500 2 5.500 6 0 5-9.200 10-9.200 10S62 67 62 62z" fill="var(--red)" transform="translate(-8 -8) scale(.95)"/>
+            </svg>
+            <h3 id="sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</h3>
+            <p class="dc-home-svc__desc" data-ar="جلسات حوار بأسئلة دردشات، لمجموعات حتى 10 أشخاص." data-en="Dialogue sessions built on Dardachat question cards, for groups of up to 10.">جلسات حوار بأسئلة دردشات، لمجموعات حتى 10 أشخاص.</p>
+            <ul class="dc-home-svc__facts"><li data-ar="ساعة واحدة" data-en="1 hour">ساعة واحدة</li><li data-ar-html="حتى <span class='dc-num'>10</span> أشخاص" data-en-html="Up to <span class='dc-num'>10</span> people">حتى <span class="dc-num">10</span> أشخاص</li></ul>
+            <p class="dc-home-svc__price"><b class="dc-num">₪ 70</b><span data-ar-html="للشخص · <span class='dc-num'>₪ 500</span> للمجموعة كاملة" data-en-html="per person · <span class='dc-num'>₪ 500</span> for a full group">للشخص · <span class="dc-num">₪ 500</span> للمجموعة كاملة</span></p>
+            <div class="dc-home-svc__go">
+              <a class="dc-btn dc-btn--sm dc-home-wa" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D8%AC%D9%84%D8%B3%D8%A9%20%D8%AD%D9%88%D8%A7%D8%B1." target="_blank" rel="noopener" data-wa-ar="مرحبًا دردشات، أودّ الاستفسار عن حجز جلسة حوار." data-wa-en="Hello Dardachat, I would like to ask about booking a dialogue session."><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+              <a class="dc-home-more" href="services.html#sessions"><span data-ar="التفاصيل" data-en="Details">التفاصيل</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- game nights -->
+          <article class="dc-home-svc" data-reveal style="--d:100ms">
+            <svg class="dc-home-svc__art" viewBox="0 0 96 96" aria-hidden="true">
+              <rect x="8" y="26" width="46" height="46" rx="10" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.5" transform="rotate(-10 31 49)"/>
+              <g fill="var(--red)" transform="rotate(-10 31 49)"><circle cx="21" cy="39" r="4"/><circle cx="31" cy="49" r="4"/><circle cx="41" cy="59" r="4"/><circle cx="41" cy="39" r="4"/><circle cx="21" cy="59" r="4"/></g>
+              <rect x="50" y="20" width="38" height="50" rx="9" fill="var(--sky)" stroke="var(--blue)" stroke-width="2.5" transform="rotate(9 69 45)"/>
+              <circle cx="69" cy="45" r="11" fill="var(--red)" transform="rotate(9 69 45)"/>
+            </svg>
+            <h3 id="game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</h3>
+            <p class="dc-home-svc__desc" data-ar="فرق تلعب ألعاب دردشات وتجمع نقاطًا على التحدّيات وأسئلة المجموعة." data-en="Teams play Dardachat games and earn points for challenges and group questions.">فرق تلعب ألعاب دردشات وتجمع نقاطًا على التحدّيات وأسئلة المجموعة.</p>
+            <ul class="dc-home-svc__facts"><li data-ar-html="ساعة إلى ساعة ونصف" data-en-html="1 to 1.5 hours">ساعة إلى ساعة ونصف</li><li data-ar="أصدقاء وعائلات" data-en="Friends &amp; families">أصدقاء وعائلات</li></ul>
+            <p class="dc-home-svc__price"><b class="dc-num">₪ 70</b><span data-ar-html="للشخص · <span class='dc-num'>₪ 1400</span> للمجموعة" data-en-html="per person · <span class='dc-num'>₪ 1400</span> per group">للشخص · <span class="dc-num">₪ 1400</span> للمجموعة</span></p>
+            <div class="dc-home-svc__go">
+              <a class="dc-btn dc-btn--sm dc-home-wa" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D9%84%D9%8A%D9%84%D8%A9%20%D8%A3%D9%84%D8%B9%D8%A7%D8%A8." target="_blank" rel="noopener" data-wa-ar="مرحبًا دردشات، أودّ الاستفسار عن حجز ليلة ألعاب." data-wa-en="Hello Dardachat, I would like to ask about booking a game night."><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+              <a class="dc-home-more" href="services.html#game-nights"><span data-ar="التفاصيل" data-en="Details">التفاصيل</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+
+          <!-- workshops -->
+          <article class="dc-home-svc" data-reveal style="--d:200ms">
+            <svg class="dc-home-svc__art" viewBox="0 0 96 96" aria-hidden="true">
+              <circle cx="48" cy="48" r="38" fill="var(--surface)" stroke="var(--blue)" stroke-width="5"/>
+              <circle cx="48" cy="48" r="30" fill="none" stroke="var(--blue)" stroke-width="2" stroke-dasharray="5 5"/>
+              <path d="M34 50c0-8 6-13 14-13s14 5 14 13c0 11-14 20-14 20S34 61 34 50z" fill="var(--red)"/>
+              <path d="M40 48l5 5 9-10" fill="none" stroke="var(--on-red)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="44" y="6" width="8" height="10" rx="3" fill="var(--blue)"/>
+            </svg>
+            <h3 id="workshops" data-ar="ورشات العمل" data-en="Workshops">ورشات العمل</h3>
+            <p class="dc-home-svc__desc" data-ar="لعب ونشاط فني تخرجون منه بذكرى بأيديكم: تطريز، طين، رسم على حقائب، وترتيب ورود." data-en="Play plus an art activity that leaves you with a keepsake: embroidery, clay, painting on tote bags and flower arranging.">لعب ونشاط فني تخرجون منه بذكرى بأيديكم: تطريز، طين، رسم على حقائب، وترتيب ورود.</p>
+            <ul class="dc-home-svc__facts"><li data-ar-html="مجموعات <bdi dir='ltr' class='dc-num'>20–25</bdi>" data-en-html="Groups of <bdi dir='ltr' class='dc-num'>20–25</bdi>">مجموعات <bdi dir="ltr" class="dc-num">20–25</bdi></li><li data-ar="ساعتان إلى 3 ساعات" data-en="2 to 3 hours">ساعتان إلى 3 ساعات</li></ul>
+            <p class="dc-home-svc__price"><b class="dc-num"><bdi dir="ltr">₪ 100–180</bdi></b><span data-ar="للشخص، حسب الورشة وعدد المشاركين" data-en="per person, by workshop and group size">للشخص، حسب الورشة وعدد المشاركين</span></p>
+            <div class="dc-home-svc__go">
+              <a class="dc-btn dc-btn--sm dc-home-wa" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%D9%88%D8%B1%D8%B4%D8%A9%20%D8%B9%D9%85%D9%84." target="_blank" rel="noopener" data-wa-ar="مرحبًا دردشات، أودّ الاستفسار عن حجز ورشة عمل." data-wa-en="Hello Dardachat, I would like to ask about booking a workshop."><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+              <a class="dc-home-more" href="services.html#workshops"><span data-ar="التفاصيل" data-en="Details">التفاصيل</span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUOTE + ABOUT ============ -->
+    <section class="dc-home-sec dc-page" id="about" aria-labelledby="about-title">
+      <div class="dc-home-about">
+        <figure class="dc-banner" data-reveal>
+          <blockquote style="margin:0"><p class="dc-banner__quote" data-ar="«قبل ما نتعمق بمعرفة الأشخاص من حولنا مهم نتعمق في معرفة ذاتنا»" data-en="“Before we get to know the people around us, it matters to get to know ourselves”">«قبل ما نتعمق بمعرفة الأشخاص من حولنا مهم نتعمق في معرفة ذاتنا»</p></blockquote>
+          <figcaption class="dc-banner__sig" data-ar="— دردشات" data-en="— Dardachat">— دردشات</figcaption>
+          <!-- two cards leaning on each other, a heart on the front one, and a blue brush stroke underneath -->
+          <svg class="dc-home-art" viewBox="0 0 200 170" aria-hidden="true">
+            <g>
+              <rect class="dc-home-art__c1" x="36" y="34" width="66" height="98" rx="10" transform="rotate(12 69 132)"/>
+              <circle class="dc-home-art__dot" cx="72" cy="78" r="11" transform="rotate(12 69 132)"/>
+            </g>
+            <rect class="dc-home-art__c2" x="98" y="34" width="66" height="98" rx="10" transform="rotate(-12 131 132)"/>
+            <path class="dc-home-art__heart" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" transform="translate(101 62) scale(1.7)"/>
+            <svg class="dc-brush" id="quoteBrush" viewBox="0 0 200 20" x="10" y="146" width="180" height="20" preserveAspectRatio="none" overflow="visible"><path d="M6 12 C 46 4, 84 17, 116 10 S 168 6, 194 11"/></svg>
+          </svg>
+        </figure>
+        <div class="dc-home-text" data-reveal style="--d:120ms">
+          <h2 id="about-title" data-ar="من نحن" data-en="About us">من نحن</h2>
+          <p data-ar="نحن في «دردشات» نؤمن بأن التواصل هو جوهر العلاقات الإنسانية. من قلب القدس، أطلقنا مشروعًا مبتكرًا يعزز الروابط بين الأفراد من خلال ألعاب لوحية وبطاقات وخدمات اجتماعية تلهم الحوار والتفاعل."
+             data-en="At Dardachat we believe that connection is the core of human relationships. From the heart of Jerusalem we launched a project that strengthens the bonds between people through board games, cards and social services that inspire dialogue and interaction.">نحن في «دردشات» نؤمن بأن التواصل هو جوهر العلاقات الإنسانية. من قلب القدس، أطلقنا مشروعًا مبتكرًا يعزز الروابط بين الأفراد من خلال ألعاب لوحية وبطاقات وخدمات اجتماعية تلهم الحوار والتفاعل.</p>
+          <ul class="dc-home-pillars" aria-label="ركائز دردشات" data-ar-label="ركائز دردشات" data-en-label="Dardachat pillars">
+            <li data-ar="مجتمع دردشات" data-en="Dardachat community">مجتمع دردشات</li>
+            <li data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</li>
+            <li data-ar="الجلسات" data-en="Sessions">الجلسات</li>
+            <li data-ar="الورشات" data-en="Workshops">الورشات</li>
+            <li data-ar="صناديق الألعاب" data-en="Game boxes">صناديق الألعاب</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dc-home-foot" id="contact">
+    <div class="dc-page">
+      <img src="assets/dardachat-lockup-knockout.png" alt="دردشات Dardachat" data-ar-alt="دردشات" data-en-alt="Dardachat">
+      <address>
+        <div><small data-ar="العنوان" data-en="Address">العنوان</small><span data-ar="القدس – بيت حنينا" data-en="Beit Hanina, Jerusalem">القدس – بيت حنينا</span></div>
+        <div><small data-ar="واتساب وهاتف" data-en="WhatsApp and phone">واتساب وهاتف</small><a class="dc-num" href="https://wa.me/972543992424" target="_blank" rel="noopener">054 399 2424</a></div>
+        <div><small data-ar="البريد" data-en="Email">البريد</small><a href="mailto:dardchat.2023@gmail.com">dardchat.2023@gmail.com</a></div>
+        <div><small data-ar="إنستغرام" data-en="Instagram">إنستغرام</small><a class="dc-num" href="https://instagram.com/dard_chat" target="_blank" rel="noopener">@dard_chat</a></div>
+      </address>
+      <div class="dc-home-foot__wa">
+        <a class="dc-btn dc-home-draw" href="https://wa.me/972543992424" target="_blank" rel="noopener" data-ar="تحدّث معنا على واتساب" data-en="Chat with us on WhatsApp">تحدّث معنا على واتساب</a>
+      </div>
+      <div class="dc-home-foot__legal">
+        <span data-ar="دردشات · Dardachat · القدس" data-en="Dardachat · Jerusalem">دردشات · Dardachat · القدس</span>
+        <a href="assistant.html" data-ar="اسأل مساعد دردشات" data-en="Ask the Dardachat assistant">اسأل مساعد دردشات</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+document.addEventListener('dc:ready', function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var SPRING = 'cubic-bezier(.34,1.56,.64,1)';
+  var dir = function () { return DC.lang === 'ar' ? -1 : 1; };
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn = $('#menuBtn'), nav = $('#dc-nav'), top = $('#top');
+  function menu(open) { menuBtn.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); }
+  menuBtn.addEventListener('click', function () { menu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('is-open')) { menu(false); menuBtn.focus(); } });
+  document.addEventListener('click', function (e) { if (nav.classList.contains('is-open') && !e.target.closest('.dc-home-top')) menu(false); });
+  $$('#dc-nav a').forEach(function (a) { a.addEventListener('click', function () { menu(false); }); });
+
+  /* ---------- the header logo joins once the big lockup has scrolled away ---------- */
+  var heroLogo = $('#heroLogo');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { top.classList.toggle('is-past-hero', !es[0].isIntersecting); }, { rootMargin: '-64px 0px 0px 0px' }).observe(heroLogo);
+  } else { top.classList.add('is-past-hero'); }
+
+  /* ---------- brush underline under "box": paints on after the corner strokes ---------- */
+  var hl = $('#hlBrush');
+  setTimeout(function () { DC.draw(hl); }, DC.reducedMotion() ? 0 : 900);
+
+  /* ---------- draw a card ---------- */
+  var POOL = [
+    { k: 'q',  ar: 'شو أكثر لحظة حسّيت فيها إنك مفهوم تمامًا؟', en: 'What moment made you feel completely understood?' },
+    { k: 'c',  ar: 'ارسم الشخص اللي على يمينك بثلاثين ثانية، وخلّيه يخمّن مين.', en: 'Draw the person on your right in thirty seconds and let them guess who it is.' },
+    { k: 'w',  ar: 'مين فينا أول واحد بيضحك بالجمعة؟', en: 'Who among us is the first to laugh at the gathering?' },
+    { k: 'q',  ar: 'أي ذكرى من طفولتك بترجعلك دفا كل ما تتذكرها؟', en: 'Which childhood memory still warms you whenever you remember it?' },
+    { k: 'c',  ar: 'احكِ عن يومك بثلاث كلمات فقط، وخلّي الباقي يسألوك عنه.', en: 'Describe your day in three words, then let the others ask you about it.' },
+    { k: 'w',  ar: 'مين فينا بيوصل متأخر ومعه أحسن عذر؟', en: 'Who among us arrives late with the best excuse?' },
+    { k: 'q',  ar: 'مين آخر واحد علّمك شي جديد، وشو كان؟', en: 'Who last taught you something new, and what was it?' },
+    { k: 'c',  ar: 'مثّل ذكرى دافئة بدون كلام، والباقي يخمّنوها.', en: 'Act out a warm memory without words while the others guess.' }
+  ];
+  var KIND = { q: ['سؤال', 'Question', ''], c: ['تحدّي', 'Challenge', 'dc-qcard__front--pink'], w: ['مين فينا؟', 'Who among us?', ''] };
+  var slot = $('#slot'), deck = $('#deck'), drawBtn = $('#drawBtn'), drawLabel = $('#drawLabel'), live = $('#live');
+  var order = POOL.map(function (_, i) { return i; }), pos = 0, drawn = 0, busy = false;
+  var first = $('.dc-home-card', slot);
+
+  function kindText(k) { return DC.lang === 'ar' ? KIND[k][0] : KIND[k][1]; }
+  function paint(card) {
+    var p = POOL[+card.getAttribute('data-idx')];
+    $('.dc-qcard__disc', card).textContent = kindText(p.k);
+    $('.dc-qcard__kicker', card).textContent = kindText(p.k);
+    $('.dc-qcard__q', card).textContent = DC.lang === 'ar' ? p.ar : p.en;
+    card.setAttribute('aria-label', DC.t('اقلب البطاقة', 'Flip the card'));
+  }
+  function make(idx) {
+    var p = POOL[idx], b = document.createElement('button');
+    b.type = 'button'; b.className = 'dc-qcard dc-home-card is-current'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('data-idx', idx);
+    b.innerHTML = '<span class="dc-qcard__inner"><span class="dc-qcard__face dc-qcard__front ' + KIND[p.k][2] + '"><span class="dc-qcard__disc"></span></span>' +
+      '<span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker"></span><span class="dc-qcard__q"></span></span></span>';
+    paint(b); return b;
+  }
+  function toss(card) {
+    card.classList.remove('is-current');
+    card.setAttribute('aria-hidden', 'true'); card.tabIndex = -1;
+    card.style.setProperty('--tx', (Math.round((Math.random() * 16 - 8)) + dir() * 6) + 'px');
+    card.style.setProperty('--ty', (6 + Math.round(Math.random() * 8)) + 'px');
+    card.style.setProperty('--rot', (dir() * (4 + Math.random() * 8) * (Math.random() > .5 ? 1 : -1)).toFixed(1) + 'deg');
+    card.classList.add('is-tossed');
+    var old = $$('.is-tossed', slot);
+    while (old.length > 2) { var g = old.shift(); g.classList.add('is-gone'); (function (n) { setTimeout(function () { n.remove(); }, 260); })(g); }
+  }
+  function announce(card) {
+    var p = POOL[+card.getAttribute('data-idx')];
+    live.textContent = kindText(p.k) + ': ' + (DC.lang === 'ar' ? p.ar : p.en);
+  }
+  function draw(isFirst) {
+    if (busy) return; busy = true;
+    var prev = $('.is-current', slot);
+    var idx = order[pos % order.length]; pos++;
+    var card = make(idx);
+    if (prev) toss(prev);
+    slot.appendChild(card);
+    drawn++;
+    drawLabel.textContent = DC.t('اسحب بطاقة أخرى', 'Draw another card');
+    drawLabel.setAttribute('data-ar', 'اسحب بطاقة أخرى'); drawLabel.setAttribute('data-en', 'Draw another card');
+    if (DC.reducedMotion()) { DC.flip(card, true); announce(card); busy = false; return; }
+    var d = deck.getBoundingClientRect(), s = card.getBoundingClientRect();
+    var dx = (d.left + d.width / 2) - (s.left + s.width / 2), dy = (d.top + d.height / 2) - (s.top + s.height / 2);
+    var sc = d.width / s.width;
+    card.animate([
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) rotate(' + (dir() * -10) + 'deg) scale(' + sc + ')' },
+      { transform: 'none' }
+    ], { duration: 620, easing: SPRING });
+    setTimeout(function () { DC.flip(card, true); announce(card); }, 480);
+    setTimeout(function () { busy = false; }, 700);
+  }
+  // the page reads without JS with one card already turned. With motion we take it back and deal it properly.
+  if (DC.reducedMotion()) {
+    // keep the static card; keep the rotation of the pool in step with it
+    pos = 1; drawn = 1;
+    drawLabel.textContent = DC.t('اسحب بطاقة أخرى', 'Draw another card');
+  } else {
+    first.remove();
+    drawLabel.textContent = DC.t('اسحب بطاقة', 'Draw a card');
+    drawLabel.setAttribute('data-ar', 'اسحب بطاقة'); drawLabel.setAttribute('data-en', 'Draw a card');
+    // deal and first draw start when the table is actually seen (on desktop that is immediately)
+    var table = $('.dc-home-table'), started = false;
+    var start = function () { if (started) return; started = true; table.classList.remove('is-wait'); setTimeout(function () { draw(true); }, 1100); };
+    var r0 = table.getBoundingClientRect(), vis = Math.min(r0.bottom, innerHeight) - Math.max(r0.top, 0);
+    var need = Math.min(.5, (innerHeight * .9) / Math.max(r0.height, 1));
+    if (!('IntersectionObserver' in window) || vis >= r0.height * need) start();
+    else {
+      table.classList.add('is-wait');
+      var tio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { tio.disconnect(); start(); } }, { threshold: need });
+      tio.observe(table);
+    }
+  }
+  drawBtn.addEventListener('click', function () { draw(false); });
+  deck.addEventListener('click', function () { draw(false); });
+  document.addEventListener('dc:lang', function () {
+    $$('.dc-home-card', slot).forEach(paint);
+    var cur = $('.is-current', slot); if (cur && drawn) announce(cur);
+    drawLabel.textContent = DC.t(drawLabel.getAttribute('data-ar'), drawLabel.getAttribute('data-en'));
+    waLinks();
+  });
+
+  /* ---------- cart: heart pop is automatic (data-pop); the count bumps, a toast offers the cart ---------- */
+  var cartCount = $('#cartCount'), toast = $('#toast'), toastText = $('#toastText'), toastLink = $('.dc-btn', toast), tt, n = 0;
+  $$('[data-add]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      n++; cartCount.textContent = String(n); cartCount.classList.remove('is-empty'); DC.bump(cartCount);
+      b.classList.add('is-added'); setTimeout(function () { b.classList.remove('is-added'); }, 1400);
+      toastText.textContent = DC.t('أضفنا ', 'Added ') + DC.t(b.getAttribute('data-name-ar'), b.getAttribute('data-name-en')) + DC.t(' إلى السلة', ' to your cart');
+      toast.classList.add('is-on'); toastLink.tabIndex = 0;
+      clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('is-on'); toastLink.tabIndex = -1; }, 3200);
+    });
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { toast.classList.remove('is-on'); toastLink.tabIndex = -1; } });
+
+  /* ---------- WhatsApp booking links follow the language ---------- */
+  function waLinks() {
+    $$('[data-wa-ar]').forEach(function (a) {
+      a.href = 'https://wa.me/972543992424?text=' + encodeURIComponent(DC.lang === 'ar' ? a.getAttribute('data-wa-ar') : a.getAttribute('data-wa-en'));
+    });
+  }
+  waLinks();
+
+  /* ---------- the short blue stroke under the quote art paints on when the panel is seen ---------- */
+  var qb = $('#quoteBrush');
+  if (qb) {
+    if ('IntersectionObserver' in window && !DC.reducedMotion()) {
+      var qio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { qio.disconnect(); setTimeout(function () { DC.draw(qb); }, 350); } }, { threshold: .5 });
+      qio.observe(qb);
+    } else DC.draw(qb);
+  }
+
+  /* ---------- quiet scroll reveal (only what is below the fold is prepared; nothing is hidden without JS) ---------- */
+  var reveals = $$('[data-reveal]');
+  if ('IntersectionObserver' in window && !DC.reducedMotion()) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.remove('is-pre'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    reveals.forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top > innerHeight * .92) { el.classList.add('is-pre'); io.observe(el); }
+    });
+  }
+});
+</script>
+</body>
+</html>

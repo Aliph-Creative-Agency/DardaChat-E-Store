@@ -1,0 +1,66 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-09-29T18:33:10Z"
+ },
+ "title": "Dardachat Design System",
+ "namespace": "Dardachat",
+ "libraries": [],
+ "sections": {},
+ "groups": [
+  "Logos",
+  "Source"
+ ],
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "l",
+   "order": [
+    "dardachat-banner.png",
+    "dardachat-lockup-on-blue.png"
+   ],
+   "files": {
+    "dardachat-banner.png": {
+     "name": "dardachat-banner.png",
+     "blob": "8b0df344cd26756f2f133cc79e91bd90",
+     "size": 23463,
+     "type": "image/png"
+    },
+    "dardachat-lockup-on-blue.png": {
+     "name": "dardachat-lockup-on-blue.png",
+     "blob": "34bf4f25bc9b033265d2947a244a1e43",
+     "size": 15475,
+     "type": "image/png"
+    }
+   }
+  },
+  "Source": {
+   "name": "Source",
+   "tile": "m",
+   "order": [
+    "client-palette.jpg"
+   ],
+   "files": {
+    "client-palette.jpg": {
+     "name": "client-palette.jpg",
+     "blob": "548b3a38727cc39af2542e192257c6a8",
+     "size": 36619,
+     "type": "image/jpeg"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Obaida Sartawi",
+  "at": "2026-09-29T18:33:10Z",
+  "via": "Claude Code",
+  "note": "First version from the client palette, brand profile and product/service copy."
+ }
+}

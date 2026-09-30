@@ -1,0 +1,19 @@
+<!-- @dsCard group="Decoration" height=300 -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><title>BrushStroke — preview</title></head>
+<body>
+<div class="dc-root">
+  <div class="dc-hero">
+    <svg class="dc-brush is-drawing" viewBox="0 0 720 240" preserveAspectRatio="none" aria-hidden="true">
+      <path style="--len:900" stroke-width="46" d="M-20 60 C 60 10, 110 120, 40 150 S 10 250, 120 215"/>
+      <path style="--len:900" stroke-width="46" d="M740 30 C 650 70, 700 150, 640 190 S 700 250, 610 260"/>
+    </svg>
+    <img src="/_blob/34bf4f25bc9b033265d2947a244a1e43" alt="دردشات — Dardachat">
+  </div>
+</div>
+<script>
+const b=document.querySelector('.dc-brush');document.querySelector('.dc-hero').addEventListener('click',()=>{b.classList.remove('is-drawing');void b.getBoundingClientRect();b.classList.add('is-drawing');});
+</script>
+</body>
+</html>

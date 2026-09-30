@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-ar="صندوق دردشات مع الحب · دردشات" data-en="Dardachat with Love Box · Dardachat">صندوق دردشات مع الحب · دردشات</title>
+  <link rel="stylesheet" href="ds.css">
+  <script src="_shared.js" defer></script>
+  <style>
+    /* ==== product screen only (prefix dc-pdp). Tokens from ds.css; nothing hard-coded except geometry. ==== */
+
+    /* Night: the DS --pink is a plum (#3a2a44) that is not a brand colour, so the box body and the pink-ground tiles use a navy tint of --blue instead */
+    :root { --pdp-pink: var(--pink); --pdp-pink-ground: var(--pink); }
+    [data-theme="dark"] .dc-qcard__front--pink { background: var(--pdp-pink); }
+    [data-theme="dark"] { --pdp-pink: color-mix(in srgb, var(--blue) 32%, var(--surface)); --pdp-pink-ground: color-mix(in srgb, var(--blue) 13%, var(--surface)); }
+
+    /* ---- header (same band as shop) ---- */
+    .dc-pdp-top { position: sticky; inset-block-start: 0; z-index: 50; background: var(--band); color: var(--on-band); }
+    .dc-pdp-top .dc-header { max-width: 1200px; margin-inline: auto; background: transparent; color: var(--on-band); border-radius: 0;
+      padding-block: var(--space-2); padding-inline: var(--space-4); gap: var(--space-4); position: relative; }
+    @media (min-width: 768px) { .dc-pdp-top .dc-header { padding-inline: var(--space-5); gap: var(--space-5); } }
+    .dc-pdp-brand { display: block; line-height: 0; border-radius: var(--radius-sm); }
+    .dc-pdp-top .dc-header__logo { height: 52px; }
+    .dc-pdp-top nav a, .dc-pdp-top .dc-cart, .dc-pdp-menu { color: var(--on-band); }
+    .dc-pdp-actions { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-1); }
+    .dc-pdp-top .dc-cart { text-decoration: none; }
+    .dc-pdp-top .dc-cart:hover, .dc-pdp-menu:hover { background: rgb(255 255 255 / .12); }
+    .dc-pdp-top :focus-visible { outline-color: var(--on-band); }
+    .dc-pdp-menu { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; border-radius: 50%; cursor: pointer; }
+    .dc-pdp-menu svg { width: 24px; height: 24px; }
+    .dc-pdp-menu .i-close, .dc-pdp-menu[aria-expanded="true"] .i-open { display: none; }
+    .dc-pdp-menu[aria-expanded="true"] .i-close { display: block; }
+    .dc-pdp-top nav { position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--band); flex-direction: column; gap: 0;
+      padding: var(--space-2) var(--space-4) var(--space-4); visibility: hidden; opacity: 0; transform: translateY(-8px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+      box-shadow: var(--shadow-lift); border-block-start: 1px solid rgb(255 255 255 / .16); }
+    .dc-pdp-top nav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-pdp-top nav a { padding-block: 14px; font-size: 16px; }
+    .dc-pdp-top nav a::after { inset-block-end: 6px; }
+    @media (min-width: 900px) {
+      .dc-pdp-menu { display: none; }
+      .dc-pdp-top nav { position: static; visibility: visible; opacity: 1; transform: none; flex-direction: row; gap: var(--space-4); padding: 0; box-shadow: none; border: 0; background: none; flex-wrap: nowrap; }
+      .dc-pdp-top nav a { padding-block: 8px; font-size: 15px; }
+      .dc-pdp-top nav a::after { inset-block-end: 0; }
+      .dc-pdp-actions { margin-inline-start: 0; }
+    }
+
+    /* ---- breadcrumb ---- */
+    .dc-pdp-crumbs { padding-block: var(--space-4) var(--space-3); font: var(--type-small); color: var(--ink-soft); }
+    .dc-pdp-crumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+    .dc-pdp-crumbs li + li::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-inline-end: var(--space-2);
+      border-block-start: 1.6px solid currentColor; border-inline-end: 1.6px solid currentColor; transform: rotate(45deg); opacity: .7; }
+    [dir="rtl"] .dc-pdp-crumbs li + li::before { transform: rotate(-45deg); }
+    .dc-pdp-crumbs a { color: var(--blue); font-weight: 600; text-underline-offset: 3px; }
+    .dc-pdp-crumbs [aria-current] { color: var(--ink); font-weight: 600; }
+
+    /* ---- hero: gallery + buy panel ---- */
+    .dc-pdp-hero { display: grid; gap: var(--space-5); padding-block-end: var(--space-7); }
+    @media (min-width: 900px) { .dc-pdp-hero { grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: var(--space-7); align-items: start; padding-block-end: var(--space-8); } }
+
+    .dc-pdp-gallery { display: grid; gap: var(--space-3); min-width: 0; }
+    .dc-pdp-stage { position: relative; aspect-ratio: 1 / 1; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); touch-action: pan-y; background: var(--sky); }
+    .dc-pdp-slide { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; visibility: hidden;
+      transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    .dc-pdp-slide.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+    .dc-pdp-slide svg { width: 82%; height: auto; overflow: visible; }
+    .dc-pdp-slide.is-in svg { animation: dc-pdp-arrive var(--dur-slow) var(--ease-spring) both; }
+    @keyframes dc-pdp-arrive { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 36px)) rotate(calc(var(--dir, 1) * 4deg)) scale(.94); } }
+    .dc-pdp-slide--pink { background: var(--pdp-pink-ground); } .dc-pdp-slide--sky { background: var(--sky); }
+    .dc-pdp-arrow { position: absolute; inset-block-start: 50%; margin-block-start: -22px; width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+      background: var(--surface); color: var(--ink); box-shadow: var(--shadow-card); display: grid; place-items: center; z-index: 2;
+      transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-base); }
+    .dc-pdp-arrow:hover { background: var(--blue); color: var(--on-blue); }
+    .dc-pdp-arrow:active { transform: scale(.94); }
+    .dc-pdp-arrow svg { width: 20px; height: 20px; }
+    .dc-pdp-arrow--prev { inset-inline-start: var(--space-3); } .dc-pdp-arrow--next { inset-inline-end: var(--space-3); }
+    [dir="rtl"] .dc-pdp-arrow svg { transform: scaleX(-1); }
+    .dc-pdp-ph { position: absolute; inset-block-end: var(--space-3); inset-inline-start: var(--space-3); z-index: 2; }
+    @media (max-width: 599px) { .dc-pdp-ph { inset-block: var(--space-3) auto; } }
+    .dc-pdp-thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); }
+    .dc-pdp-thumb { padding: 0; border: 0; cursor: pointer; aspect-ratio: 1 / 1; border-radius: var(--radius-md); overflow: hidden; display: grid; place-items: center;
+      box-shadow: inset 0 0 0 1.5px var(--line); opacity: .78; position: relative;
+      transition: opacity var(--dur-base), transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base); }
+    .dc-pdp-thumb svg { width: 88%; height: auto; overflow: visible; pointer-events: none; }
+    .dc-pdp-thumb:hover { opacity: 1; transform: translateY(-3px); }
+    .dc-pdp-thumb[aria-current="true"] { opacity: 1; box-shadow: inset 0 0 0 3px var(--blue); }
+    .dc-pdp-thumb.dc-pdp-slide--pink { background: var(--pdp-pink-ground); } .dc-pdp-thumb.dc-pdp-slide--sky { background: var(--sky); }
+
+    /* buy panel */
+    .dc-pdp-buy { display: grid; gap: var(--space-4); align-content: start; min-width: 0; }
+    .dc-pdp-buy h1 { font: var(--type-display-2); margin: 0; color: var(--ink); text-wrap: balance; }
+    @media (min-width: 768px) { .dc-pdp-buy h1 { font: var(--type-display-1); } }
+    .dc-pdp-buy .dc-brush { display: block; width: 150px; height: 14px; margin-block-start: calc(-1 * var(--space-2)); }
+    .dc-pdp-buy .dc-brush path { stroke-width: 7; }
+    .dc-pdp-lede { margin: 0; font: var(--type-body-lg); color: var(--ink-soft); max-width: 52ch; text-wrap: pretty; }
+    .dc-pdp-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); margin: 0; }
+    .dc-pdp-facts div { background: var(--surface); border-radius: var(--radius-md); padding: var(--space-3); box-shadow: inset 0 0 0 1.5px var(--line); min-width: 0; }
+    .dc-pdp-facts dt { font: 500 12.5px/1.3 var(--font-sans); color: var(--ink-soft); }
+    .dc-pdp-facts dd { margin: 3px 0 0; font: 700 16px/1.35 var(--font-sans); color: var(--ink); overflow-wrap: anywhere; }
+    .dc-pdp-facts dd.dc-pdp-fact-num { font: 700 22px/1.2 var(--font-display); color: var(--blue); }
+
+    .dc-pdp-purchase { background: var(--surface); border-radius: var(--radius-lg); padding: var(--space-4); display: grid; gap: var(--space-4); box-shadow: var(--shadow-card); }
+    @media (min-width: 768px) { .dc-pdp-purchase { padding: var(--space-5); } }
+    .dc-pdp-priceline { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
+    .dc-pdp-priceline .dc-price__now { font-size: 32px; }
+    .dc-pdp-priceline .dc-price { gap: 6px; }
+    .dc-pdp-priceline .dc-price .dc-ph { justify-self: start; }
+    .dc-pdp-total { text-align: end; font: var(--type-small); color: var(--ink-soft); display: none; }
+    .dc-pdp-total.is-on { display: block; }
+    .dc-pdp-total b { display: block; font: 700 18px/1.3 var(--font-sans); color: var(--ink); }
+    .dc-pdp-total b.is-tick { animation: dc-bump 520ms var(--ease-spring); }
+    .dc-pdp-buyrow { display: flex; gap: var(--space-3); align-items: stretch; }
+    .dc-pdp-qty { display: inline-flex; align-items: center; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1.5px var(--line-strong); flex: none; }
+    .dc-pdp-qty button { width: 44px; height: 52px; border: 0; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; border-radius: var(--radius-pill);
+      transition: background-color var(--dur-quick), transform var(--dur-quick) var(--ease-out); }
+    .dc-pdp-qty button:hover:not([disabled]) { background: var(--sky); }
+    .dc-pdp-qty button:active:not([disabled]) { transform: scale(.9); }
+    .dc-pdp-qty button[disabled] { opacity: .35; cursor: not-allowed; }
+    .dc-pdp-qty svg { width: 18px; height: 18px; }
+    .dc-pdp-qty output { min-width: 28px; text-align: center; font: 700 18px/1 var(--font-sans); color: var(--ink); }
+    .dc-pdp-add { flex: 1; justify-content: center; font-size: 17px; min-height: 52px; }
+    .dc-pdp-add svg:not(.dc-heart) { width: 20px; height: 20px; }
+    .dc-pdp-lab { display: inline-grid; justify-items: center; }
+    .dc-pdp-lab > span { grid-area: 1 / 1; }
+    .dc-pdp-lab .t-done, .is-added > .dc-pdp-lab .t-add { visibility: hidden; }
+    .is-added > .dc-pdp-lab .t-done { visibility: visible; }
+    .dc-pdp-add .i-tick { display: none; } .dc-pdp-add.is-added .i-tick { display: block; } .dc-pdp-add.is-added .i-bag { display: none; }
+    .dc-pdp-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); font: var(--type-small); color: var(--ink-soft); }
+    .dc-pdp-notes li { display: flex; gap: var(--space-2); align-items: flex-start; }
+    .dc-pdp-notes svg { width: 18px; height: 18px; flex: none; margin-block-start: 3px; color: var(--blue); }
+    .dc-pdp-notes a { color: var(--blue); font-weight: 600; text-underline-offset: 3px; }
+    .dc-pdp-off { display: none; gap: var(--space-3); }
+    .dc-pdp-off__note { margin: 0; display: flex; gap: var(--space-2); align-items: center; font: 600 14px/1.5 var(--font-sans); color: var(--ink); }
+    .dc-pdp-off__note svg { width: 18px; height: 18px; flex: none; color: var(--red); }
+    .dc-pdp-buy.is-off .dc-pdp-buyrow { display: none; }
+    .dc-pdp-buy.is-off .dc-pdp-off { display: grid; }
+    .dc-pdp-notify { justify-content: center; }
+    .dc-pdp-notify[aria-pressed="true"] { background: var(--sky); color: var(--on-soft); border-color: transparent; }
+    .dc-pdp-notify .n-on, .dc-pdp-notify[aria-pressed="true"] .n-off { display: none; }
+    .dc-pdp-notify[aria-pressed="true"] .n-on { display: inline; }
+
+    @media (max-width: 599px) {
+      .dc-pdp-crumbs { padding-block: var(--space-3) var(--space-2); }
+      .dc-pdp-hero { gap: var(--space-4); }
+      .dc-pdp-gallery { gap: var(--space-2); }
+      .dc-pdp-stage { aspect-ratio: 4 / 3; }
+      .dc-pdp-slide svg { width: auto; height: 92%; }
+      .dc-pdp-thumbs { grid-template-columns: repeat(4, 56px); justify-content: center; }
+      .dc-pdp-buy { gap: var(--space-3); }
+      .dc-pdp-lede { font: var(--type-body); }
+      /* price and the add button come straight after the name; the fact tiles follow */
+      .dc-pdp-facts { order: 5; }
+      .dc-pdp-purchase { order: 4; }
+    }
+
+    /* ---- section heads ---- */
+    .dc-pdp-head { display: grid; gap: var(--space-2); margin-block-end: var(--space-5); max-width: 60ch; }
+    .dc-pdp-head h2 { font: var(--type-display-2); margin: 0; color: var(--ink); text-wrap: balance; }
+    .dc-pdp-head p { margin: 0; font: var(--type-body); color: var(--ink-soft); }
+    @media (min-width: 768px) { .dc-pdp-head h2 { font: var(--type-display-1); } .dc-pdp-head p { font: var(--type-body-lg); } }
+    .dc-pdp-head .dc-brush { width: 120px; height: 12px; margin-block: 2px; }
+    .dc-pdp-head .dc-brush path { stroke-width: 6; }
+
+    /* ---- what is in the box: the exploded view (signature) ---- */
+    .dc-pdp-inside { background: var(--surface); border-radius: var(--radius-lg); padding: var(--space-5) var(--space-4) var(--space-6); box-shadow: var(--shadow-card); }
+    @media (min-width: 768px) { .dc-pdp-inside { padding: var(--space-7) var(--space-6); } }
+    .dc-pdp-inside__grid { display: grid; gap: var(--space-4); align-items: start; }
+    @media (min-width: 900px) { .dc-pdp-inside__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-7); } }
+    /* phones: a short sticky picture (200px), a soft fade under it, and rows that scroll to rest below it */
+    .dc-pdp-inside { --pdp-head: 68px; --pdp-xv-h: min(26vh, 200px); --pdp-xv-top: 72px; }
+    .dc-pdp-xv { position: sticky; overflow: visible; inset-block-start: var(--pdp-xv-top); z-index: 5; background: var(--sky); border-radius: var(--radius-lg); height: var(--pdp-xv-h); box-shadow: var(--shadow-card); }
+    .dc-pdp-xv svg { position: absolute; inset: var(--space-2); width: calc(100% - 16px); height: calc(100% - 16px); overflow: visible; }
+    .dc-pdp-xv::after { content: ""; position: absolute; inset-inline: calc(var(--space-4) * -1); inset-block-start: 100%; height: 36px; pointer-events: none;
+      background: linear-gradient(to bottom, var(--surface) 55%, transparent); }
+    /* the picture sticks 4px below the header, so a section-coloured strip fills that gap and rows never show through it */
+    .dc-pdp-xv::before { content: ""; position: absolute; inset-inline: calc(var(--space-4) * -1); inset-block-end: 100%; height: calc(var(--pdp-xv-top) - var(--pdp-head)); background: var(--surface); z-index: -1; pointer-events: none; }
+    .dc-pdp-cap { display: none; }
+    @media (min-width: 900px) {
+      .dc-pdp-inside { --pdp-xv-h: 0px; }
+      .dc-pdp-xv::before { display: none; }
+      .dc-pdp-row { scroll-margin-block: 100px 24px; }
+      .dc-pdp-xv { inset-block-start: 96px; height: min(calc(100vh - 128px), 560px); }
+      .dc-pdp-xv::after { display: none; }
+      .dc-pdp-xv svg { inset: var(--space-3) var(--space-3) 68px; width: calc(100% - 32px); height: calc(100% - 80px); }
+      .dc-pdp-cap { display: flex; position: absolute; inset-inline: var(--space-3); inset-block-end: var(--space-3); justify-content: center; pointer-events: none;
+        opacity: 0; transform: translateY(6px); transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+      .dc-pdp-xv.has-active .dc-pdp-cap { opacity: 1; transform: none; }
+      .dc-pdp-cap__pill { display: inline-flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 2px 10px; max-width: 100%; padding: 10px 18px; border-radius: 24px; background: var(--surface); color: var(--ink);
+        box-shadow: var(--shadow-card), inset 0 0 0 2px var(--blue); font: 600 15px/1.45 var(--font-sans); text-align: center; }
+      .dc-pdp-cap__pill .dc-num { font: 700 20px/1 var(--font-sans); color: var(--blue); }
+      .dc-pdp-cap__pill .dc-pdp-dot { color: var(--ink-soft); }
+    .dc-pdp-cap__pill b { font: 700 15px/1.45 var(--font-display); }
+    }
+    .dc-pdp-rowtools { display: flex; justify-content: flex-end; margin-block: 0 var(--space-3); }
+    /* exploded parts: CSS transform on the outer <g>, placement transform on the inner <g> */
+    .dc-pdp-part, .dc-pdp-lid { transition: transform var(--dur-slow) var(--ease-spring), opacity var(--dur-base) var(--ease-out), filter var(--dur-base) var(--ease-out); transition-delay: var(--d, 0ms); transform-box: fill-box; transform-origin: center; }
+    .dc-pdp-xv.is-packed .dc-pdp-part { transform: translate(var(--dx, 0px), var(--dy)) scale(.6); opacity: 0; transition-delay: 0ms; }
+    .dc-pdp-xv.is-packed .dc-pdp-lid { transform: translateY(var(--dy)); transition-delay: 0ms; }
+    .dc-pdp-xv.has-active .dc-pdp-part { opacity: .42; }
+    .dc-pdp-xv.has-active .dc-pdp-part.is-active { opacity: 1; transform: scale(1.09); transition-delay: 0ms; filter: drop-shadow(0 7px 9px rgb(19 40 79 / .34)); }
+    .dc-pdp-axis { stroke: var(--line-strong); stroke-width: 1.6; stroke-dasharray: 3 6; stroke-linecap: round; transition: opacity var(--dur-base); }
+    .dc-pdp-xv.is-packed .dc-pdp-axis { opacity: 0; }
+
+    .dc-pdp-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+    .dc-pdp-row { scroll-margin-block: calc(var(--pdp-head) + var(--pdp-xv-h) + 34px) 100px; width: 100%; text-align: start; border: 0; cursor: pointer; font: inherit; color: var(--ink); background: var(--cream); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4);
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-1) var(--space-3); align-items: center;
+      box-shadow: inset 0 0 0 1.5px var(--line); transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out), background-color var(--dur-base); }
+    .dc-pdp-row:hover { transform: translateY(-2px); }
+    .dc-pdp-row[aria-pressed="true"] { box-shadow: inset 0 0 0 2.5px var(--blue); background: var(--surface); transform: translateY(-2px); }
+    .dc-pdp-row b { font: 700 17px/1.4 var(--font-display); color: var(--ink); display: block; }
+    .dc-pdp-row small { grid-column: 1; font: 400 14px/1.6 var(--font-sans); color: var(--ink-soft); display: block; }
+    .dc-pdp-count { grid-column: 2; grid-row: 1 / span 2; align-self: center; justify-self: end; display: inline-flex; align-items: baseline; gap: 5px; background: var(--sky); color: var(--on-soft); border-radius: var(--radius-pill); padding: 6px 12px; font: 600 13px/1.2 var(--font-sans); white-space: nowrap; }
+    .dc-pdp-count .dc-num { font: 700 20px/1 var(--font-sans); }
+    /* Arabic dual ("بطاقتان") already says two, so the digit is dropped there */
+    :root[lang="ar"] .dc-pdp-dual { display: none; }
+    .dc-pdp-row[aria-pressed="true"] .dc-pdp-count { background: var(--blue); color: var(--on-blue); }
+    .dc-pdp-rows-tip { margin: var(--space-4) 0 0; font: var(--type-small); color: var(--ink-soft); }
+
+    /* ---- try a card ---- */
+    .dc-pdp-try { margin-block-start: var(--space-8); }
+    @media (min-width: 900px) { .dc-pdp-try { margin-block-start: var(--space-9); } }
+    .dc-pdp-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    @media (min-width: 900px) { .dc-pdp-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); } }
+    .dc-pdp-cards .dc-qcard { display: block; width: 100%; max-width: 250px; margin-inline: auto; }
+    .dc-pdp-cards .dc-qcard__disc { width: 72px; height: 72px; font-size: 18px; }
+    .dc-pdp-cards .dc-qcard__disc svg { width: 34px; height: 34px; }
+    .dc-pdp-cards .dc-qcard__q { font-size: 14.5px; line-height: 1.65; }
+    .dc-pdp-cards .dc-qcard__face { padding: var(--space-3); }
+    .dc-pdp-cards .dc-qcard__front { gap: var(--space-2); align-content: center; }
+    .dc-pdp-cardlabel { display: block; margin-block-start: var(--space-2); font: 600 13px/1.4 var(--font-sans); color: var(--on-soft); }
+    .dc-pdp-cards .dc-qcard__back { padding-block: var(--space-3); }
+    @media (min-width: 480px) { .dc-pdp-cards .dc-qcard__q { font-size: 16px; } .dc-pdp-cards .dc-qcard__disc { width: 84px; height: 84px; } }
+    .dc-pdp-cards .dc-qcard__back--secret { background: var(--red); color: var(--on-red); }
+    .dc-pdp-cards .dc-qcard__back--secret .dc-qcard__kicker { color: var(--on-red); }
+    .dc-pdp-try__foot { margin-block-start: var(--space-4); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); font: var(--type-small); color: var(--ink-soft); }
+
+    /* ---- more boxes ---- */
+    .dc-pdp-more { margin-block: var(--space-8); }
+    @media (min-width: 900px) { .dc-pdp-more { margin-block: var(--space-9); } }
+    .dc-pdp-morelist { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+    @media (min-width: 700px) { .dc-pdp-morelist { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); } }
+    .dc-pdp-mini { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--space-4); align-items: center; padding: var(--space-3); border-radius: var(--radius-lg); background: var(--surface);
+      text-decoration: none; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out); }
+    .dc-pdp-mini:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 2px var(--blue), var(--shadow-card); }
+    .dc-pdp-mini__art { aspect-ratio: 1 / 1; border-radius: var(--radius-md); display: grid; place-items: center; overflow: hidden; }
+    .dc-pdp-mini__art svg { width: 86%; height: auto; }
+    .dc-pdp-mini b { font: 700 18px/1.35 var(--font-display); display: block; color: var(--blue); }
+    .dc-pdp-mini span { font: var(--type-small); color: var(--ink-soft); display: block; }
+    .dc-pdp-mini .dc-num { font-weight: 700; color: var(--ink); }
+
+    /* ---- footer ---- */
+    .dc-pdp-foot { background: var(--band); color: var(--on-band); margin-block-start: var(--space-8); }
+    .dc-pdp-foot .dc-page { display: grid; gap: var(--space-5); padding-block: var(--space-7); align-items: center; }
+    @media (min-width: 768px) { .dc-pdp-foot .dc-page { grid-template-columns: auto 1fr; gap: var(--space-7); } }
+    .dc-pdp-foot img { height: 84px; width: auto; }
+    .dc-pdp-foot address { font-style: normal; display: grid; gap: var(--space-2) var(--space-6); font: var(--type-small); }
+    @media (min-width: 768px) { .dc-pdp-foot address { grid-template-columns: repeat(2, auto); justify-content: start; } }
+    .dc-pdp-foot a { color: var(--on-band); text-underline-offset: 3px; }
+    .dc-pdp-foot :focus-visible { outline-color: var(--on-band); }
+    .dc-pdp-foot small { display: block; opacity: .85; margin-block-end: 2px; }
+
+    /* ---- sticky add bar (phones) ---- */
+    .dc-pdp-bar { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: 60; background: var(--surface); box-shadow: 0 -10px 30px -14px rgba(19,40,79,.4);
+      padding: var(--space-3) var(--space-4); padding-block-end: calc(var(--space-3) + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: var(--space-3);
+      transform: translateY(110%); visibility: hidden; transition: transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    .dc-pdp-bar.is-on { transform: none; visibility: visible; transition-delay: 0s; }
+    .dc-pdp-bar__info { flex: 1; min-width: 0; display: grid; gap: 2px; }
+    .dc-pdp-bar__name { font: 700 15px/1.3 var(--font-display); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dc-pdp-bar__price { font: 700 16px/1.2 var(--font-sans); color: var(--ink); }
+    .dc-pdp-bar__price small { font: 500 12px/1 var(--font-sans); color: var(--ink-soft); margin-inline-start: 6px; }
+    .dc-pdp-bar .dc-btn { flex: none; }
+    @media (min-width: 900px) { .dc-pdp-bar { display: none; } }
+    @media (max-width: 899px) {
+      body.has-bar { padding-block-end: 80px; }
+      body.has-bar .dc-proto-bar { inset-block-end: 88px; }
+    }
+    /* phones: the prototype toolbar folds into one round button at the inline end so it never sits on the stepper or the list */
+    .dc-pdp-protoBtn { display: none; }
+    @media (max-width: 899px) {
+      .dc-proto-bar { inset-inline: auto var(--space-3); inset-block-end: 4px; padding: 0; align-items: center; }
+      .dc-proto-bar:not(.is-open) > button[data-dc] { display: none; }
+      .dc-proto-bar .dc-pdp-protoBtn { display: inline-grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 50%; }
+      .dc-proto-bar .dc-pdp-protoBtn svg { width: 20px; height: 20px; }
+      .dc-proto-bar .dc-pdp-protoBtn[aria-expanded="true"] { background: var(--surface-sunk); }
+    }
+
+    /* ---- toast + flying heart (same as shop) ---- */
+    .dc-pdp-toast { position: fixed; inset-block-start: 76px; inset-inline: var(--space-4); margin-inline: auto; width: max-content; max-width: calc(100% - 32px); z-index: 80;
+      background: var(--surface); color: var(--ink); border-radius: var(--radius-pill); box-shadow: var(--shadow-lift); padding-block: 10px; padding-inline: 20px 10px;
+      display: flex; align-items: center; gap: var(--space-3); font: 600 14px/1.4 var(--font-sans);
+      visibility: hidden; opacity: 0; transform: translateY(-10px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    /* wide: hang it under the cart icon (inline end of the header) instead of over the chips */
+    @media (min-width: 900px) { .dc-pdp-toast { inset-inline: auto max(var(--space-4), calc((100vw - 1200px) / 2 + var(--space-5) - 8px)); margin-inline: 0; } }
+    .dc-pdp-toast.is-on { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-pdp-toast .dc-btn { flex: none; }
+    .dc-pdp-toast .t-heart { width: 18px; height: 18px; color: var(--red); flex: none; }
+    .dc-pdp-fly { position: fixed; z-index: 90; width: 20px; height: 20px; margin: -10px 0 0 -10px; color: var(--red); pointer-events: none; }
+    .dc-pdp-fly svg { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+  <!-- shared heart symbol for the illustrations -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="dcHeart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></symbol>
+  </defs></svg>
+
+  <header class="dc-pdp-top">
+    <div class="dc-header">
+      <a class="dc-pdp-brand" href="home.html" data-ar-label="دردشات، الصفحة الرئيسية" data-en-label="Dardachat, home" aria-label="دردشات، الصفحة الرئيسية">
+        <img class="dc-header__logo" src="assets/dardachat-lockup-knockout.png" alt="">
+      </a>
+      <nav id="dc-nav" data-ar-label="القائمة الرئيسية" data-en-label="Main menu" aria-label="القائمة الرئيسية">
+        <a href="shop.html" aria-current="page" data-ar="الصناديق" data-en="Boxes">الصناديق</a>
+        <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+        <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+        <a href="home.html#about" data-ar="من نحن" data-en="About">من نحن</a>
+      </nav>
+      <div class="dc-pdp-actions">
+        <a class="dc-cart" href="cart-checkout.html" id="cartLink" aria-label="السلة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="dc-cart__count dc-num" id="cartCount" hidden>0</span>
+        </a>
+        <button class="dc-pdp-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
+          <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dc-pdp-toast" id="toast" role="status" aria-live="polite">
+    <svg class="t-heart" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg>
+    <span id="toastText"></span>
+    <a class="dc-btn dc-btn--sm" href="cart-checkout.html" id="toastLink" tabindex="-1" data-ar="عرض السلة" data-en="View cart">عرض السلة</a>
+  </div>
+
+  <main id="main" class="dc-page">
+    <nav class="dc-pdp-crumbs" data-ar-label="مسار التصفح" data-en-label="Breadcrumb" aria-label="مسار التصفح">
+      <ol>
+        <li><a href="shop.html" data-ar="الصناديق" data-en="Boxes">الصناديق</a></li>
+        <li><span aria-current="page" id="crumbName" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</span></li>
+      </ol>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="dc-pdp-hero" aria-labelledby="pName" id="top">
+
+      <div class="dc-pdp-gallery" id="gallery" role="region" aria-roledescription="carousel" data-ar-label="صور الصندوق" data-en-label="Box pictures" aria-label="صور الصندوق">
+        <div class="dc-pdp-stage" id="stage">
+          <!-- fallback (first slide); the script builds all four from the box data -->
+          <div class="dc-pdp-slide dc-pdp-slide--sky is-on">
+            <svg viewBox="0 0 240 240" aria-hidden="true">
+              <ellipse cx="120" cy="222" rx="80" ry="6" fill="var(--ink)" opacity=".12"/>
+              <rect x="40" y="110" width="160" height="100" rx="12" fill="var(--pink)" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="120" cy="160" r="24" fill="var(--red)"/><use href="#dcHeart" x="106" y="146" width="28" height="28" fill="var(--on-red)"/>
+              <rect x="32" y="88" width="176" height="28" rx="9" fill="var(--blue)"/>
+            </svg>
+          </div>
+          <button type="button" class="dc-pdp-arrow dc-pdp-arrow--prev" id="prevBtn" data-ar-label="الصورة السابقة" data-en-label="Previous picture" aria-label="الصورة السابقة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button type="button" class="dc-pdp-arrow dc-pdp-arrow--next" id="nextBtn" data-ar-label="الصورة التالية" data-en-label="Next picture" aria-label="الصورة التالية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="dc-ph dc-pdp-ph" data-ar="رسم مؤقت، بانتظار صور العميل" data-en="Placeholder art, awaiting client photos">رسم مؤقت، بانتظار صور العميل</span>
+        </div>
+        <div class="dc-pdp-thumbs" id="thumbs" role="group" data-ar-label="اختر صورة" data-en-label="Choose a picture" aria-label="اختر صورة"></div>
+        <p class="dc-sr" id="slideStatus" aria-live="polite"></p>
+      </div>
+
+      <div class="dc-pdp-buy" id="buy">
+        <div class="dc-row" id="chips">
+          <span class="dc-chip dc-chip--age dc-num">18+</span>
+          <span class="dc-chip" data-ar="للأزواج" data-en="For couples">للأزواج</span>
+        </div>
+        <h1 id="pName" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</h1>
+        <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 150 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8c22-7 42 4 66-1s48-4 76 1"/></svg>
+        <p class="dc-pdp-lede" id="pLede" data-ar="صندوق للأزواج يقوّي العلاقة ويجدّد المشاعر: أسئلة تعرّفكما أكثر، وتحدّيات ثنائية، وقلوب كريستالية، وبطاقة «سرّ الحب الأبدي»." data-en="A box for couples that strengthens the relationship and renews feelings: questions that help you know each other more, duo challenges, crystal hearts, and the “Eternal Love Secret” card.">صندوق للأزواج يقوّي العلاقة ويجدّد المشاعر: أسئلة تعرّفكما أكثر، وتحدّيات ثنائية، وقلوب كريستالية، وبطاقة «سرّ الحب الأبدي».</p>
+
+        <dl class="dc-pdp-facts" id="facts">
+          <div><dt data-ar="العمر" data-en="Age">العمر</dt><dd class="dc-pdp-fact-num dc-num" id="factAge">18+</dd></div>
+          <div><dt data-ar="لمن" data-en="For">لمن</dt><dd id="factFor" data-ar="الأزواج" data-en="Couples">الأزواج</dd></div>
+          <div><dt data-ar="في الصندوق" data-en="In the box">في الصندوق</dt><dd id="factBox" data-ar-html="<span class='dc-num'>7</span> أصناف" data-en-html="<span class='dc-num'>7</span> kinds of items"><span class="dc-num">7</span> أصناف</dd></div>
+        </dl>
+
+        <div class="dc-pdp-purchase">
+          <div class="dc-pdp-priceline">
+            <div class="dc-price">
+              <span class="dc-price__now dc-num" id="unitPrice"><small>₪</small>169.00</span>
+              <span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span>
+              <span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span>
+            </div>
+            <p class="dc-pdp-total" id="total" aria-live="polite"><span data-ar="الإجمالي" data-en="Total">الإجمالي</span><b class="dc-num" id="totalNum">₪169.00</b></p>
+          </div>
+
+          <div class="dc-pdp-buyrow">
+            <div class="dc-pdp-qty" role="group" data-ar-label="الكمية" data-en-label="Quantity" aria-label="الكمية">
+              <button type="button" id="qMinus" data-ar-label="أنقص الكمية" data-en-label="Decrease quantity" aria-label="أنقص الكمية" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg></button>
+              <output class="dc-num" id="qVal" aria-live="polite">1</output>
+              <button type="button" id="qPlus" data-ar-label="زد الكمية" data-en-label="Increase quantity" aria-label="زد الكمية"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button>
+            </div>
+            <button class="dc-btn dc-btn--cta dc-pdp-add" type="button" id="addBtn" data-pop data-ar-label="أضف صندوق دردشات مع الحب إلى السلة" data-en-label="Add Dardachat with Love Box to cart" aria-label="أضف صندوق دردشات مع الحب إلى السلة">
+              <svg class="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+              <svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              <span class="dc-pdp-lab"><span class="t-add" data-ar="أضف إلى السلة" data-en="Add to cart">أضف إلى السلة</span><span class="t-done" aria-hidden="true" data-ar="أُضيفت" data-en="Added">أُضيفت</span></span>
+              <svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg>
+            </button>
+          </div>
+
+          <div class="dc-pdp-off" id="offBlock">
+            <p class="dc-pdp-off__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.7 6.7 0 0 0 10.5 10.5z"/></svg><span data-ar="هذا الصندوق موسمي ويتوفر في رمضان." data-en="This is a seasonal box, available during Ramadan.">هذا الصندوق موسمي ويتوفر في رمضان.</span></p>
+            <button type="button" class="dc-btn dc-btn--outline dc-pdp-notify" id="notifyBtn" aria-pressed="false">
+              <span class="n-off" data-ar="أعلمني عند التوفر" data-en="Notify me when it is back">أعلمني عند التوفر</span>
+              <span class="n-on" data-ar="سنعلمك عند التوفر" data-en="We will let you know">سنعلمك عند التوفر</span>
+            </button>
+          </div>
+
+          <ul class="dc-pdp-notes">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/></svg><span data-ar="الدفع عند الاستلام متاح." data-en="Cash on delivery is available.">الدفع عند الاستلام متاح.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg><span><span data-ar="عندك سؤال عن الصندوق؟" data-en="A question about the box?">عندك سؤال عن الصندوق؟</span> <a id="waLink" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B3%D8%A4%D8%A7%D9%84%20%D8%B9%D9%86%20%D8%B5%D9%86%D8%AF%D9%88%D9%82%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%20%D9%85%D8%B9%20%D8%A7%D9%84%D8%AD%D8%A8" target="_blank" rel="noopener" data-ar="اسألنا على واتساب" data-en="Ask us on WhatsApp">اسألنا على واتساب</a></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WHAT IS IN THE BOX ========== -->
+    <section class="dc-pdp-inside" id="inside" aria-labelledby="inside-title">
+      <div class="dc-pdp-head">
+        <h2 id="inside-title" data-ar="شو في الصندوق" data-en="What is in the box">شو في الصندوق</h2>
+        <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 7c18-6 34 3 54-1s38-3 58 1"/></svg>
+        <p data-ar="افتح الصندوق وشوف كل قطعة. اضغط على أي سطر لتراها تطلع من الصندوق." data-en="Open the box and see every piece. Tap any line to lift its piece out.">افتح الصندوق وشوف كل قطعة. اضغط على أي سطر لتراها تطلع من الصندوق.</p>
+      </div>
+      <div class="dc-pdp-inside__grid">
+        <div class="dc-pdp-xv" id="xv">
+          <svg id="xvSvg" viewBox="0 0 360 440" aria-hidden="true"></svg>
+          <div class="dc-pdp-cap" id="xvCap" aria-hidden="true"><span class="dc-pdp-cap__pill" id="xvCapPill"></span></div>
+        </div>
+        <div>
+          <div class="dc-pdp-rowtools"><button type="button" class="dc-btn dc-btn--outline dc-btn--sm" id="packBtn" aria-pressed="false" aria-controls="xvSvg" data-ar="أغلق الصندوق" data-en="Close the box">أغلق الصندوق</button></div>
+          <ul class="dc-pdp-rows" id="rows" data-ar-label="محتويات الصندوق" data-en-label="Box contents" aria-label="محتويات الصندوق">
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="deck-sky"><span><b data-ar="ثلاث مجموعات أسئلة" data-en="Three sets of questions">ثلاث مجموعات أسئلة</b></span><span class="dc-pdp-count"><span class="dc-num">63</span><span data-ar="سؤالًا" data-en="questions">سؤالًا</span></span><small data-ar="للتعرّف على شريكك، والاحتياجات والهدايا، والمشاعر والمواقف." data-en="On knowing your partner, needs and gifts, and feelings and situations.">للتعرّف على شريكك، والاحتياجات والهدايا، والمشاعر والمواقف.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="deck-pink"><span><b data-ar="تحدّيات رومانسية للثنائي" data-en="Romantic duo challenges">تحدّيات رومانسية للثنائي</b></span><span class="dc-pdp-count"><span class="dc-num">16</span><span data-ar="تحدّيًا" data-en="challenges">تحدّيًا</span></span><small data-ar="تحدّيات صغيرة تلعبانها معًا، بلا جمهور." data-en="Small challenges to play together, no audience needed.">تحدّيات صغيرة تلعبانها معًا، بلا جمهور.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="secret"><span><b data-ar="بطاقة «سرّ الحب الأبدي»" data-en="The “Eternal Love Secret” card">بطاقة «سرّ الحب الأبدي»</b></span><span class="dc-pdp-count"><span class="dc-num">1</span><span data-ar="بطاقة" data-en="card">بطاقة</span></span><small data-ar="بطاقة خاصة واحدة، تحتفظ بمفاجأتها حتى تفتحاها معًا." data-en="One special card that keeps its surprise until you open it.">بطاقة خاصة واحدة، تحتفظ بمفاجأتها حتى تفتحاها معًا.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="msg"><span><b data-ar="بطاقتا رسائل سرّية" data-en="Two secret-message cards">بطاقتا رسائل سرّية</b></span><span class="dc-pdp-count"><span class="dc-num dc-pdp-dual">2</span><span data-ar="بطاقتان" data-en="cards">بطاقتان</span></span><small data-ar="اكتب فيهما ما يصعب قوله بصوت عالٍ." data-en="Write what is hard to say out loud.">اكتب فيهما ما يصعب قوله بصوت عالٍ.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="hearts"><span><b data-ar="قلوب كريستالية" data-en="Crystal hearts">قلوب كريستالية</b></span><span class="dc-pdp-count"><span class="dc-num">20</span><span data-ar="قلبًا" data-en="hearts">قلبًا</span></span><small data-ar="تُجمع وتُهدى على مدار اللعب." data-en="Collected and given as you play.">تُجمع وتُهدى على مدار اللعب.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="board"><span><b data-ar="نرد ولوحة تفاعلية" data-en="A die and an interactive board">نرد ولوحة تفاعلية</b></span><span class="dc-pdp-count"><span class="dc-num dc-pdp-dual">2</span><span data-ar="قطعتان" data-en="pieces">قطعتان</span></span><small data-ar="ارميا النرد وامشيا على اللوحة." data-en="Roll the die and move across the board.">ارميا النرد وامشيا على اللوحة.</small></button></li>
+            <li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="booklet"><span><b data-ar="كتيّب التعليمات" data-en="Instructions booklet">كتيّب التعليمات</b></span><span class="dc-pdp-count"><span class="dc-num">1</span><span data-ar="كتيّب" data-en="booklet">كتيّب</span></span><small data-ar="طريقة اللعب خطوة بخطوة." data-en="How to play, step by step.">طريقة اللعب خطوة بخطوة.</small></button></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TRY A CARD ========== -->
+    <section class="dc-pdp-try" id="try" aria-labelledby="try-title">
+      <div class="dc-pdp-head">
+        <h2 id="try-title" data-ar="اقلب بطاقة" data-en="Flip a card">اقلب بطاقة</h2>
+        <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 7c18-6 34 3 54-1s38-3 58 1"/></svg>
+        <p data-ar="هذا شكل الأسئلة اللي بتلاقيها بالصندوق. اقلب البطاقة وجرّب." data-en="This is the kind of question you will find in the box. Flip a card and try it.">هذا شكل الأسئلة اللي بتلاقيها بالصندوق. اقلب البطاقة وجرّب.</p>
+      </div>
+      <div class="dc-pdp-cards" id="cards">
+        <div>
+          <button type="button" class="dc-qcard" aria-pressed="false" data-ar-label="بطاقة سؤال، اضغط لتقلبها" data-en-label="Question card, press to flip" aria-label="بطاقة سؤال، اضغط لتقلبها"><span class="dc-qcard__inner">
+            <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg></span></span>
+            <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="التعرّف على شريكك" data-en="Knowing your partner">التعرّف على شريكك</span><span class="dc-qcard__q" data-ar="شو أول شي لفت نظرك فيّ، وشو لسّا بيضحّكك لهلأ؟" data-en="What was the first thing you noticed about me, and what still makes you smile?">شو أول شي لفت نظرك فيّ، وشو لسّا بيضحّكك لهلأ؟</span></span>
+          </span></button>
+        </div>
+        <div>
+          <button type="button" class="dc-qcard" aria-pressed="false" data-ar-label="بطاقة سؤال، اضغط لتقلبها" data-en-label="Question card, press to flip" aria-label="بطاقة سؤال، اضغط لتقلبها"><span class="dc-qcard__inner">
+            <span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-qcard__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg></span></span>
+            <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="الاحتياجات والهدايا" data-en="Needs and gifts">الاحتياجات والهدايا</span><span class="dc-qcard__q" data-ar="شو أبسط هدية بتفرّحك أكتر من هدية غالية؟" data-en="What simple gift makes you happier than an expensive one?">شو أبسط هدية بتفرّحك أكتر من هدية غالية؟</span></span>
+          </span></button>
+        </div>
+        <div>
+          <button type="button" class="dc-qcard" aria-pressed="false" data-ar-label="بطاقة سؤال، اضغط لتقلبها" data-en-label="Question card, press to flip" aria-label="بطاقة سؤال، اضغط لتقلبها"><span class="dc-qcard__inner">
+            <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg></span></span>
+            <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="المشاعر والمواقف" data-en="Feelings and situations">المشاعر والمواقف</span><span class="dc-qcard__q" data-ar="لمّا بتضايق، شو بتحتاج مني: أسمعك ولا أقعد معك بصمت؟" data-en="When you are upset, what do you need from me: to listen, or to sit with you in silence?">لمّا بتضايق، شو بتحتاج مني: أسمعك ولا أقعد معك بصمت؟</span></span>
+          </span></button>
+        </div>
+        <div>
+          <button type="button" class="dc-qcard" aria-pressed="false" data-ar-label="بطاقة سرّ الحب الأبدي، اضغط لتقلبها" data-en-label="Eternal Love Secret card, press to flip" aria-label="بطاقة سرّ الحب الأبدي، اضغط لتقلبها"><span class="dc-qcard__inner">
+            <span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-qcard__disc" style="background:var(--blue);color:var(--on-blue)"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3l1.8 5.6L19.5 10l-5.7 1.8L12 17.5l-1.8-5.7L4.5 10l5.7-1.4z"/></svg></span></span>
+            <span class="dc-qcard__face dc-qcard__back dc-qcard__back--secret"><span class="dc-qcard__kicker" data-ar="سرّ الحب الأبدي" data-en="Eternal Love Secret">سرّ الحب الأبدي</span><span class="dc-qcard__q" data-ar="هاي البطاقة بتضلّ مسكّرة هون. بتفتحوها سوا من الصندوق." data-en="This card stays closed here. You open it together, from the box.">هاي البطاقة بتضلّ مسكّرة هون. بتفتحوها سوا من الصندوق.</span></span>
+          </span></button>
+        </div>
+      </div>
+      <p class="dc-pdp-try__foot"><span class="dc-ph" data-ar="أسئلة تجريبية" data-en="Sample questions">أسئلة تجريبية</span><span data-ar="الأسئلة الفعلية يزوّدنا بها فريق دردشات." data-en="The real questions will come from the Dardachat team.">الأسئلة الفعلية يزوّدنا بها فريق دردشات.</span></p>
+    </section>
+
+    <!-- ========== OTHER BOXES ========== -->
+    <section class="dc-pdp-more" aria-labelledby="more-title">
+      <div class="dc-pdp-head">
+        <h2 id="more-title" data-ar="صناديق أخرى" data-en="Other boxes">صناديق أخرى</h2>
+        <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 7c18-6 34 3 54-1s38-3 58 1"/></svg>
+      </div>
+      <ul class="dc-pdp-morelist" id="more"></ul>
+    </section>
+  </main>
+
+  <footer class="dc-pdp-foot">
+    <div class="dc-page">
+      <img src="assets/dardachat-lockup-knockout.png" alt="دردشات Dardachat" data-ar-alt="دردشات" data-en-alt="Dardachat">
+      <address>
+        <div><small data-ar="العنوان" data-en="Address">العنوان</small><span data-ar="القدس – بيت حنينا" data-en="Beit Hanina, Jerusalem">القدس – بيت حنينا</span></div>
+        <div><small data-ar="واتساب وهاتف" data-en="WhatsApp and phone">واتساب وهاتف</small><a class="dc-num" href="https://wa.me/972543992424" target="_blank" rel="noopener">054 399 2424</a></div>
+        <div><small data-ar="البريد" data-en="Email">البريد</small><a href="mailto:dardchat.2023@gmail.com">dardchat.2023@gmail.com</a></div>
+        <div><small data-ar="إنستغرام" data-en="Instagram">إنستغرام</small><a class="dc-num" href="https://instagram.com/dard_chat" target="_blank" rel="noopener">@dard_chat</a></div>
+      </address>
+    </div>
+  </footer>
+
+  <!-- sticky add bar (phones) -->
+  <div class="dc-pdp-bar" id="bar" role="region" data-ar-label="إضافة سريعة إلى السلة" data-en-label="Quick add to cart" aria-label="إضافة سريعة إلى السلة">
+    <div class="dc-pdp-bar__info">
+      <span class="dc-pdp-bar__name" id="barName" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</span>
+      <span class="dc-pdp-bar__price"><span class="dc-num" id="barPrice">₪169.00</span><small data-ar="شامل الضريبة" data-en="Incl. VAT">شامل الضريبة</small></span>
+    </div>
+    <button class="dc-btn dc-btn--cta" type="button" id="barAdd" data-pop data-ar-label="أضف إلى السلة" data-en-label="Add to cart" aria-label="أضف إلى السلة">
+      <span class="dc-pdp-lab"><span class="t-add" data-ar="أضف إلى السلة" data-en="Add to cart">أضف إلى السلة</span><span class="t-done" aria-hidden="true" data-ar="أُضيفت" data-en="Added">أُضيفت</span></span>
+      <svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+<script>
+document.addEventListener('dc:ready', function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduced = function () { return DC.reducedMotion(); };
+  var lang = function (ar, en) { return DC.lang === 'en' ? en : ar; };
+  var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); };
+  function setL(el, ar, en) { if (!el) return; el.setAttribute('data-ar', ar); el.setAttribute('data-en', en); el.textContent = lang(ar, en); }
+  function setLabel(el, ar, en) { if (!el) return; el.setAttribute('data-ar-label', ar); el.setAttribute('data-en-label', en); el.setAttribute('aria-label', lang(ar, en)); }
+  function setHtml(el, ar, en) { if (!el) return; el.setAttribute('data-ar-html', ar); el.setAttribute('data-en-html', en); el.innerHTML = lang(ar, en); }
+
+  /* ------------------------------------------------------------------ box data ------------------------------------------------------------------ */
+  /* item: [part kind, count, unit ar, unit en, title ar, title en, desc ar, desc en]. Prices are placeholders (NOTES.md). */
+  var BOXES = {
+    love: { id: 'love', ar: 'صندوق دردشات مع الحب', en: 'Dardachat with Love Box', price: 169, age: '18+', off: false,
+      chipAr: 'للأزواج', chipEn: 'For couples', forAr: 'الأزواج', forEn: 'Couples', ground: ['sky', 'pink'], boxFill: 'pink', emblem: 'heart', peek: 'hearts', scatter: 'hearts' },
+    dardachat: { id: 'dardachat', ar: 'صندوق دردشات', en: 'Dardachat Box', price: 149, age: '12+', off: false,
+      chipAr: 'للعائلة والأصدقاء', chipEn: 'Family & friends', forAr: 'العائلة والأصدقاء', forEn: 'Family & friends', ground: ['pink', 'sky'], boxFill: 'sky', emblem: 'heart', peek: 'cards', scatter: 'cards',
+      ledeAr: 'بطاقات مليئة بالأسئلة والتحدّيات لجلسات حوار عميقة مع العائلة والأصدقاء.', ledeEn: 'Cards full of questions and challenges for deep conversations with family and friends.',
+      items: [
+        ['deck-sky', 50, 'بطاقة', 'cards', 'مجموعتان من الأسئلة العميقة', 'Two sets of deep questions', 'أسئلة اجتماعية ونفسية تفتح حديثًا أعمق من المعتاد.', 'Social and psychological questions that open a deeper talk than usual.'],
+        ['deck-pink', 25, 'بطاقة', 'cards', 'بطاقات تحدّيات مرحة وإبداعية', 'Fun, creative challenge cards', 'تحدّيات تكسر الجدّية وتضحّك الطاولة كلها.', 'Challenges that break the seriousness and make the whole table laugh.'],
+        ['props', 10, 'قطع', 'pieces', 'لوازم التحدّيات', 'Challenge props', 'كل ما تحتاجه لتنفيذ التحدّيات.', 'Everything you need to carry out the challenges.'] ] },
+    whoamong: { id: 'whoamong', ar: 'صندوق مين فينا', en: 'Who Among Us Box', price: 119, age: '12+', off: false,
+      chipAr: 'للعائلة والأصدقاء', chipEn: 'Family & friends', forAr: 'العائلة والأصدقاء', forEn: 'Family & friends', ground: ['pink', 'sky'], boxFill: 'pink', emblem: 'dots', peek: 'signs', scatter: 'signs',
+      ledeAr: 'صندوق اجتماعي مرح يقرّب الناس ويكشف كيف يرى كلٌّ منا الآخر، بعفوية وخفّة دم.', ledeEn: 'A fun social box that brings people closer and reveals how each of us sees the others, spontaneously and with humour.',
+      items: [
+        ['deck-sky', 45, 'بطاقة', 'cards', 'بطاقات في ثلاث مراحل', 'Cards in three stages', 'نتعرّف، ثم نفهم، ثم نكتشف بمرح.', 'We get to know, then understand, then discover with a smile.'],
+        ['booklet', 1, 'بروشور', 'booklet', 'بروشور التعليمات', 'Instructions booklet', 'طريقة اللعب خطوة بخطوة.', 'How to play, step by step.'],
+        ['signs', 5, 'لافتات', 'signs', 'لافتات التصويت', 'Voting signs', 'ترفعونها مع كل سؤال لتكشفوا كيف يراكم الآخرون.', 'Raise them with each question to reveal how the others see you.'] ] },
+    ramadan: { id: 'ramadan', ar: 'صندوق رمضان للعائلة', en: 'Ramadan Family Box', price: 129, age: '', off: true,
+      chipAr: 'موسمي · رمضان', chipEn: 'Seasonal · Ramadan', forAr: 'العائلة', forEn: 'Family', ground: ['sky', 'pink'], boxFill: 'sky', emblem: 'moon', peek: 'cards', scatter: 'cards', season: true,
+      ledeAr: 'يجمع العائلة في رمضان حول لحظات دافئة وذكريات ومعلومات، بأجواء روحانية ومرحة بعد الإفطار.', ledeEn: 'Gathers the family in Ramadan around warm moments, memories and knowledge, in a spiritual, fun atmosphere after iftar.',
+      items: [
+        ['deck-sky', 15, 'بطاقة', 'cards', 'أسئلة ومعلومات دينية', 'Religious questions and facts', 'أسئلة تُعلّم وتُذكّر، لكل الأعمار.', 'Questions that teach and remind, for every age.'],
+        ['deck-pink', 15, 'بطاقة', 'cards', 'ألغاز دينية', 'Religious riddles', 'ألغاز تُفكّرون فيها معًا بعد الإفطار.', 'Riddles to think through together after iftar.'],
+        ['deck-red', 15, 'بطاقة', 'cards', 'أسئلة اجتماعية عن رمضان', 'Social questions about Ramadan', 'ذكريات وعادات رمضان في بيوتنا.', 'Memories and customs of Ramadan in our homes.'] ] }
+  };
+  /* love: its list lives in the markup; the same data drives the picture. */
+  BOXES.love.items = $$('#rows .dc-pdp-row').map(function (b) { return [b.dataset.part]; });
+  var SAMPLES = {
+    dardachat: [
+      ['deck-sky', 'أسئلة عميقة', 'Deep questions', 'شو أهم شي تعلّمته عن حالك هالسنة؟', 'What is the most important thing you learned about yourself this year?'],
+      ['deck-pink', 'بطاقة تحدٍّ', 'Challenge card', 'احكِ قصة صورة من جوّالك في دقيقة، والباقي يحزّر متى انأخذت.', 'Tell the story behind a photo on your phone in one minute, and let the others guess when it was taken.'],
+      ['deck-sky', 'أسئلة عميقة', 'Deep questions', 'مين الشخص اللي غيّر فيك شي من غير ما يدري؟', 'Who changed something in you without ever knowing it?']],
+    whoamong: [
+      ['deck-sky', 'المرحلة الأولى: نتعرّف', 'Stage one: getting to know', 'مين فينا أكتر واحد بيتأخر عن المواعيد؟', 'Who among us is the most likely to be late?'],
+      ['deck-pink', 'المرحلة الثانية: نفهم', 'Stage two: understanding', 'مين فينا بتحكي معه لمّا بتكون زعلان؟', 'Who among us would you talk to when you are upset?'],
+      ['deck-sky', 'المرحلة الثالثة: نكتشف بمرح', 'Stage three: fun discovery', 'مين فينا لو صار ممثّل كان رح ينجح أكتر؟', 'Who among us would be the most successful if they became an actor?']],
+    ramadan: [
+      ['deck-sky', 'سؤال ومعلومة', 'Question and fact', 'كم عدد أجزاء القرآن الكريم؟', 'How many parts (juz) are in the Holy Quran?'],
+      ['deck-pink', 'لغز', 'Riddle', 'شو الشي اللي بننتظره كل يوم عند المغرب وبيفرّحنا كلنا؟', 'What do we wait for every day at sunset that makes us all happy?'],
+      ['deck-red', 'ذكريات رمضان', 'Ramadan memories', 'شو أحلى ذكرى إلك على مائدة الإفطار؟', 'What is your sweetest memory at the iftar table?']]
+  };
+
+  var key = (new URLSearchParams(location.search).get('box') || 'love');
+  if (!BOXES[key]) key = 'love';
+  var B = BOXES[key];
+  var fmt = function (n) { return '₪' + DC.num(n, 2); };
+
+  /* ------------------------------------------------------------------ flat illustrations ------------------------------------------------------------------ */
+  var H = function (x, y, s, fill, sw) { return '<use href="#dcHeart" x="' + x + '" y="' + y + '" width="' + s + '" height="' + s + '" fill="' + fill + '"' + (sw ? ' stroke="var(--blue)" stroke-width="' + sw + '"' : '') + '/>'; };
+  var SPARK = function (x, y, s) { return '<path transform="translate(' + x + ' ' + y + ') scale(' + s + ')" d="M0 -8C1 -2 2 -1 8 0C2 1 1 2 0 8C-1 2 -2 1 -8 0C-2 -1 -1 -2 0 -8z" fill="var(--brush)"/>'; };
+  var fillOf = function (k) { return k === 'sky' ? 'var(--sky)' : k === 'pink' ? 'var(--pdp-pink)' : k === 'red' ? 'var(--red)' : 'var(--surface)'; };
+  function emblem(o, cx, cy, r) {
+    var s = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="var(--red)"/>';
+    if (o.emblem === 'heart') s += H(cx - r * .62, cy - r * .62, r * 1.24, 'var(--on-red)');
+    else if (o.emblem === 'dots') s += [[-.5, .18], [0, -.42], [.5, .18]].map(function (p) { return '<circle cx="' + (cx + p[0] * r) + '" cy="' + (cy + p[1] * r) + '" r="' + (r * .19) + '" fill="var(--on-red)"/>'; }).join('');
+    else s += '<path transform="translate(' + cx + ' ' + cy + ') scale(' + (r / 24) + ')" d="M4 -12 A13 13 0 1 0 12 8 A10.5 10.5 0 1 1 4 -12z" fill="var(--on-red)"/>';
+    return s;
+  }
+  function lid(o) { return '<rect x="32" y="88" width="176" height="28" rx="9" fill="var(--blue)"/><path d="M48 98h40" stroke="var(--on-blue)" stroke-width="3" stroke-linecap="round" opacity=".5"/>'; }
+  function body(o) { return '<rect x="40" y="110" width="160" height="100" rx="12" fill="' + fillOf(o.boxFill) + '" stroke="var(--blue)" stroke-width="3"/>' + emblem(o, 120, 160, 24); }
+  function shadow() { return '<ellipse cx="120" cy="222" rx="80" ry="6" fill="var(--ink)" opacity=".12"/>'; }
+  function peek(o) {
+    if (o.peek === 'hearts') return H(60, 36, 44, 'var(--red)', 1.6) + H(112, 22, 36, 'var(--surface)', 1.6) + H(148, 48, 30, 'var(--red)', 1.6);
+    if (o.peek === 'signs') return [-2, -1, 0, 1, 2].map(function (i) { return '<g transform="translate(' + (120 + i * 30) + ' ' + (70 + Math.abs(i) * 6) + ') rotate(' + (i * 9) + ')"><rect x="-11" y="-30" width="22" height="34" rx="6" fill="' + (i % 2 ? 'var(--surface)' : 'var(--red)') + '" stroke="var(--blue)" stroke-width="2.4"/><rect x="-2" y="4" width="4" height="26" fill="var(--blue)"/></g>'; }).join('');
+    return '<rect x="66" y="34" width="56" height="56" rx="9" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.4" transform="rotate(-9 94 62)"/><rect x="118" y="30" width="56" height="56" rx="9" fill="var(--red)" stroke="var(--blue)" stroke-width="2.4" transform="rotate(8 146 58)"/>' + H(134, 44, 24, 'var(--on-red)');
+  }
+  var ART = {
+    closed: function (o) { return shadow() + body(o) + lid(o) + SPARK(196, 66, 1.1) + SPARK(46, 62, .8); },
+    open: function (o) { return shadow() + peek(o) + body(o) + '<g transform="rotate(-16 44 100) translate(-14 -30)">' + lid(o) + '</g>' + SPARK(206, 44, 1) + SPARK(34, 130, .7); },
+    fan: function (o) {
+      var f = [['-18', 'var(--surface)', 0], ['0', fillOf(o.ground[1] === 'pink' ? 'sky' : 'pink'), 1], ['18', 'var(--surface)', 2]];
+      var s = shadow();
+      f.forEach(function (c) { s += '<g transform="translate(120 218) rotate(' + c[0] + ')"><rect x="-44" y="-130" width="88" height="88" rx="11" fill="' + c[1] + '" stroke="var(--blue)" stroke-width="3"/>' +
+        (c[2] === 1 ? emblem(o, 0, -86, 26) : '<path d="M-26 -100h52M-26 -84h40M-26 -68h48" stroke="var(--line-strong)" stroke-width="4" stroke-linecap="round"/>') + '</g>'; });
+      return s + SPARK(206, 52, 1.1) + SPARK(34, 70, .8);
+    },
+    scatter: function (o) {
+      var s = '', i, pos;
+      if (o.scatter === 'hearts') {
+        pos = [[36, 48, 34, 'var(--red)'], [110, 30, 28, 'var(--surface)'], [170, 60, 38, 'var(--red)'], [70, 110, 40, 'var(--surface)'], [140, 128, 32, 'var(--red)'], [30, 170, 30, 'var(--red)'], [100, 176, 36, 'var(--surface)'], [174, 178, 28, 'var(--surface)'], [196, 118, 24, 'var(--red)']];
+        pos.forEach(function (p) { s += H(p[0], p[1], p[2], p[3], 1.6); });
+      } else if (o.scatter === 'signs') {
+        for (i = 0; i < 5; i++) s += '<g transform="translate(' + (44 + i * 38) + ' ' + (112 + (i % 2) * 22) + ') rotate(' + ((i - 2) * 11) + ')"><rect x="-15" y="-46" width="30" height="48" rx="8" fill="' + (i % 2 ? 'var(--surface)' : 'var(--red)') + '" stroke="var(--blue)" stroke-width="3"/><rect x="-2.5" y="2" width="5" height="50" fill="var(--blue)"/></g>';
+      } else {
+        pos = [[44, 60, -14, 'var(--surface)'], [130, 42, 10, 'var(--red)'], [176, 104, -8, 'var(--surface)'], [60, 140, 12, 'var(--surface)'], [134, 158, -10, 'var(--red)'], [188, 190, 8, 'var(--surface)']];
+        pos.forEach(function (p) { s += '<rect x="-24" y="-24" width="48" height="48" rx="8" fill="' + p[3] + '" stroke="var(--blue)" stroke-width="2.6" transform="translate(' + p[0] + ' ' + p[1] + ') rotate(' + p[2] + ')"/>'; });
+      }
+      return s + SPARK(210, 40, 1) + SPARK(24, 212, .8);
+    }
+  };
+  var svgWrap = function (inner) { return '<svg viewBox="0 0 240 240" aria-hidden="true">' + inner + '</svg>'; };
+  function slideSet(o) {
+    var g = o.ground;
+    return [
+      { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
+      { cls: g[1], svg: ART.open(o), ar: 'الصندوق مفتوحًا', en: 'The box, open' },
+      { cls: g[0], svg: ART.fan(o), ar: 'بطاقات من الصندوق', en: 'Cards from the box' },
+      { cls: g[1], svg: ART.scatter(o), ar: 'ما في الصندوق', en: 'What comes with it' }
+    ];
+  }
+
+  /* ------------------------------------------------------------------ gallery ------------------------------------------------------------------ */
+  var stage = $('#stage'), thumbs = $('#thumbs'), status = $('#slideStatus');
+  var slides = [], thumbEls = [], cur = 0, slideData = [];
+  function buildGallery() {
+    slideData = slideSet(B);
+    $$('.dc-pdp-slide', stage).forEach(function (n) { n.remove(); });
+    var anchor = $('#prevBtn');
+    slides = slideData.map(function (d, i) {
+      var el = document.createElement('div');
+      el.className = 'dc-pdp-slide dc-pdp-slide--' + d.cls + (i === 0 ? ' is-on' : '');
+      el.setAttribute('role', 'group'); el.setAttribute('aria-roledescription', 'slide');
+      el.innerHTML = svgWrap(d.svg);
+      stage.insertBefore(el, anchor);
+      return el;
+    });
+    thumbs.innerHTML = '';
+    thumbEls = slideData.map(function (d, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'dc-pdp-thumb dc-pdp-slide--' + d.cls;
+      b.innerHTML = svgWrap(d.svg);
+      b.addEventListener('click', function () { go(i); });
+      thumbs.appendChild(b);
+      return b;
+    });
+    cur = 0; paintSlides(0, false);
+  }
+  function paintSlides(dir, animate) {
+    slides.forEach(function (el, i) {
+      var on = i === cur;
+      el.classList.toggle('is-on', on);
+      el.classList.remove('is-in');
+      el.setAttribute('aria-label', lang(slideData[i].ar, slideData[i].en) + ' ' + (i + 1) + ' / ' + slides.length);
+      if (on && animate && !reduced()) { el.style.setProperty('--dir', dir < 0 ? -1 : 1); DC.restart(el, 'is-in'); }
+    });
+    thumbEls.forEach(function (b, i) {
+      b.setAttribute('aria-current', String(i === cur));
+      b.setAttribute('aria-label', lang(slideData[i].ar, slideData[i].en) + ' ' + (i + 1) + ' / ' + slides.length);
+    });
+    status.textContent = lang(slideData[cur].ar, slideData[cur].en) + ', ' + (cur + 1) + ' / ' + slides.length;
+  }
+  function go(i, dir) {
+    var n = (i + slides.length) % slides.length;
+    var d = dir != null ? dir : (n > cur ? 1 : -1);
+    if (n === cur) return;
+    cur = n; paintSlides(d, true);
+  }
+  /* physical direction: in RTL "next" sits at the inline end (left), so the picture should arrive from that side */
+  var dirSign = function () { return DC.lang === 'ar' ? -1 : 1; };
+  $('#nextBtn').addEventListener('click', function () { go(cur + 1, dirSign()); });
+  $('#prevBtn').addEventListener('click', function () { go(cur - 1, -dirSign()); });
+  stage.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); (DC.lang === 'ar' ? go(cur - 1, -dirSign()) : go(cur + 1, dirSign())); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); (DC.lang === 'ar' ? go(cur + 1, dirSign()) : go(cur - 1, -dirSign())); }
+  });
+  /* swipe on touch */
+  (function () {
+    var x0 = null;
+    stage.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) {
+      if (x0 == null) return; var dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) < 40) return;
+      // finger moving toward the inline-start means "next"
+      var next = DC.lang === 'ar' ? dx > 0 : dx < 0;
+      next ? go(cur + 1, dx < 0 ? 1 : -1) : go(cur - 1, dx < 0 ? 1 : -1);
+    });
+  })();
+
+  /* ------------------------------------------------------------------ exploded box (signature) ------------------------------------------------------------------ */
+  var xv = $('#xv'), xvSvg = $('#xvSvg'), rowsEl = $('#rows'), packBtn = $('#packBtn');
+  var PART = {
+    'deck-sky': function (f) { return deckShape(f || 'var(--sky)'); },
+    'deck-pink': function () { return deckShape('var(--pdp-pink)'); },
+    'deck-red': function () { return deckShape('var(--red)', true); },
+    props: function () {
+      return '<g transform="translate(-34 0) rotate(-12)"><rect x="-14" y="-14" width="28" height="28" rx="6" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.2"/><circle cx="-5" cy="-5" r="2.6" fill="var(--red)"/><circle cx="0" cy="0" r="2.6" fill="var(--red)"/><circle cx="5" cy="5" r="2.6" fill="var(--red)"/></g>' +
+        '<circle cx="6" cy="6" r="13" fill="var(--red)" stroke="var(--blue)" stroke-width="2.2"/><path transform="translate(38 0) rotate(8)" d="M0 -17L16 12H-16z" fill="var(--blue)"/>';
+    },
+    booklet: function () {
+      return '<rect x="-31" y="-25" width="62" height="50" rx="6" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.2"/><rect x="-31" y="-25" width="12" height="50" rx="6" fill="var(--blue)"/><path d="M-8 -8h28M-8 2h22M-8 12h26" stroke="var(--line-strong)" stroke-width="3.4" stroke-linecap="round"/><circle cx="12" cy="-13" r="0" fill="var(--red)"/>';
+    },
+    signs: function () {
+      return [-2, -1, 0, 1, 2].map(function (i) { return '<g transform="translate(' + (i * 22) + ' ' + (Math.abs(i) * 2) + ') rotate(' + (i * 8) + ')"><rect x="-9" y="-26" width="18" height="30" rx="5" fill="' + (i % 2 ? 'var(--surface)' : 'var(--red)') + '" stroke="var(--blue)" stroke-width="2"/><rect x="-1.6" y="3" width="3.2" height="22" fill="var(--blue)"/></g>'; }).join('');
+    },
+    hearts: function () {
+      var p = [[-52, -10, 26, 'var(--red)'], [-26, -24, 22, 'var(--sky)'], [-10, 2, 28, 'var(--surface)'], [16, -20, 24, 'var(--red)'], [26, 4, 26, 'var(--sky)'], [46, -14, 22, 'var(--surface)'], [-44, 12, 20, 'var(--surface)']];
+      return p.map(function (h) { return H(h[0], h[1], h[2], h[3], 2); }).join('');
+    },
+    board: function () {
+      return '<rect x="-40" y="-22" width="80" height="46" rx="9" fill="var(--sky)" stroke="var(--blue)" stroke-width="2.2"/><path d="M-28 10c10-16 22 4 32-8s14-2 22-6" fill="none" stroke="var(--blue)" stroke-width="2.6" stroke-dasharray="2 6" stroke-linecap="round"/><circle cx="-28" cy="10" r="4.5" fill="var(--red)"/><circle cx="26" cy="-4" r="4.5" fill="var(--red)"/>' +
+        '<g transform="translate(34 -12) rotate(14)"><rect x="-13" y="-13" width="26" height="26" rx="6" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.2"/><circle cx="-5" cy="-5" r="2.5" fill="var(--red)"/><circle cx="5" cy="5" r="2.5" fill="var(--red)"/><circle cx="5" cy="-5" r="2.5" fill="var(--red)"/><circle cx="-5" cy="5" r="2.5" fill="var(--red)"/></g>';
+    },
+    secret: function () {
+      return '<rect x="-24" y="-28" width="48" height="56" rx="8" fill="var(--red)" stroke="var(--blue)" stroke-width="2.2"/>' + H(-13, -13, 26, 'var(--on-red)') + SPARK(-40, -14, 1.2) + SPARK(42, 14, 1.4);
+    },
+    msg: function () {
+      return '<g transform="translate(-22 -2) rotate(-7)"><rect x="-26" y="-17" width="52" height="34" rx="5" fill="var(--surface)" stroke="var(--blue)" stroke-width="2.2"/><path d="M-26 -17L0 3L26 -17" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linejoin="round"/></g>' +
+        '<g transform="translate(24 6) rotate(8)"><rect x="-26" y="-17" width="52" height="34" rx="5" fill="var(--pdp-pink)" stroke="var(--blue)" stroke-width="2.2"/><path d="M-26 -17L0 3L26 -17" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linejoin="round"/>' + H(-6, -2, 12, 'var(--red)') + '</g>';
+    }
+  };
+  function deckShape(fill, redDeck) {
+    var card = function (t, f) { return '<g transform="' + t + '"><rect x="-23" y="-23" width="46" height="46" rx="7" fill="' + f + '" stroke="var(--blue)" stroke-width="2.2"/></g>'; };
+    return card('translate(-17 3) rotate(-11)', 'var(--surface)') + card('translate(17 3) rotate(11)', 'var(--surface)') + card('rotate(-1)', fill) +
+      (redDeck ? H(-10, -12, 20, 'var(--on-red)') : '<circle r="11" cy="-1" fill="var(--red)"/>' + H(-6, -7, 12, 'var(--on-red)'));
+  }
+  var xvState = { active: -1 };
+  var mqWide = matchMedia('(min-width:900px)');
+  /* Two compositions of the same exploded box. Wide: pieces climb the dashed axis, alternating either side of it, tilted a few degrees.
+     Phones: the panel is short, so the pieces lift in a zigzag row above a small box (mirrored in Arabic so the first line sits at the reading start). */
+  function buildExploded() {
+    var rows = $$('.dc-pdp-row', rowsEl), n = rows.length, wide = mqWide.matches, rtl = document.documentElement.dir === 'rtl';
+    var VW = 360, VH = wide ? 440 : 190, CX = 180;
+    xvSvg.setAttribute('viewBox', '0 0 ' + VW + ' ' + VH);
+    var boxY = wide ? 372 : 152, boxH = wide ? 64 : 34, boxW = wide ? 192 : 156, lidW = wide ? 168 : 132, lidH = wide ? 26 : 18, lidY = wide ? 6 : 4;
+    var s = '<line class="dc-pdp-axis" x1="' + CX + '" y1="' + (lidY + lidH + 4) + '" x2="' + CX + '" y2="' + (boxY - 4) + '"/>';
+    // the box, open, seen from the front
+    s += '<rect x="' + (CX - boxW / 2) + '" y="' + boxY + '" width="' + boxW + '" height="' + boxH + '" rx="' + (wide ? 12 : 9) + '" fill="' + fillOf(B.boxFill) + '" stroke="var(--blue)" stroke-width="3"/>' +
+      '<rect x="' + (CX - boxW / 2) + '" y="' + boxY + '" width="' + boxW + '" height="' + (wide ? 14 : 9) + '" rx="' + (wide ? 7 : 4.5) + '" fill="var(--surface-sunk)" stroke="var(--blue)" stroke-width="3"/>';
+    s += emblem(B, CX, boxY + boxH * (wide ? .66 : .68), wide ? 16 : 10);
+    // parts: built at the origin first so their real size can be measured, then placed
+    rows.forEach(function (r, i) { s += '<g class="dc-pdp-part" data-i="' + i + '"><g class="in">' + (PART[r.dataset.part] || PART['deck-sky'])() + '</g></g>'; });
+    s += '<g class="dc-pdp-lid" style="--dy:' + (boxY - 6 - lidY) + 'px;--d:0ms"><rect x="' + (CX - lidW / 2) + '" y="' + lidY + '" width="' + lidW + '" height="' + lidH + '" rx="' + (wide ? 9 : 6) + '" fill="var(--blue)"/><path d="M' + (CX - lidW / 2 + 16) + ' ' + (lidY + lidH / 2) + 'h' + (wide ? 44 : 30) + '" stroke="var(--on-blue)" stroke-width="3" stroke-linecap="round" opacity=".5"/></g>';
+    xvSvg.innerHTML = s;
+    var top = 56, bottom = boxY - 18, slot = (bottom - top) / n, span = 300 / n;
+    $$('.dc-pdp-part', xvSvg).forEach(function (g, i) {
+      var inn = g.firstChild, bb = inn.getBBox(), bw = bb.width || 1, bh = bb.height || 1, x, y, sc, rot;
+      if (wide) {
+        var side = i % 2 ? 1 : -1;
+        sc = Math.min(2.4, (n < 5 ? 140 : 124) / bw, Math.min(n < 5 ? 100 : 74, slot * 1.7) / bh);
+        x = CX + side * (n > 4 ? 60 : 64); y = top + slot * (i + .5); rot = side * (4 + (i * 2) % 3);
+      } else {
+        sc = Math.min(2.4, Math.min(n < 5 ? 92 : 64, span * 1.3) / bw, (n < 5 ? 70 : 58) / bh);
+        var k = rtl ? n - 1 - i : i;
+        x = 30 + span * (k + .5); y = k % 2 ? 112 : 68; rot = (i % 2 ? 1 : -1) * (4 + (i * 2) % 3);
+      }
+      var cx = bb.x + bw / 2, cy = bb.y + bh / 2;
+      inn.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + rot + ') scale(' + sc.toFixed(3) + ') translate(' + (-cx).toFixed(1) + ' ' + (-cy).toFixed(1) + ')');
+      g.style.setProperty('--dx', Math.round(CX - x) + 'px');
+      g.style.setProperty('--dy', Math.round(boxY + 10 - y) + 'px');
+      g.style.setProperty('--d', (240 + i * 80) + 'ms');
+    });
+    return rows;
+  }
+  /* the label for the lifted piece (wide layout only; on phones the highlighted row sits right under the picture) */
+  function paintCap() {
+    var pill = $('#xvCapPill'), r = xvState.active >= 0 ? $$('.dc-pdp-row', rowsEl)[xvState.active] : null;
+    if (!r) return;
+    var cnt = $('.dc-pdp-count', r), name = $('b', r);
+    var num = $('.dc-num', cnt), unit = num.nextElementSibling.textContent, nm = name.textContent, hasNum = getComputedStyle(num).display !== 'none';
+    /* drop the unit when the name already carries it ("1 · بطاقة «سرّ…»", "1 · The … card"); compare on a stem so duals and plurals match */
+    var stripD = function (t) { return t.replace(/[ً-ْـ]/g, '').replace(/[أإآ]/g, 'ا'); };
+    var stem = DC.lang === 'en' ? unit.toLowerCase().replace(/s$/, '') : stripD(unit).slice(0, 4);
+    var hay = DC.lang === 'en' ? nm.toLowerCase() : stripD(nm);
+    var dup = DC.lang === 'en' ? hay.indexOf(stem) > -1 : hay.indexOf(stem) === 0;
+    var lead = (hasNum ? '<span class="dc-num">' + esc(num.textContent) + '</span>' : '') + (dup ? '' : '<span>' + esc(unit) + '</span>');
+    pill.innerHTML = lead + (lead ? '<span class="dc-pdp-dot" aria-hidden="true">·</span>' : '') + '<b>' + esc(nm) + '</b>';
+  }
+  function setActive(i, fromRow) {
+    xvState.active = i;
+    var parts = $$('.dc-pdp-part', xvSvg);
+    xv.classList.toggle('has-active', i >= 0);
+    parts.forEach(function (g, k) { g.classList.toggle('is-active', k === i); });
+    $$('.dc-pdp-row', rowsEl).forEach(function (r, k) { r.setAttribute('aria-pressed', String(k === i)); });
+    paintCap();
+    if (i >= 0 && xv.classList.contains('is-packed')) pack(false);
+  }
+  function pack(on) {
+    xv.classList.toggle('is-packed', on);
+    packBtn.setAttribute('aria-pressed', String(on));
+    var ar = on ? 'افتح الصندوق' : 'أغلق الصندوق', en = on ? 'Open the box' : 'Close the box';
+    setL(packBtn, ar, en);
+    if (on) { xvState.active = -1; xv.classList.remove('has-active'); $$('.dc-pdp-part', xvSvg).forEach(function (g) { g.classList.remove('is-active'); }); $$('.dc-pdp-row', rowsEl).forEach(function (r) { r.setAttribute('aria-pressed', 'false'); }); }
+  }
+  packBtn.addEventListener('click', function () { pack(!xv.classList.contains('is-packed')); });
+
+  function wireRows() {
+    $$('.dc-pdp-row', rowsEl).forEach(function (r, i) {
+      /* a click only ever selects (focus and hover have already selected this row, so a toggle would cancel the tap); Close the box and Esc clear it */
+      r.addEventListener('click', function () {
+        setActive(i);
+        holdProbe();
+        if (!mqWide.matches) r.scrollIntoView({ block: 'start', behavior: reduced() ? 'auto' : 'smooth' });
+      });
+      r.addEventListener('mouseenter', function () { if (matchMedia('(hover:hover)').matches && !xv.classList.contains('is-packed')) setActive(i); });
+      r.addEventListener('focus', function () { setActive(i); });
+    });
+    rowsEl.addEventListener('mouseleave', function () { if (matchMedia('(hover:hover)').matches) { probeActive(); } });
+  }
+  /* the row nearest a probe line lifts its piece while you scroll through the list */
+  var probeOn = false, probeHold = 0;
+  /* after a tap the list scrolls the row under the picture; the probe stays quiet until that settles so it cannot pick a neighbour */
+  function holdProbe() { probeHold = Date.now() + 900; }
+  function probeActive() {
+    if (!probeOn || Date.now() < probeHold || xv.classList.contains('is-packed')) return;
+    var rows = $$('.dc-pdp-row', rowsEl), r0 = rowsEl.getBoundingClientRect();
+    if (r0.bottom < 0 || r0.top > innerHeight) return;
+    var probe = mqWide.matches ? innerHeight * .45 : xv.getBoundingClientRect().bottom + 84, best = -1, bd = 1e9;
+    rows.forEach(function (r, i) { var b = r.getBoundingClientRect(), d = Math.abs((b.top + b.bottom) / 2 - probe); if (d < bd) { bd = d; best = i; } });
+    if (r0.top > probe + 60) best = -1;
+    if (best !== xvState.active) setActive(best);
+  }
+  var tick = false;
+  addEventListener('scroll', function () { if (tick) return; tick = true; requestAnimationFrame(function () { tick = false; probeActive(); }); }, { passive: true });
+
+  function rebuildExploded() {
+    var a = xvState.active; buildExploded();
+    xvState.active = -1; if (a >= 0 && !xv.classList.contains('is-packed')) setActive(a);
+  }
+  mqWide.addEventListener('change', rebuildExploded);
+  function initExplode() {
+    var rows = buildExploded();
+    wireRows();
+    // pack on load, open as the section arrives (skipped entirely under reduced motion or without IO)
+    if (!reduced() && 'IntersectionObserver' in window) {
+      xv.classList.add('is-packed'); packBtn.setAttribute('aria-pressed', 'true'); setL(packBtn, 'افتح الصندوق', 'Open the box');
+      var io = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { io.disconnect(); pack(false); setTimeout(function () { probeOn = true; }, 900); }
+      }, { threshold: .35 });
+      io.observe(xv);
+    } else probeOn = true;
+    setHtml($('#factBox'), "<span class='dc-num'>" + rows.length + "</span> " + (rows.length > 2 ? 'أصناف' : 'صنفان'), "<span class='dc-num'>" + rows.length + "</span> kinds of items");
+  }
+
+  /* ------------------------------------------------------------------ swap content for the other boxes ------------------------------------------------------------------ */
+  function rowHTML(it) {
+    var ar = esc(it[4]), en = esc(it[5]);
+    return '<li><button type="button" class="dc-pdp-row" aria-pressed="false" data-part="' + it[0] + '"><span><b data-ar="' + ar + '" data-en="' + en + '">' + ar + '</b></span>' +
+      '<span class="dc-pdp-count"><span class="dc-num">' + it[1] + '</span><span data-ar="' + esc(it[2]) + '" data-en="' + esc(it[3]) + '">' + esc(it[2]) + '</span></span>' +
+      '<small data-ar="' + esc(it[6]) + '" data-en="' + esc(it[7]) + '">' + esc(it[6]) + '</small></button></li>';
+  }
+  function cardHTML(s) {
+    var front = s[0] === 'deck-pink' ? ' dc-qcard__front--pink' : '';
+    var disc = s[0] === 'deck-red' ? '' : '';
+    return '<div><button type="button" class="dc-qcard" aria-pressed="false" data-ar-label="بطاقة سؤال، اضغط لتقلبها" data-en-label="Question card, press to flip" aria-label="بطاقة سؤال، اضغط لتقلبها"><span class="dc-qcard__inner">' +
+      '<span class="dc-qcard__face dc-qcard__front' + front + '"><span class="dc-qcard__disc"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#dcHeart" fill="currentColor"/></svg></span></span>' +
+      '<span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="' + esc(s[1]) + '" data-en="' + esc(s[2]) + '">' + esc(s[1]) + '</span><span class="dc-qcard__q" data-ar="' + esc(s[3]) + '" data-en="' + esc(s[4]) + '">' + esc(s[3]) + '</span></span></span></button></div>';
+  }
+  function miniHTML(o) {
+    var art = svgWrap(ART.closed(o));
+    return '<li><a class="dc-pdp-mini" href="product.html?box=' + o.id + '"><span class="dc-pdp-mini__art dc-pdp-slide--' + o.ground[0] + '">' + art + '</span><span><b data-ar="' + esc(o.ar) + '" data-en="' + esc(o.en) + '">' + esc(o.ar) + '</b>' +
+      '<span data-ar="' + esc(o.chipAr) + '" data-en="' + esc(o.chipEn) + '">' + esc(o.chipAr) + '</span><span class="dc-num">' + fmt(o.price) + '</span></span></a></li>';
+  }
+  function applyBox() {
+    if (B.id !== 'love') {
+      document.title = lang(B.ar, B.en) + ' · ' + lang('دردشات', 'Dardachat');
+      var t = $('title'); t.setAttribute('data-ar', B.ar + ' · دردشات'); t.setAttribute('data-en', B.en + ' · Dardachat');
+      setL($('#crumbName'), B.ar, B.en); setL($('#pName'), B.ar, B.en); setL($('#pLede'), B.ledeAr, B.ledeEn);
+      $('#chips').innerHTML = (B.age ? '<span class="dc-chip dc-chip--age dc-num">' + B.age + '</span>' : '') +
+        '<span class="dc-chip' + (B.season ? ' dc-chip--season' : '') + '" data-ar="' + esc(B.chipAr) + '" data-en="' + esc(B.chipEn) + '">' + esc(B.chipAr) + '</span>' +
+        (B.season ? '<span class="dc-chip" data-ar="لكل الأعمار" data-en="All ages">لكل الأعمار</span>' : '');
+      $('#factAge').textContent = B.age || '';
+      if (!B.age) { $('#factAge').className = 'dc-pdp-fact-num'; setL($('#factAge'), 'كل الأعمار', 'All ages'); }
+      setL($('#factFor'), B.forAr, B.forEn);
+      $('#unitPrice').innerHTML = '<small>₪</small>' + DC.num(B.price, 2);
+      $('#barName').setAttribute('data-ar', B.ar); $('#barName').setAttribute('data-en', B.en);
+      setLabel($('#addBtn'), 'أضف ' + B.ar + ' إلى السلة', 'Add ' + B.en + ' to cart');
+      $('#waLink').href = 'https://wa.me/972543992424?text=' + encodeURIComponent('مرحبا، عندي سؤال عن ' + B.ar);
+      rowsEl.innerHTML = B.items.map(rowHTML).join('');
+      $('#cards').innerHTML = SAMPLES[B.id].map(cardHTML).join('');
+      if (B.off) $('#buy').classList.add('is-off');
+      $('#bar').setAttribute('data-off', B.off ? '1' : '');
+    }
+    var others = Object.keys(BOXES).filter(function (k) { return k !== B.id; }).map(function (k) { return BOXES[k]; });
+    $('#more').innerHTML = others.map(miniHTML).join('');
+    $('#barPrice').textContent = fmt(B.price);
+    DC.applyLang(document);
+  }
+
+  /* ------------------------------------------------------------------ cart ------------------------------------------------------------------ */
+  var cart = { total: 0, lines: {} }, shown = 0, qty = 1;
+  try { var saved = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); if (saved && typeof saved.total === 'number') cart = saved; } catch (e) {}
+  shown = cart.total;
+  var cartCount = $('#cartCount'), cartLink = $('#cartLink');
+  function saveCart() { try { sessionStorage.setItem('dc-proto-cart', JSON.stringify(cart)); } catch (e) {} }
+  function paintCart() {
+    cartCount.textContent = String(shown); cartCount.hidden = shown === 0;
+    cartLink.setAttribute('aria-label', shown ? lang('السلة، ' + shown + (shown === 1 ? ' منتج' : ' منتجات'), 'Cart, ' + shown + (shown === 1 ? ' item' : ' items')) : lang('السلة، فارغة', 'Cart, empty'));
+  }
+  function paintQty() {
+    $('#qVal').textContent = String(qty); $('#qMinus').disabled = qty <= 1; $('#qPlus').disabled = qty >= 9;
+    var tot = $('#total'), b = $('#totalNum');
+    tot.classList.toggle('is-on', qty > 1);
+    b.textContent = fmt(B.price * qty);
+    $('#barPrice').textContent = fmt(B.price * qty);
+  }
+  $('#qMinus').addEventListener('click', function () { if (qty > 1) { qty--; paintQty(); if (!reduced()) DC.restart($('#totalNum'), 'is-tick'); } });
+  $('#qPlus').addEventListener('click', function () { if (qty < 9) { qty++; paintQty(); if (!reduced()) DC.restart($('#totalNum'), 'is-tick'); } });
+
+  var toast = $('#toast'), toastText = $('#toastText'), toastLink = $('#toastLink'), toastTimer;
+  function showToast() {
+    toastText.textContent = lang('أُضيف إلى سلتك', 'Added to your cart');
+    toast.classList.add('is-on'); toastLink.tabIndex = 0; clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 3600);
+  }
+  function hideToast() { toast.classList.remove('is-on'); toastLink.tabIndex = -1; }
+  toast.addEventListener('focusin', function () { clearTimeout(toastTimer); });
+  toast.addEventListener('focusout', function () { toastTimer = setTimeout(hideToast, 2200); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { hideToast(); if (xvState.active >= 0) { holdProbe(); setActive(-1); } } });
+
+  function landed() { shown = cart.total; paintCart(); DC.bump(cartCount); }
+  function fly(btn) {
+    var a = btn.getBoundingClientRect(), b = cartLink.getBoundingClientRect();
+    var x0 = a.left + a.width / 2, y0 = a.top + a.height / 2, dx = (b.left + b.width / 2) - x0, dy = (b.top + b.height / 2) - y0;
+    var el = document.createElement('span'); el.className = 'dc-pdp-fly'; el.setAttribute('aria-hidden', 'true');
+    el.style.left = x0 + 'px'; el.style.top = y0 + 'px';
+    el.innerHTML = '<svg viewBox="0 0 24 24"><use href="#dcHeart" fill="currentColor"/></svg>';
+    document.body.appendChild(el);
+    var lift = Math.min(90, Math.max(30, Math.abs(dy) * .4 + 40));
+    var an = el.animate([
+      { transform: 'translate(0,0) scale(.6)', opacity: 0 },
+      { transform: 'translate(' + dx * .15 + 'px,' + (-lift * .6) + 'px) scale(1.25)', opacity: 1, offset: .2 },
+      { transform: 'translate(' + dx * .6 + 'px,' + (dy * .6 - lift) + 'px) scale(1.05)', opacity: 1, offset: .62 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.55)', opacity: .9 }
+    ], { duration: 760, easing: 'cubic-bezier(.45,.05,.4,1)', fill: 'forwards' });
+    var done = function () { el.remove(); landed(); };
+    an.onfinish = done; an.oncancel = done;
+  }
+  function add(btn) {
+    cart.total += qty; cart.lines[B.id] = (cart.lines[B.id] || 0) + qty; saveCart();
+    btn.classList.add('is-added'); clearTimeout(btn._t); btn._t = setTimeout(function () { btn.classList.remove('is-added'); }, 1300);
+    showToast();
+    reduced() ? landed() : fly(btn);
+  }
+  $('#addBtn').addEventListener('click', function () { add(this); });
+  $('#barAdd').addEventListener('click', function () { add(this); });
+  $('#notifyBtn').addEventListener('click', function () { this.setAttribute('aria-pressed', String(this.getAttribute('aria-pressed') !== 'true')); });
+
+  /* ------------------------------------------------------------------ sticky bar ------------------------------------------------------------------ */
+  var bar = $('#bar');
+  function paintBar() {
+    var r = $('#addBtn').getBoundingClientRect(), gone = (r.bottom < 0 || r.top > innerHeight) && !B.off;
+    bar.classList.toggle('is-on', gone); document.body.classList.toggle('has-bar', gone);
+  }
+  addEventListener('scroll', paintBar, { passive: true }); addEventListener('resize', paintBar); paintBar(); addEventListener('load', paintBar); setTimeout(paintBar, 400); document.addEventListener('dc:lang', function () { setTimeout(paintBar, 60); });
+
+  /* ------------------------------------------------------------------ prototype toolbar: one button on phones ------------------------------------------------------------------ */
+  (function () {
+    var pb = $('.dc-proto-bar'); if (!pb) return;
+    var t = document.createElement('button'); t.type = 'button'; t.className = 'dc-pdp-protoBtn'; t.setAttribute('aria-expanded', 'false');
+    t.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>';
+    var lab = function () { t.setAttribute('aria-label', lang('أدوات النموذج', 'Prototype controls')); };
+    lab(); document.addEventListener('dc:lang', lab);
+    t.addEventListener('click', function () { var o = !pb.classList.contains('is-open'); pb.classList.toggle('is-open', o); t.setAttribute('aria-expanded', String(o)); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pb.classList.contains('is-open')) { pb.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); } });
+    pb.appendChild(t);
+  })();
+
+  /* ------------------------------------------------------------------ mobile menu ------------------------------------------------------------------ */
+  var menuBtn = $('#menuBtn'), nav = $('#dc-nav');
+  function menu(open) { menuBtn.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); }
+  menuBtn.addEventListener('click', function () { menu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('is-open')) { menu(false); menuBtn.focus(); } });
+  document.addEventListener('click', function (e) { if (nav.classList.contains('is-open') && !e.target.closest('.dc-pdp-top')) menu(false); });
+
+  /* ------------------------------------------------------------------ deal-in for the sample cards ------------------------------------------------------------------ */
+  function dealCards() {
+    if (reduced()) return;
+    var SPRING = 'cubic-bezier(.34,1.56,.64,1)';
+    $$('#cards > div').forEach(function (c, i) {
+      c.animate([{ opacity: 0, transform: 'translateY(28px) rotate(-7deg) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: i * 110, easing: SPRING, fill: 'backwards' });
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    var cio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { cio.disconnect(); dealCards(); } }, { threshold: .25 });
+    cio.observe($('#cards'));
+  }
+
+  /* ------------------------------------------------------------------ boot ------------------------------------------------------------------ */
+  applyBox();
+  buildGallery();
+  initExplode();
+  paintCart(); paintQty();
+  document.addEventListener('dc:lang', function () { rebuildExploded(); paintCap(); paintCart(); paintSlides(0, false); paintQty(); });
+});
+</script>
+</body>
+</html>

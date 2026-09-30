@@ -1,0 +1,18 @@
+<!-- @dsCard group="Navigation" height=110 -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><title>SiteHeader — preview</title></head>
+<body>
+<div class="dc-root">
+  <header class="dc-header">
+    <img class="dc-header__logo" src="/_blob/34bf4f25bc9b033265d2947a244a1e43" alt="دردشات">
+    <nav aria-label="القائمة"><a href="#" aria-current="page">الصناديق</a><a href="#">الورشات</a><a href="#">الجلسات</a><a href="#">ليالي الألعاب</a><a href="#">الرحلة</a><a href="#">من نحن</a></nav>
+    <button class="dc-cart" type="button" aria-label="السلة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><span class="dc-cart__count dc-num">2</span></button>
+  </header>
+</div>
+<script>
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+const n=document.querySelector('.dc-cart__count');let c=2;document.querySelector('.dc-cart').addEventListener('click',()=>{n.textContent=String(++c);n.classList.remove('is-bumped');void n.offsetWidth;n.classList.add('is-bumped');});
+</script>
+</body>
+</html>
