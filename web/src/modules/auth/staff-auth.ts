@@ -17,7 +17,7 @@ import { createSession, markSecondFactor, type Session, type SessionMeta } from 
  * challenge rotates it into a full session. Pure: every function takes `db` and an explicit `now`.
  */
 
-export const TOTP_ISSUER = "DardaChat";
+export const TOTP_ISSUER = "Dardachat";
 const TOTP_PERIOD_S = 30;
 /** ±1 time step (30 s either side) for clock drift. */
 const TOTP_TOLERANCE_S = TOTP_PERIOD_S;

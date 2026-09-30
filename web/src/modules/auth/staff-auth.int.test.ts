@@ -79,7 +79,7 @@ describe("TOTP enrolment", () => {
     const p = await pending(OWNER);
     const e = await beginTotpEnrolment(db, p.session, at());
     if (!e.ok) throw new Error(e.error);
-    expect(e.otpauthUri).toMatch(/^otpauth:\/\/totp\/DardaChat:owner%40s\.test\?/);
+    expect(e.otpauthUri).toMatch(/^otpauth:\/\/totp\/Dardachat:owner%40s\.test\?/);
     expect(e.groupedSecret.replace(/ /g, "")).toBe(e.secret);
     const [row] = await db.select().from(totpSecrets).where(eq(totpSecrets.userId, p.staffId));
     expect(row!.secretEncrypted).not.toContain(e.secret);

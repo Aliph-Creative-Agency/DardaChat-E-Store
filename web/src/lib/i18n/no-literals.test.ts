@@ -34,7 +34,7 @@ describe("no JSX string literals (NFR-LOC-001)", () => {
       "      Add to cart",
       "      <input placeholder={'Search'} aria-label={t('x')} />",
       "      {/* i18n-ignore */}",
-      "      DardaChat",
+      "      Dardachat",
       "      <span>{t('ok')} · 42</span>",
       "    </div>",
       "  );",

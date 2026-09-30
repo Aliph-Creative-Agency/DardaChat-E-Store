@@ -11,7 +11,7 @@ const MESSAGES_DIR = path.resolve(__dirname, "../../../messages");
  * `<namespace>.<key.path>` whose Arabic value may legitimately contain no Arabic script (e.g. a Latin brand mark).
  * Values with no letters at all (pure ICU / numbers / punctuation) are always allowed.
  */
-const LATIN_ONLY_ALLOWED = new Set<string>(["common.devUi.specimen.latin"]);
+const LATIN_ONLY_ALLOWED = new Set<string>(["common.devUi.specimen.latin", "common.brand.nameEn"]);
 
 type Flat = Map<string, string>;
 

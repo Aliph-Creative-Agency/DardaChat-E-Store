@@ -1,15 +1,15 @@
 {
   "meta": {
-    "title": "DardaChat",
-    "description": "DardaChat: boxed conversation games that gather people around questions that open hearts."
+    "title": "Dardachat",
+    "description": "Dardachat: boxed conversation games that gather people around questions that open hearts."
   },
   "placeholder": {
-    "title": "DardaChat",
+    "title": "Dardachat",
     "body": "The prototype is under construction."
   },
   "devUi": {
     "eyebrow": "Design system",
-    "title": "DardaChat components",
+    "title": "Dardachat components",
     "intro": "Developer-only page: every token and component in one place, in Arabic and English.",
     "type": {
       "heading": "Typefaces",
@@ -27,7 +27,7 @@
       "h1": "Questions that open hearts",
       "h2": "A conversation game in a box",
       "h3": "Family evenings in Ramadan",
-      "body": "DardaChat is a card game that gathers family and friends around simple questions that open long conversations. Every card is an invitation to hear a story not yet told.",
+      "body": "Dardachat is a card game that gathers family and friends around simple questions that open long conversations. Every card is an invitation to hear a story not yet told.",
       "diacritics": "دَرْدَشَةٌ مَعَ الأَحِبَّةِ",
       "latin": "Questions that open hearts. 0123456789",
       "numerals": "Price {price}, order {ref}"
@@ -209,11 +209,16 @@
     "cartCount": "Items in cart: {count}",
     "store": {
       "home": "Home",
-      "shop": "Shop",
+      "shop": "Games",
+      "workshops": "Workshops",
+      "sessions": "Sessions",
+      "gameNights": "Game nights",
+      "contact": "Contact",
       "ramadan": "Ramadan collection",
       "journey": "The Journey",
       "about": "About us",
       "faq": "FAQ",
+      "search": "Search",
       "account": "My account",
       "cart": "Cart"
     },
@@ -279,14 +284,23 @@
     "closeMenu": "Close menu",
     "help": "Help"
   },
+  "brand": {
+    "nameAr": "دردشات",
+    "nameEn": "Dardachat"
+  },
   "footer": {
     "tagline": "Conversation games in a box, gathering loved ones around questions that open hearts.",
     "shop": "Shop",
     "policies": "Policies",
     "contact": "Contact us",
-    "contactSoon": "Contact channels and social accounts are coming soon.",
+    "address": "Beit Hanina, Jerusalem",
+    "phoneLabel": "Phone and WhatsApp",
+    "emailLabel": "Email",
+    "instagramLabel": "Instagram",
+    "whatsappCta": "Message us on WhatsApp",
+    "whatsappGreeting": "Hello Dardachat, I have a question",
     "language": "Site language",
-    "copyright": "© {year} DardaChat. All rights reserved."
+    "copyright": "© {year} Dardachat. All rights reserved."
   },
   "admin": {
     "backOffice": "Back office",

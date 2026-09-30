@@ -1,4 +1,4 @@
-# DardaChat web
+# Dardachat web
 
 Next.js 16 app (App Router, `src/`), Drizzle ORM on an embedded PostgreSQL, next-intl (`ar` default, `en`),
 vitest + Playwright. Everything below runs from this `web/` folder.

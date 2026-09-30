@@ -62,8 +62,8 @@ const MINUTES = Math.round(TTL.otpMs / 60_000);
 /** Bilingual OTP copy (Latin digits in both locales so the code is copyable). */
 export function otpText(locale: Locale, code: string): string {
   return locale === "en"
-    ? `Your DardaChat code is ${code}. It expires in ${MINUTES} minutes. Never share it with anyone.`
-    : `رمز التحقق الخاص بك في دردشة هو ${code}. صالح لمدة ${MINUTES} دقائق. لا تشاركه مع أي شخص.`;
+    ? `Your Dardachat code is ${code}. It expires in ${MINUTES} minutes. Never share it with anyone.`
+    : `رمز التحقق الخاص بك في دردشات هو ${code}. صالح لمدة ${MINUTES} دقائق. لا تشاركه مع أي شخص.`;
 }
 
 /**
@@ -111,11 +111,11 @@ const RESET_MINUTES = Math.round(TTL.resetTokenMs / 60_000);
 export function resetLinkText(locale: Locale, url: string): { subject: string; text: string } {
   return locale === "en"
     ? {
-        subject: "Reset your DardaChat password",
+        subject: "Reset your Dardachat password",
         text: `Use this link to choose a new password: ${url}\nIt works once and expires in ${RESET_MINUTES} minutes. If you did not ask for this, ignore this email.`,
       }
     : {
-        subject: "إعادة تعيين كلمة المرور في دردشة",
+        subject: "إعادة تعيين كلمة المرور في دردشات",
         text: `استخدم هذا الرابط لاختيار كلمة مرور جديدة: ${url}\nيعمل الرابط مرة واحدة وتنتهي صلاحيته بعد ${RESET_MINUTES} دقيقة. إذا لم تطلب ذلك فتجاهل هذه الرسالة.`,
       };
 }
