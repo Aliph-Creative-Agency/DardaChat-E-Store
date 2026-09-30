@@ -26,7 +26,7 @@ export function PriceTag({ amount, compareAt, size = "md", className }: PriceTag
   const onSale = compareAt != null && compareAt > amount;
 
   return (
-    <span className={cn("inline-flex flex-wrap items-baseline gap-x-2", className)} data-on-sale={onSale || undefined}>
+    <span className={cn("inline-flex flex-wrap items-baseline gap-x-2 font-sans", className)} data-on-sale={onSale || undefined}>
       <span className={cn("font-semibold tabular-nums", sizes[size], onSale ? "text-brand" : "text-ink")}>
         {onSale ? <span className="sr-only">{t("now")} </span> : null}
         <span data-price="current">{formatMoney(amount, locale)}</span>

@@ -64,13 +64,13 @@ in Arabic. next-intl's `formats` in `request.ts` use the same settings, so `{d, 
 
 ## 5. Design tokens and type
 
-The tokens are in `src/app/globals.css` (`@theme`). Colours are `paper`/`ink`/`brand`/`saffron`/`line` plus the
+The tokens are in `src/app/globals.css` (`@theme`). Colours are `paper`/`ink`/`brand`/`accent`/`pink`/`sky`/`line` plus the
 semantic `success`/`warning`/`danger`/`info`, each with a `-soft` background. There are also radius tokens
 (`rounded-control`, `rounded-card`, `rounded-pill`), shadow and motion tokens (`duration-fast`, `ease-soft`),
 and a reduced-motion fallback. Contrast pairs are checked in `tokens.test.ts`: add a pair there when you introduce
 a new text/background combination.
-Fonts: the body is IBM Plex Sans Arabic / IBM Plex Sans. The display face is **Reem Kufi, for h1/h2 and the
-wordmark only**. h3-h6 and any heading under 20px use the body font at semibold. For a small h2, add
+Fonts: the body is IBM Plex Sans Arabic / IBM Plex Sans. The display face is **Baloo Bhaijaan 2, for h1/h2 and the
+wordmark only** (prices, quantities and order numbers never use it; `PriceTag` pins `font-sans`). h3-h6 and any heading under 20px use the body font at semibold. For a small h2, add
 `font-sans font-semibold`. Every focusable element gets the global 3px `:focus-visible` ring; don't remove it.
 Live gallery (dev only): `/ar/dev/ui`, `/en/dev/ui`.
 

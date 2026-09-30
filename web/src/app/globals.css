@@ -61,7 +61,7 @@
 
   /* Type */
   --font-sans: var(--font-plex-arabic), var(--font-plex-latin), system-ui, "Segoe UI", Tahoma, sans-serif;
-  --font-display: var(--font-reem-kufi), var(--font-plex-arabic), system-ui, sans-serif;
+  --font-display: var(--font-baloo), var(--font-plex-arabic), system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
   --text-display: 3rem;
   --text-display--line-height: 1.15;
@@ -126,11 +126,12 @@
     text-wrap: balance;
   }
 
-  /* Reem Kufi is a display face: only h1/h2 (and the wordmark) get it. Below ~20px its dots crowd, so h3-h6 and any
-     small heading use the body stack at semibold (add `font-sans font-semibold` to a small h2). */
+  /* Baloo Bhaijaan 2 is a display face: only h1/h2 (and the wordmark) get it. h3-h6 and any small heading use the body
+     stack at semibold (add `font-sans font-semibold` to a small h2). Prices and numerals never use it. */
   h1,
   h2 {
     font-family: var(--font-display);
+    font-weight: 700;
   }
 
   h3,
