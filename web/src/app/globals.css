@@ -148,6 +148,11 @@
     outline-offset: 2px;
   }
 
+  /* The blue footer/hero bands: the blue ring would vanish, so use the pink brush colour (>=3:1 on blue). */
+  [data-tone="brand"] :focus-visible {
+    outline-color: var(--color-pink);
+  }
+
   ::selection {
     background: var(--color-brand-soft);
     color: var(--color-ink);

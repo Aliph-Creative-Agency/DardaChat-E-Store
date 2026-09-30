@@ -28,9 +28,20 @@ for (const locale of LOCALES) {
       await expect(page.locator("main")).toBeFocused();
     });
 
-    test("home link is marked as the current page", async ({ page }) => {
+    test("the logo is the home link and the header nav lists the seven brand destinations", async ({ page }) => {
       await page.goto(`/${locale}`);
-      await expect(page.getByTestId("main-nav").locator('[aria-current="page"]')).toHaveAttribute("href", `/${locale}`);
+      await expect(page.getByRole("banner").getByRole("link").first()).toHaveAttribute("href", `/${locale}`);
+      await expect(page.getByTestId("main-nav").getByRole("link")).toHaveCount(7);
+      await expect(page.getByTestId("main-nav").locator('a[href$="/pages/workshops"]')).toHaveCount(1);
+    });
+
+    test("footer carries the contact block", async ({ page }) => {
+      await page.goto(`/${locale}`);
+      const footer = page.getByRole("contentinfo");
+      await expect(footer.locator('a[href="tel:+972543992424"]')).toBeVisible();
+      await expect(footer.locator('a[href="mailto:dardchat.2023@gmail.com"]')).toBeVisible();
+      await expect(footer.locator('a[href="https://instagram.com/dard_chat"]')).toBeVisible();
+      await expect(footer.locator('a[href^="https://wa.me/972543992424"]')).toBeVisible();
     });
 
     test("nav sits on the start side", async ({ page }) => {
@@ -54,7 +65,7 @@ for (const locale of LOCALES) {
       const menu = page.getByRole("dialog");
       await expect(menu).toBeVisible();
       await expect(button).toHaveAttribute("aria-expanded", "true");
-      await expect(menu.getByTestId("mobile-nav").getByRole("link")).toHaveCount(7);
+      await expect(menu.getByTestId("mobile-nav").getByRole("link")).toHaveCount(9);
       // sheet enters from the start edge (poll: it slides in, and a cold dev server can catch it mid-animation)
       await expect
         .poll(async () => {

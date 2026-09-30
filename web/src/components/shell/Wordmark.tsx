@@ -1,30 +1,46 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { Link } from "@/lib/i18n/navigation";
+import { BrandMark } from "@/lib/shell/BrandMark";
 
-/** Cross-stitch diamond (tatreez) used as the brand mark. Decorative. */
-function StitchMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden focusable="false" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M12 2.5 21.5 12 12 21.5 2.5 12Z" />
-      <path d="m9.5 9.5 5 5m0-5-5 5" />
-    </svg>
-  );
-}
-
-/** Brand name as a home link. The visible name is the link text (the store name in the current locale). */
-export function Wordmark({ className, href = "/" }: { className?: string; href?: string }) {
-  const t = useTranslations("common.meta");
+/**
+ * Brand lockup as a home link: finger-heart mark + the name in the current locale (Arabic «دردشات», Latin
+ * "Dardachat"). `stacked` puts the mark above the Arabic name with the thin Latin name underneath, like the logo
+ * banner. Text + inline SVG, so it stays crisp at any size (the raster logo in /brand is a placeholder).
+ */
+export function Wordmark({
+  className,
+  href = "/",
+  stacked = false,
+  tone = "default",
+}: {
+  className?: string;
+  href?: string;
+  stacked?: boolean;
+  /** `onBrand`: cream lettering for use on the blue footer. */
+  tone?: "default" | "onBrand";
+}) {
+  const t = useTranslations("common");
+  const locale = useLocale();
   return (
     <Link
       href={href}
       className={cn(
-        "inline-flex min-h-11 items-center gap-2 rounded-control font-display text-2xl leading-none text-brand",
+        "rounded-control font-display leading-none",
+        tone === "onBrand" ? "text-on-brand" : "text-brand",
+        stacked
+          ? "inline-flex flex-col items-center gap-1 py-1 text-3xl"
+          : "inline-flex min-h-11 items-center gap-2 text-2xl",
         className,
       )}
     >
-      <StitchMark className="size-7 text-saffron" />
-      <span>{t("title")}</span>
+      <BrandMark className={stacked ? "h-12 w-10" : "h-9 w-[30px]"} />
+      <span>{t("meta.title")}</span>
+      {stacked && locale !== "en" ? (
+        <span aria-hidden className="font-sans text-sm font-light tracking-[0.2em]" dir="ltr">
+          {t("brand.nameEn")}
+        </span>
+      ) : null}
     </Link>
   );
 }

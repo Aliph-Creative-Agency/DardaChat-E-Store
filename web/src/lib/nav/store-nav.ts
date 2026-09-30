@@ -15,11 +15,22 @@ export type StoreNavItem = {
 export const STORE_PRIMARY_NAV = [
   { id: "home", href: "/", labelKey: "home" },
   { id: "shop", href: "/products", labelKey: "shop" },
-  { id: "ramadan", href: "/collections/ramadan", labelKey: "ramadan" },
+  { id: "workshops", href: "/pages/workshops", labelKey: "workshops" },
+  { id: "sessions", href: "/pages/sessions", labelKey: "sessions" },
+  { id: "game-nights", href: "/pages/game-nights", labelKey: "gameNights" },
   { id: "journey", href: "/journey", labelKey: "journey" },
   { id: "about", href: "/pages/about", labelKey: "about" },
-  { id: "faq", href: "/faq", labelKey: "faq" },
+  { id: "contact", href: "/pages/contact", labelKey: "contact" },
 ] as const satisfies readonly StoreNavItem[];
+
+/**
+ * Header links: the primary nav without Home (the logo is the home link). The `/pages/*` routes are seeded CMS pages
+ * (CATALOG); until that lands they 404 in a branch that has not merged it.
+ */
+export const STORE_HEADER_NAV = STORE_PRIMARY_NAV.filter((i) => i.id !== "home");
+
+/** Extra footer-only links. */
+export const STORE_SECONDARY_NAV = [{ id: "faq", href: "/faq", labelKey: "faq" }] as const satisfies readonly StoreNavItem[];
 
 /** Header utilities at the logical end (account; the cart is the header's `cartSlot`). */
 export const STORE_UTILITY_NAV = [
