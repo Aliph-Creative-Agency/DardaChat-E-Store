@@ -33,8 +33,7 @@
 .dc-asst-art { position: relative; background: var(--pink); border-radius: var(--radius-lg); aspect-ratio: 1 / 1; display: grid; place-items: center; overflow: hidden; }
 .dc-asst-art svg { width: 68%; height: auto; overflow: visible; }
 .dc-asst-art .dc-ph { position: absolute; inset-block-start: var(--space-3); inset-inline-start: var(--space-3); }
-main .dc-ph { color: #7a4f00; }
-:root[data-theme="dark"] main .dc-ph { color: var(--warning); }
+main .dc-ph { color: var(--ink); } /* --warning is 4.4:1 on the pink art; ink keeps AA in both themes */
 .dc-asst-art .dc-brush { position: absolute; inset-inline: 0; inset-block-end: 0; width: 100%; height: 34%; }
 .dc-asst-info { display: grid; gap: var(--space-4); align-content: start; }
 .dc-asst-info h1 { font: 700 32px/42px var(--font-display); margin: 0; text-wrap: balance; }
