@@ -63,6 +63,7 @@
     .dc-pdp-slide { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; visibility: hidden;
       transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
     .dc-pdp-slide.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+    .dc-pdp-slide img.is-contain { object-fit: contain; }
     .dc-pdp-slide img, .dc-pdp-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
     .dc-pdp-slide svg { width: 82%; height: auto; overflow: visible; }
     .dc-pdp-slide.is-in svg { animation: dc-pdp-arrive var(--dur-slow) var(--ease-spring) both; }
@@ -76,6 +77,7 @@
     .dc-pdp-arrow svg { width: 20px; height: 20px; }
     .dc-pdp-arrow--prev { inset-inline-start: var(--space-3); } .dc-pdp-arrow--next { inset-inline-end: var(--space-3); }
     [dir="rtl"] .dc-pdp-arrow svg { transform: scaleX(-1); }
+    .dc-pdp-tempnote { margin: var(--space-3) 0 0; }
     .dc-pdp-ph { position: absolute; inset-block-end: var(--space-3); inset-inline-start: var(--space-3); z-index: 2; }
     @media (max-width: 599px) { .dc-pdp-ph { inset-block: var(--space-3) auto; } }
     .dc-pdp-thumbs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); }
@@ -367,6 +369,7 @@
           <span class="dc-ph dc-pdp-ph" data-ar="رسم مؤقت، بانتظار صور العميل" data-en="Placeholder art, awaiting client photos">رسم مؤقت، بانتظار صور العميل</span>
         </div>
         <div class="dc-pdp-thumbs" id="thumbs" role="group" data-ar-label="اختر صورة" data-en-label="Choose a picture" aria-label="اختر صورة"></div>
+        <p class="dc-pdp-tempnote" id="tempNote" hidden><span class="dc-ph" data-ar="تصميم مؤقت · سيُعاد تصميم هذا الصندوق" data-en="Temporary design · this box is being redesigned">تصميم مؤقت · سيُعاد تصميم هذا الصندوق</span></p>
         <p class="dc-sr" id="slideStatus" aria-live="polite"></p>
       </div>
 
@@ -626,27 +629,25 @@ document.addEventListener('dc:ready', function () {
     }
   };
   var svgWrap = function (inner) { return '<svg viewBox="0 0 240 240" aria-hidden="true">' + inner + '</svg>'; };
-  /* client photos per box and slide index (assets/photos; same names get overwritten by the hi-res set) */
-  /* Photo gate: the current files are ~120 px Canva crops, too soft for the large gallery. Set to true when hi-res files
-     land under the same names in assets/photos/ (see ds.css "photo gate"). */
-  var PHOTOS_ON = false;
+  /* client photos per box: [file, ar, en, fit]. Boxes with a photo set show only photos; others keep the drawn slides. */
   var PHOTOS = {
-    dardachat: ['box-dardachat-1', 'box-dardachat-open-1', 'cards-question-1', 'card-question-1'],
-    whoamong: ['box-whoamong-1']
+    dardachat: [['box-dardachat-box', 'الصندوق مغلقًا', 'The closed box'], ['box-dardachat-contents', 'محتويات الصندوق', 'What is inside the box'], ['box-dardachat-questions', 'بطاقات الأسئلة', 'The question cards'], ['box-dardachat-challenges', 'بطاقات التحدّيات', 'The challenge cards', 'contain'], ['box-dardachat-card', 'بطاقة سؤال', 'A question card']],
+    whoamong: [['box-whoamong-box', 'الصندوق مغلقًا', 'The closed box'], ['box-whoamong-cards', 'بطاقات اللعبة', 'The game cards'], ['box-whoamong-signs', 'لافتات التصويت', 'The voting signs'], ['box-whoamong-instructions', 'التعليمات', 'The instructions', 'contain'], ['box-whoamong-card', 'بطاقة سؤال', 'A question card']],
+    ramadan: [['box-ramadan-game', 'اللعبة في أجواء رمضان', 'The game, Ramadan setting'], ['box-ramadan-full', 'اللعبة كاملة', 'The full game'], ['box-ramadan-card', 'بطاقة سؤال', 'A question card']],
+    love: [['box-love-box', 'الصندوق', 'The box', 'contain'], ['box-love-contents', 'محتوى الصندوق', 'What is inside the box', 'contain'], ['box-love-board', 'لوح اللعبة', 'The game board'], ['box-love-card', 'بطاقة سؤال', 'A question card'], ['box-love-instructions', 'التعليمات', 'The instructions', 'contain']]
   };
   function slideSet(o) {
-    var g = o.ground, ph = (PHOTOS_ON && PHOTOS[o.id]) || [];
-    var set = [
+    var g = o.ground, ph = PHOTOS[o.id];
+    if (ph) return ph.map(function (p, i) { return { cls: g[i % 2], img: 'assets/photos/' + p[0] + '.jpg', ar: p[1], en: p[2], fit: p[3] || '' }; });
+    return [
       { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
       { cls: g[1], svg: ART.open(o), ar: 'الصندوق مفتوحًا', en: 'The box, open' },
       { cls: g[0], svg: ART.fan(o), ar: 'بطاقات من الصندوق', en: 'Cards from the box' },
       { cls: g[1], svg: ART.scatter(o), ar: 'محتويات الصندوق', en: 'What is inside the box' }
     ];
-    set.forEach(function (d, i) { if (ph[i]) d.img = 'assets/photos/' + ph[i] + '.jpg'; });
-    return set;
   }
   function photoImg(d) {
-    return '<img src="' + d.img + '" alt="' + d.ar + ' · ' + B.ar + '" data-ar-alt="' + d.ar + ' · ' + B.ar + '" data-en-alt="' + d.en + ' · ' + B.en + '" decoding="async">';
+    return '<img' + (d.fit ? ' class="is-' + d.fit + '"' : '') + ' src="' + d.img + '" alt="' + d.ar + ' · ' + B.ar + '" data-ar-alt="' + d.ar + ' · ' + B.ar + '" data-en-alt="' + d.en + ' · ' + B.en + '" decoding="async">';
   }
 
   /* ------------------------------------------------------------------ gallery ------------------------------------------------------------------ */
@@ -687,6 +688,7 @@ document.addEventListener('dc:ready', function () {
       b.setAttribute('aria-current', String(i === cur));
       b.setAttribute('aria-label', lang(slideData[i].ar, slideData[i].en) + ' ' + (i + 1) + ' / ' + slides.length);
     });
+    var tn = $('#tempNote'); if (tn) tn.hidden = B.id !== 'ramadan';
     var phTag = $('.dc-pdp-ph'); if (phTag) phTag.style.display = slideData[cur].img ? 'none' : '';
     $$('img[data-ar-alt]', stage).concat($$('img[data-ar-alt]', thumbs)).forEach(function (im) { im.alt = lang(im.dataset.arAlt, im.dataset.enAlt); });
     status.textContent = lang(slideData[cur].ar, slideData[cur].en) + ', ' + (cur + 1) + ' / ' + slides.length;

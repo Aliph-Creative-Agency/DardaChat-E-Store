@@ -55,3 +55,17 @@
 - Chromium check (`pw/chips.cjs`, 1440, ar and en, 0 page errors): «ما محتويات الصندوق؟», «ماذا تنصحون لجمعة الأصدقاء؟» and «كم سعر الجلسة؟» (and their EN versions) all still get a scripted answer after the move to MSA. The 4th chip, «كم يستغرق التوصيل؟», goes to the WhatsApp escalation **by design** (the `OOS` regex covers توصيل/delivery: "never guess, escalate to the team").
 - Small fixes by the supervisor in `assistant.html`: the source label «صفحة الألعاب» became «صفحة صناديق الألعاب» (×2, ~286–287), to match the shop page heading and nav. «من 20 إلى 25 مشارك» became «مشاركًا» (accusative, ~316). The chips were re-tested after the edit.
 - No revise round needed.
+
+## Photos (round 1, ~120 px Canva crops): provisional, superseded by the high-res swap in progress
+
+The rendered size was measured in Chromium (`scratchpad/pw/photochk.cjs`, DPR 2, 390 and 1440). Upscale is display CSS px ÷ natural px.
+| Slot | Upscale (390 / 1440) | Decision |
+|---|---|---|
+| home Dardachat main card | 3.9× / 6.3× (crop shows only the box base) | reverted to drawing |
+| home Who Among Us card | 2.1× / 1.8× | reverted to drawing |
+| shop Dardachat + Who Among Us cards | 1.9–2.0× / 2.9–3.1× | reverted to drawing |
+| product ?box=dardachat slides 1–4, ?box=whoamong slide 1 | 3.0–4.2× / 4.8–6.7× | reverted to drawing; the «رسم مؤقت» tag comes back automatically |
+| services ws-gift card | 1.1× / 2.7× | reverted to drawing (section tag «رسوم تجريبية» covers it) |
+| home service tickets (sessions, game nights, workshops) | 1.0–1.15× | **kept** (sharp enough at 92 px, real alt text, no placeholder tag) |
+
+How it is reverted (the wiring is kept): `data-photo-off` on the 5 slot containers (home ×2, shop ×2, services ×1), plus a 2-line rule at the end of `ds.css`, plus `PHOTOS_ON = false` in `product.html`. **To turn the photos back on with hi-res files:** delete every `data-photo-off` attribute and set `PHOTOS_ON = true`.
