@@ -317,7 +317,7 @@ img, svg { max-width: 100%; }
 .dc-skip:focus { inset-block-start: var(--space-3); }
 /* Placeholder marker: anything not final gets this tag */
 .dc-ph { display: inline-block; font: 600 11px/1 var(--font-sans); padding: 4px 8px; border-radius: var(--radius-pill);
-  background: var(--surface-sunk); color: var(--warning); box-shadow: inset 0 0 0 1px currentColor; }
+  background: var(--surface); color: var(--warning); box-shadow: inset 0 0 0 1px currentColor; } /* client-demo: --surface (not -sunk) keeps warning text >= 4.5:1 (was 4.42) */
 /* Language swap: [data-ar]/[data-en] text is swapped by _shared.js; these hide whole blocks per language */
 html[lang="ar"] [data-only="en"], html[lang="en"] [data-only="ar"] { display: none !important; }
 /* Manual reduced-motion (toggle in _shared.js sets html[data-motion="reduce"]) mirrors the media query */
