@@ -19,7 +19,8 @@ Why (b): almost all the work already existed (the `design/prototypes/` screens),
 1. Copied the 7 screens plus `ds.css`, `_shared.js` and `assets/` from `design/prototypes/` into this folder, unchanged.
 2. **Offline-safe:** three.js r128 (used only by the 3D table in the Journey) is now loaded from `vendor/three.min.js` instead of cdnjs. No page loads GSAP or anything else from a CDN. The only network resource left is Google Fonts, and system fonts take over when you are offline. If WebGL is unavailable, the Journey falls back to a flat 2D table.
 3. `index.html` is the client-facing start page: the old gallery with the internal review status chips, file names and review shortcuts removed. Its thumbnails are regenerated into `screenshots/thumbs/`.
-4. Took screenshots at 1440 and 390, Arabic and English, for every page and key state, and verified every page in Chromium (see README).
+4. One review round with 3 parallel workers (A: home/shop/product; B: cart-checkout/services; C: journey/assistant/start). Fixes: one cart shared across pages (`sessionStorage` `dc-proto-cart`, so a box added on Home/Shop/Product appears in checkout), and AA contrast for the quiet “Sample” tags (`ds.css` `.dc-ph` now uses the `--surface` token as its background). Verdicts are in `_review/verdicts.md`.
+5. Took screenshots at 1440 and 390, Arabic and English, for every page and key state, and verified every page in Chromium (see README).
 
 ## Page list (presentation order)
 

@@ -15,3 +15,15 @@
 - The `home.html` raw `#7a4f00` is **cleaned up by the supervisor**. The rule is now `main .dc-ph { font-size: 11.5px; }` and the dark override is gone, so the colour comes from ds.css (`--warning` on `--surface`, about 5.5:1 Cream, over 8:1 Night). `.dc-home-drawrow .dc-ph` (white on blue band) is more specific and unaffected.
 - C's 2x re-shoots of 10/11 mobile-390 ar are overwritten by the supervisor's full rerun, which is in progress. Shots affected by C's fix: 10/11 assistant, all sizes and languages (covered by the full rerun). Missing 06–09/desktop files are expected while the rerun is in progress.
 - No revise round needed.
+
+## Worker B (cart-checkout, services): APPROVE
+
+- The checks cover the full matrix plus Night, the whole checkout flow end to end (validation, zone, payment, terms, confirmation) and the services WhatsApp links and cards. No errors, no overflow. Red is only used for `--red-text` validation copy with words, which is allowed.
+- The shared-cart wiring (`cart-checkout.html` ~529–548) is reviewed and correct. The id map works in both directions, quantities are capped at MAX_QTY, the out-of-season Ramadan box is ignored, it is try/catch guarded, and it falls back to the seeded `{chat:1, love:1}` only when the session cart is empty, so the README script still holds. Accepted side effects: visiting the cart writes the sample cart back to the session (other pages then show 2, which is consistent), and after an order the next visit shows the sample cart again.
+- The local `.dc-ph { color: var(--ink-soft) }` override is **removed by the supervisor**. ds.css now passes AA (`--warning` on `--surface`, about 5.5:1), and removing the override keeps the amber “sample” tag consistent along the whole shopping path in Cream and Night.
+- Shots to rerun: 04 and 05, all variants (in the supervisor's final targeted rerun).
+- No revise round needed.
+
+## Final rerun
+
+00–05, 10 and 11 at 390/1440 × ar/en, toolbar hidden. The results are in the supervisor's final report.

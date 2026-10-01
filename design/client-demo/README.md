@@ -19,7 +19,7 @@ Start at `index.html`, in Arabic.
 2. **Home** (card 1). Point out the brush strokes painting on. Press **«اسحب بطاقة أخرى»** (Draw another card) a few times: a question card is drawn from the deck and flips. Scroll: the four boxes, services, the brand quote and contact (WhatsApp and Instagram).
 3. **Shop** (from the header «الصناديق»). Try the filters (who / age / season). Hover a box: the lid tilts. Press the heart/add button: a heart flies to the cart and the count bumps. Note the Ramadan box shown as out of season.
 4. **Product.** Open «صندوق دردشات مع الحب». The box opens and its pieces rise out one by one. Flip the sample question cards, and point out the price incl. VAT, marked as a sample.
-5. **Cart & checkout.** Open the cart from the header: the drawer slides in, already holding two boxes. Continue to checkout:
+5. **Cart & checkout.** Open the cart from the header: the drawer slides in holding whatever was added on Home/Shop/Product, since the cart is shared across pages for the browser tab. If nothing was added, it shows two sample boxes. Continue to checkout:
    - Address: fill in any name, a phone number and a city. The inline errors show if you skip a field.
    - Delivery: pick a zone and the fee updates.
    - Payment: card, wallet, transfer or **cash on delivery**. Card details are never typed here; that happens on the payment provider's page.
@@ -38,7 +38,7 @@ Each of these is marked on the page with a small “Sample / تجريبي” tag
 |---|---|
 | Box prices (₪119–₪169), box photos/art | Placeholder. We need prices and photos from the client. |
 | Service prices | Real (from the brand spec) |
-| Cart, checkout, order number, delivery zones/fees, promo `SAMPLE10` | Simulated in the browser. Nothing is saved or sent. A page reload resets the cart. |
+| Cart, checkout, order number, delivery zones/fees, promo `SAMPLE10` | Simulated in the browser. Nothing is sent anywhere. The cart lives only in this browser tab, and closing the tab empties it. |
 | Payment | No payment is taken. Methods are shown only. |
 | Assistant answers | Pre-written from real catalogue and service facts. Not a live AI. |
 | Journey stops, choices, results | Illustrative content |
