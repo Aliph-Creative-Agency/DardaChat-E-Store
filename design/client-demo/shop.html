@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-ar="المتجر · دردشات" data-en="Shop · Dardachat">المتجر · دردشات</title>
+  <link rel="stylesheet" href="ds.css">
+  <script src="_shared.js" defer></script>
+  <style>
+    /* ==== shop screen only. Tokens from ds.css; nothing hard-coded except geometry. ==== */
+
+    /* ---- header: full-bleed brand band, sticky. In Night the DS text colour on blue turns navy, so use --on-band here. ---- */
+    .dc-shop-top { position: sticky; inset-block-start: 0; z-index: 50; background: var(--band); color: var(--on-band); }
+    .dc-shop-top .dc-header { max-width: 1200px; margin-inline: auto; background: transparent; color: var(--on-band); border-radius: 0;
+      padding-block: var(--space-2); padding-inline: var(--space-4); gap: var(--space-4); position: relative; }
+    @media (min-width: 768px) { .dc-shop-top .dc-header { padding-inline: var(--space-5); gap: var(--space-5); } }
+    .dc-shop-brand { display: block; line-height: 0; border-radius: var(--radius-sm); }
+    .dc-shop-top .dc-header__logo { height: 52px; }
+    .dc-shop-top nav a, .dc-shop-top .dc-cart, .dc-shop-menu { color: var(--on-band); }
+    .dc-shop-actions { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-1); }
+    .dc-shop-top .dc-cart { text-decoration: none; }
+    .dc-shop-top .dc-cart:hover, .dc-shop-menu:hover { background: rgb(255 255 255 / .12); }
+    .dc-shop-top :focus-visible { outline-color: var(--on-band); }
+    .dc-shop-menu { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; border-radius: 50%; cursor: pointer; }
+    .dc-shop-menu svg { width: 24px; height: 24px; }
+    .dc-shop-menu .i-close, .dc-shop-menu[aria-expanded="true"] .i-open { display: none; }
+    .dc-shop-menu[aria-expanded="true"] .i-close { display: block; }
+    /* mobile nav = drop-down sheet under the band */
+    .dc-shop-top nav { position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--band); flex-direction: column; gap: 0;
+      padding: var(--space-2) var(--space-4) var(--space-4); visibility: hidden; opacity: 0; transform: translateY(-8px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+      box-shadow: var(--shadow-lift); border-block-start: 1px solid rgb(255 255 255 / .16); }
+    .dc-shop-top nav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-shop-top nav a { padding-block: 14px; font-size: 16px; }
+    .dc-shop-top nav a::after { inset-block-end: 6px; }
+    @media (min-width: 900px) {
+      .dc-shop-menu { display: none; }
+      .dc-shop-top nav { position: static; visibility: visible; opacity: 1; transform: none; flex-direction: row; gap: var(--space-4); padding: 0; box-shadow: none; border: 0; background: none; flex-wrap: nowrap; }
+      .dc-shop-top nav a { padding-block: 8px; font-size: 15px; }
+      .dc-shop-top nav a::after { inset-block-end: 0; }
+      .dc-shop-actions { margin-inline-start: 0; }
+    }
+
+    /* ---- intro ---- */
+    .dc-shop-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-5); padding-block: var(--space-6) var(--space-5); }
+    .dc-shop-intro h1 { font: var(--type-display-2); margin: 0; color: var(--ink); }
+    .dc-shop-intro .dc-brush { display: block; width: 150px; height: 14px; margin-block: 2px var(--space-3); }
+    .dc-shop-intro .dc-brush path { stroke-width: 7; }
+    .dc-shop-intro p { font: var(--type-body); color: var(--ink-soft); margin: 0; max-width: 46ch; text-wrap: pretty; }
+    .dc-shop-fan { display: none; width: 150px; height: 132px; flex: none; overflow: visible; }
+    .dc-shop-fan rect { stroke: var(--blue); stroke-width: 3; }
+    .dc-shop-fan .f1 rect { fill: var(--pink); } .dc-shop-fan .f2 rect { fill: var(--sky); } .dc-shop-fan .f3 rect { fill: var(--blue); }
+    @media (min-width: 768px) {
+      .dc-shop-intro { padding-block: var(--space-7) var(--space-6); }
+      .dc-shop-intro h1 { font: var(--type-display-1); }
+      .dc-shop-intro p { font: var(--type-body-lg); }
+      .dc-shop-fan { display: block; }
+    }
+
+    /* ---- filters ---- */
+    .dc-shop-filters { background: var(--surface); border-radius: var(--radius-lg); padding: var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-7); box-shadow: var(--shadow-card); }
+    @media (min-width: 768px) { .dc-shop-filters { padding: var(--space-5); } }
+    .dc-shop-fgroup { display: grid; gap: var(--space-2); align-content: start; min-width: 0; }
+    .dc-shop-flabel { font: var(--type-label); color: var(--ink-soft); }
+    .dc-shop-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .dc-shop-fchip { min-height: 40px; padding-inline: 14px; font-size: 14px; border: 0; cursor: pointer; color: var(--ink);
+      transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+    .dc-shop-fchip:hover { background: var(--sky); box-shadow: none; }
+    .dc-shop-fchip:active { transform: scale(.95); }
+    .dc-shop-fchip[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); box-shadow: none; }
+    /* phones: one scrollable row per group (label above), fade at the end edge so it reads as "more this way" */
+    [dir="rtl"] .dc-shop-filters { --fade: to left; } .dc-shop-filters { --fade: to right; }
+    @media (max-width: 599px) {
+      .dc-shop-intro { padding-block: var(--space-4) var(--space-3); }
+      .dc-shop-intro h1 { font: var(--type-display-3); }
+      .dc-shop-intro .dc-brush { margin-block: 0 var(--space-2); width: 110px; }
+      .dc-shop-intro p { font: var(--type-small); }
+      .dc-shop-filters { flex-direction: column; flex-wrap: nowrap; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-2); }
+      .dc-shop-fgroup { gap: 2px; }
+      .dc-shop-flabel { font-size: 13px; line-height: 1.3; }
+      .dc-shop-chips { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none;
+        margin-inline: calc(-1 * var(--space-4)); padding-inline: var(--space-4); padding-block: 4px; scroll-padding-inline: var(--space-4);
+        -webkit-mask-image: linear-gradient(var(--fade), #000 calc(100% - 36px), transparent); mask-image: linear-gradient(var(--fade), #000 calc(100% - 36px), transparent); }
+      .dc-shop-chips.is-end { -webkit-mask-image: none; mask-image: none; }
+      .dc-shop-chips::-webkit-scrollbar { display: none; }
+      .dc-shop-fchip { flex: none; scroll-snap-align: start; min-height: 38px; white-space: nowrap; }
+      .dc-shop-result { min-height: 40px; margin-block: var(--space-3) var(--space-2); }
+    }
+    .dc-shop-fchip svg { width: 0; height: 14px; opacity: 0; margin-inline-end: -6px; transition: width var(--dur-base) var(--ease-spring), opacity var(--dur-base), margin var(--dur-base) var(--ease-spring); }
+    .dc-shop-fchip[aria-pressed="true"] svg { width: 14px; opacity: 1; margin-inline-end: 0; }
+    .dc-shop-result { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 48px; margin-block: var(--space-5) var(--space-3); }
+    .dc-shop-result [hidden] { display: none; }
+    .dc-shop-count { margin: 0; font: var(--type-body-strong); color: var(--ink); }
+    .dc-shop-count .dc-num { display: inline-block; }
+    .dc-shop-count.is-tick .dc-num { animation: dc-bump 520ms var(--ease-spring); }
+
+    /* ---- grid ---- */
+    .dc-shop-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+    @media (min-width: 600px) { .dc-shop-grid { gap: var(--space-4); } }
+    @media (min-width: 1024px) { .dc-shop-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); } }
+    .dc-shop-item { min-width: 0; display: grid; }
+    .dc-shop-item[hidden], .dc-shop-empty[hidden] { display: none; }
+    .dc-shop-grid .dc-product { width: auto; position: relative; }
+    .dc-shop-grid .dc-product__body { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-2); padding: var(--space-3); }
+    .dc-shop-grid .dc-product__body > .dc-row { gap: 6px; }
+    .dc-shop-grid .dc-chip { font-size: 12px; padding-block: 6px; padding-inline: 10px; }
+    .dc-shop-grid .dc-product__name { font-size: 18px; }
+    .dc-shop-grid .dc-product__meta { font-size: 13px; line-height: 1.6; }
+    .dc-shop-grid .dc-product__foot { margin-block-start: auto; padding-block-start: var(--space-2); flex-direction: column; align-items: stretch; gap: var(--space-3); }
+    .dc-shop-grid .dc-price { gap: 4px; }
+    .dc-shop-grid .dc-price__now { font-size: 20px; justify-self: start; }
+    .dc-shop-grid .dc-ph, .dc-shop-note .dc-ph { color: color-mix(in srgb, var(--warning) 78%, var(--ink)); }
+    .dc-shop-grid .dc-price .dc-ph { justify-self: start; font-size: 10.5px; padding: 3px 7px; }
+    .dc-shop-grid .dc-btn { justify-content: center; }
+    @media (min-width: 600px) {
+      .dc-shop-grid .dc-product__body { padding: var(--space-4); gap: var(--space-2); }
+      .dc-shop-grid .dc-product__name { font-size: 22px; }
+      .dc-shop-grid .dc-product__meta { font-size: 14px; }
+      .dc-shop-grid .dc-chip { font-size: 13px; padding-inline: 12px; }
+      .dc-shop-grid .dc-product__foot { flex-direction: row; align-items: flex-end; }
+      .dc-shop-grid .dc-price .dc-ph { font-size: 11px; }
+    }
+    @media (min-width: 600px) and (max-width: 1023px) { .dc-shop-grid .dc-product__foot { flex-direction: row; } }
+    @media (min-width: 1024px) { .dc-shop-grid .dc-product__foot { flex-direction: column; align-items: stretch; } }
+    /* whole card is one link (the name); the add button sits above it */
+    .dc-shop-stretch { color: inherit; text-decoration: none; }
+    .dc-shop-stretch::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+    .dc-shop-stretch:focus-visible { outline: none; }
+    .dc-product:has(.dc-shop-stretch:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+    /* keyboard focus opens the lid; a tap on a phone must not leave it open (focus-within would, the button keeps focus) */
+    .dc-product:has(:focus-visible):not(.is-off) .dc-product__lid { transform: translateY(-10px) rotate(-8deg); }
+    .dc-product:has(:focus-visible):not(.is-off) .dc-product__peek { transform: translateY(-18px); }
+    /* ds.css lifts on :hover; on touch, :hover sticks after a tap, so only real hover devices get it */
+    @media (hover: none) {
+      .dc-product:hover:not(.is-off) { transform: none; box-shadow: var(--shadow-card); }
+      .dc-product:hover:not(.is-off) .dc-product__lid, .dc-product:hover:not(.is-off) .dc-product__peek { transform: none; }
+    }
+    .dc-product .dc-btn { z-index: 2; }
+    /* RTL: the lid hinges on the other side, so it opens toward the reading start */
+    [dir="rtl"] .dc-product__lid { transform-origin: 70% 100%; }
+    @media (hover: hover) { [dir="rtl"] .dc-product:hover:not(.is-off) .dc-product__lid { transform: translateY(-10px) rotate(8deg); } }
+    [dir="rtl"] .dc-product:has(:focus-visible):not(.is-off) .dc-product__lid { transform: translateY(-10px) rotate(8deg); }
+    [dir="rtl"] .dc-product.is-off:hover .dc-product__lid { animation-name: dc-shop-nudge-rtl; }
+    .dc-shop-grid .dc-product__art svg { width: 76%; }
+    .dc-shop-grid .dc-product__art { transition: background-color var(--dur-base) var(--ease-out); }
+    .dc-product__name .dc-shop-stretch:hover { color: var(--blue); }
+
+    /* add button: label swaps to a tick for a moment */
+    .dc-shop-add .i-tick { display: none; }
+    .dc-shop-add.is-added .i-tick { display: block; }
+    .dc-shop-lbl { display: inline-grid; justify-items: center; }
+    .dc-shop-lbl > span { grid-area: 1 / 1; }
+    .dc-shop-lbl .l-done, .dc-shop-add.is-added .l-add { visibility: hidden; }
+    .dc-shop-add.is-added .l-done { visibility: visible; }
+    .dc-shop-add svg:not(.dc-heart) { width: 18px; height: 18px; }
+
+    /* out-of-season Ramadan box: lid stays shut; hover is a polite "not yet" nudge */
+    .dc-product.is-off .dc-product__art { filter: saturate(.55); }
+    .dc-product.is-off .dc-product__peek { opacity: 0; }
+    .dc-product.is-off { box-shadow: none; background: var(--surface); outline: 2px dashed var(--line-strong); outline-offset: -2px; }
+    .dc-product.is-off:hover { transform: none; box-shadow: none; }
+    .dc-product.is-off:hover .dc-product__lid { transform: none; animation: dc-shop-nudge 520ms var(--ease-spring); }
+    .dc-product.is-off .dc-product__note { display: flex; align-items: flex-start; gap: 6px; color: var(--ink-soft); font-weight: 500; }
+    .dc-product.is-off .dc-product__note svg { width: 16px; height: 16px; flex: none; margin-block-start: 2px; color: var(--blue); }
+    @keyframes dc-shop-nudge { 30% { transform: translateY(-4px) rotate(-3deg); } 65% { transform: translateY(0) rotate(1.5deg); } }
+    @keyframes dc-shop-nudge-rtl { 30% { transform: translateY(-4px) rotate(3deg); } 65% { transform: translateY(0) rotate(-1.5deg); } }
+    .dc-shop-notify[aria-pressed="true"] { background: var(--sky); color: var(--on-soft); border-color: transparent; }
+    .dc-shop-notify .n-on, .dc-shop-notify[aria-pressed="true"] .n-off { display: none; }
+    .dc-shop-notify[aria-pressed="true"] .n-on { display: inline; }
+    .dc-shop-main { overflow-x: clip; }
+    .dc-shop-notify { white-space: nowrap; }
+    .dc-shop-notify svg { display: none; }
+    .dc-shop-notify[aria-pressed="true"] svg { display: block; }
+
+    /* empty state: a card that deals in and flips */
+    .dc-shop-empty { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-5) var(--space-6); padding-block: var(--space-6); }
+    .dc-shop-empty .dc-qcard { cursor: default; width: 200px; flex: none; }
+    .dc-shop-empty.is-in .dc-qcard { animation: dc-deal-in var(--dur-slow) var(--ease-spring) both; }
+    .dc-shop-empty .dc-qcard__q { font-size: 17px; padding-inline: var(--space-3); }
+    .dc-shop-empty__text { max-width: 34ch; display: grid; gap: var(--space-3); justify-items: start; }
+    .dc-shop-empty__text h3 { font: var(--type-display-3); margin: 0; color: var(--ink); }
+    .dc-shop-empty__text p { margin: 0; color: var(--ink-soft); font: var(--type-body); }
+
+    .dc-shop-note { margin-block: var(--space-5) 0; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); font: var(--type-small); color: var(--ink-soft); }
+    .dc-shop-note a { color: var(--blue); font-weight: 600; }
+
+    /* ---- after the grid: quote + services ---- */
+    .dc-shop-after { display: grid; gap: var(--space-5); margin-block: var(--space-8) var(--space-8); align-items: center; }
+    @media (min-width: 900px) { .dc-shop-after { grid-template-columns: 1.15fr 1fr; gap: var(--space-6); margin-block: var(--space-9) var(--space-9); } }
+    .dc-shop-after .dc-banner { max-width: none; height: auto; }
+    @media (max-width: 599px) { .dc-shop-after .dc-banner { padding: var(--space-5); } .dc-shop-after .dc-banner__quote { font-size: 22px; } .dc-shop-after .dc-banner__blob { width: 84px; height: 84px; } }
+    .dc-shop-play { display: grid; align-content: center; gap: var(--space-3); }
+    .dc-shop-play h2 { font: var(--type-display-3); margin: 0; color: var(--ink); }
+    .dc-shop-play > p { margin: 0; color: var(--ink-soft); font: var(--type-body); }
+    .dc-shop-play ul { list-style: none; margin: var(--space-2) 0 0; padding: 0; }
+    .dc-shop-play li + li { border-block-start: 1.5px solid var(--line); }
+    .dc-shop-play a { display: flex; align-items: center; gap: var(--space-3); padding-block: var(--space-3); color: var(--ink); text-decoration: none; border-radius: var(--radius-sm);
+      transition: padding var(--dur-base) var(--ease-out), color var(--dur-base); }
+    .dc-shop-play a b { font: 700 18px/1.3 var(--font-display); color: var(--blue); }
+    .dc-shop-play a > div > span { font: var(--type-small); color: var(--ink-soft); display: block; }
+    .dc-shop-play a > i { margin-inline-start: auto; width: 20px; height: 20px; color: var(--blue); transition: transform var(--dur-base) var(--ease-spring); flex: none; }
+    [dir="rtl"] .dc-shop-play a > i { transform: scaleX(-1); }
+    .dc-shop-play a:hover { padding-inline-start: var(--space-2); }
+    .dc-shop-play a:hover > i { transform: translateX(4px); }
+    [dir="rtl"] .dc-shop-play a:hover > i { transform: scaleX(-1) translateX(4px); }
+
+    /* ---- footer ---- */
+    .dc-shop-foot { background: var(--band); color: var(--on-band); margin-block-start: var(--space-8); }
+    .dc-shop-foot .dc-page { display: grid; gap: var(--space-5); padding-block: var(--space-7); align-items: center; }
+    @media (min-width: 768px) { .dc-shop-foot .dc-page { grid-template-columns: auto 1fr; gap: var(--space-7); } }
+    .dc-shop-foot img { height: 84px; width: auto; }
+    .dc-shop-foot address { font-style: normal; display: grid; gap: var(--space-2) var(--space-6); font: var(--type-small); }
+    @media (min-width: 768px) { .dc-shop-foot address { grid-template-columns: repeat(2, auto); justify-content: start; } }
+    .dc-shop-foot a { color: var(--on-band); text-underline-offset: 3px; }
+    .dc-shop-foot :focus-visible { outline-color: var(--on-band); }
+    .dc-shop-foot small { display: block; opacity: .85; margin-block-end: 2px; }
+
+    /* ---- toast + flying heart ---- */
+    .dc-shop-toast { position: fixed; inset-block-start: 84px; inset-inline: var(--space-4); margin-inline: auto; width: max-content; max-width: calc(100% - 32px); z-index: 40;
+      background: var(--surface); color: var(--ink); border-radius: var(--radius-pill); box-shadow: var(--shadow-lift); padding: 10px 10px 10px 20px; padding-inline: 20px 10px;
+      display: flex; align-items: center; gap: var(--space-3); font: 600 14px/1.4 var(--font-sans);
+      visibility: hidden; opacity: 0; transform: translateY(-10px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    .dc-shop-toast.is-on { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-shop-toast .dc-btn { flex: none; }
+    #toastText { text-wrap: balance; }
+    .dc-shop-toast .t-heart { width: 18px; height: 18px; color: var(--red); flex: none; }
+    .dc-shop-fly { position: fixed; z-index: 90; width: 20px; height: 20px; margin: -10px 0 0 -10px; color: var(--red); pointer-events: none; }
+    .dc-shop-fly svg { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+  <header class="dc-shop-top">
+    <div class="dc-header">
+      <a class="dc-shop-brand" href="home.html" data-ar-label="دردشات، الصفحة الرئيسية" data-en-label="Dardachat, home" aria-label="دردشات، الصفحة الرئيسية">
+        <img class="dc-header__logo" src="assets/dardachat-lockup-knockout.png" alt="">
+      </a>
+      <nav id="dc-nav" data-ar-label="القائمة الرئيسية" data-en-label="Main menu" aria-label="القائمة الرئيسية">
+        <a href="shop.html" aria-current="page" data-ar="الصناديق" data-en="Boxes">الصناديق</a>
+        <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+        <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+        <a href="home.html#about" data-ar="من نحن" data-en="About">من نحن</a>
+      </nav>
+      <div class="dc-shop-actions">
+        <a class="dc-cart" href="cart-checkout.html" id="cartLink" aria-label="السلة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="dc-cart__count dc-num" id="cartCount">0</span>
+        </a>
+        <button class="dc-shop-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
+          <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dc-shop-toast" id="toast" role="status" aria-live="polite">
+    <svg class="t-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
+    <span id="toastText"></span>
+    <a class="dc-btn dc-btn--sm" href="cart-checkout.html" id="toastLink" tabindex="-1" data-ar="عرض السلة" data-en="View cart">عرض السلة</a>
+  </div>
+
+  <main id="main" class="dc-page dc-shop-main">
+    <section class="dc-shop-intro" aria-labelledby="shop-title">
+      <div>
+        <h1 id="shop-title" data-ar="الصناديق" data-en="The boxes">الصناديق</h1>
+        <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 150 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8c22-7 42 4 66-1s48-4 76 1"/></svg>
+        <p data-ar="أربعة صناديق من البطاقات والتحدّيات، لكل جلسة صندوقها. اختر حسب من يجلس معك على الطاولة."
+           data-en="Four boxes of cards and challenges, one for every gathering. Choose by who is sitting at your table.">أربعة صناديق من البطاقات والتحدّيات، لكل جلسة صندوقها. اختر حسب من يجلس معك على الطاولة.</p>
+      </div>
+      <svg class="dc-shop-fan" viewBox="0 0 170 150" aria-hidden="true">
+        <g class="f1"><rect x="34" y="20" width="76" height="106" rx="12" transform="rotate(-17 72 73)"/></g>
+        <g class="f2"><rect x="46" y="18" width="76" height="106" rx="12" transform="rotate(-2 84 71)"/></g>
+        <g class="f3 dc-float"><rect x="60" y="20" width="76" height="106" rx="12" transform="rotate(14 98 73)"/>
+          <g transform="rotate(14 98 73)"><circle cx="98" cy="73" r="22" fill="var(--red)"/><path d="M90.5 67c0-9 15-9 15 0 0 6-7.5 6-7.5 13" fill="none" stroke="var(--on-red)" stroke-width="4" stroke-linecap="round"/><circle cx="98" cy="88" r="2.6" fill="var(--on-red)"/></g></g>
+      </svg>
+    </section>
+
+    <!-- FILTERS: each group is single-choice; buttons carry aria-pressed and a tick, so state is never colour alone -->
+    <section class="dc-shop-filters" aria-labelledby="filters-title" id="filters">
+      <h2 class="dc-sr" id="filters-title" data-ar="تصفية الصناديق" data-en="Filter the boxes">تصفية الصناديق</h2>
+
+      <div class="dc-shop-fgroup" role="group" aria-labelledby="fl-aud">
+        <span class="dc-shop-flabel" id="fl-aud" data-ar="لمن الصندوق؟" data-en="Who is it for?">لمن الصندوق؟</span>
+        <div class="dc-shop-chips">
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="audience" data-val="any" aria-pressed="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="الكل" data-en="All">الكل</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="audience" data-val="family" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="عائلة" data-en="Family">عائلة</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="audience" data-val="friends" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="أصدقاء" data-en="Friends">أصدقاء</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="audience" data-val="couples" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="أزواج" data-en="Couples">أزواج</span></button>
+        </div>
+      </div>
+
+      <div class="dc-shop-fgroup" role="group" aria-labelledby="fl-age">
+        <span class="dc-shop-flabel" id="fl-age" data-ar="العمر" data-en="Age">العمر</span>
+        <div class="dc-shop-chips">
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="age" data-val="any" aria-pressed="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="الكل" data-en="All">الكل</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="age" data-val="12" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span class="dc-num">12+</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="age" data-val="18" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span class="dc-num">18+</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="age" data-val="everyone" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="لكل الأعمار" data-en="All ages">لكل الأعمار</span></button>
+        </div>
+      </div>
+
+      <div class="dc-shop-fgroup" role="group" aria-labelledby="fl-sea">
+        <span class="dc-shop-flabel" id="fl-sea" data-ar="الموسم" data-en="Season">الموسم</span>
+        <div class="dc-shop-chips">
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="season" data-val="any" aria-pressed="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="الكل" data-en="All">الكل</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="season" data-val="year" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="على مدار السنة" data-en="All year">على مدار السنة</span></button>
+          <button type="button" class="dc-chip dc-chip--outline dc-shop-fchip" data-key="season" data-val="ramadan" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg><span data-ar="موسمي · رمضان" data-en="Seasonal · Ramadan">موسمي · رمضان</span></button>
+        </div>
+      </div>
+    </section>
+
+    <div class="dc-shop-result">
+      <p class="dc-shop-count" id="count" role="status" aria-live="polite"></p>
+      <button type="button" class="dc-btn dc-btn--ghost dc-btn--sm" id="clearBtn" hidden data-ar="مسح التصفية" data-en="Clear filters">مسح التصفية</button>
+    </div>
+
+    <!-- PRODUCTS -->
+    <ul class="dc-shop-grid" id="grid" aria-label="الصناديق" data-ar-label="الصناديق" data-en-label="The boxes">
+
+      <!-- 1. صندوق دردشات -->
+      <li class="dc-shop-item" data-id="dardachat" data-audience="family friends" data-age="12" data-season="year" data-name-ar="صندوق دردشات" data-name-en="Dardachat Box">
+        <article class="dc-product">
+          <div class="dc-product__art">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+              <g class="dc-product__peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/></g>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
+              <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+            </svg>
+          </div>
+          <div class="dc-product__body">
+            <div class="dc-row"><span class="dc-chip dc-chip--age dc-num">12+</span><span class="dc-chip" data-ar="للعائلة والأصدقاء" data-en="Family &amp; friends">للعائلة والأصدقاء</span></div>
+            <h3 class="dc-product__name"><a class="dc-shop-stretch" href="product.html?box=dardachat" data-ar="صندوق دردشات" data-en="Dardachat Box">صندوق دردشات</a></h3>
+            <p class="dc-product__meta"
+               data-ar-html="<span class='dc-num'>50</span> بطاقة أسئلة عميقة · <span class='dc-num'>25</span> بطاقة تحدّيات · <span class='dc-num'>10</span> قطع لوازم"
+               data-en-html="<span class='dc-num'>50</span> deep question cards · <span class='dc-num'>25</span> challenge cards · <span class='dc-num'>10</span> props"><span class="dc-num">50</span> بطاقة أسئلة عميقة · <span class="dc-num">25</span> بطاقة تحدّيات · <span class="dc-num">10</span> قطع لوازم</p>
+            <div class="dc-product__foot">
+              <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>149.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+              <button class="dc-btn dc-btn--cta dc-btn--sm dc-shop-add" type="button" data-pop data-add data-ar-label="أضف صندوق دردشات إلى السلة" data-en-label="Add Dardachat Box to cart" aria-label="أضف صندوق دردشات إلى السلة"><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-shop-lbl"><span class="l-add" data-ar="أضف" data-en="Add">أضف</span><span class="l-done" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 2. صندوق مين فينا -->
+      <li class="dc-shop-item" data-id="whoamong" data-audience="family friends" data-age="12" data-season="year" data-name-ar="صندوق مين فينا" data-name-en="Who Among Us Box">
+        <article class="dc-product">
+          <div class="dc-product__art dc-product__art--sky">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+              <g class="dc-product__peek"><rect x="48" y="44" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(-9 73 77)"/><rect x="100" y="42" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(8 125 75)"/><circle cx="125" cy="70" r="11" fill="var(--red)" transform="rotate(8 125 75)"/></g>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--pink)"/>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+              <circle cx="89" cy="126" r="4.2" fill="var(--on-red)"/><circle cx="100" cy="118" r="4.2" fill="var(--on-red)"/><circle cx="111" cy="126" r="4.2" fill="var(--on-red)"/>
+              <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+            </svg>
+          </div>
+          <div class="dc-product__body">
+            <div class="dc-row"><span class="dc-chip dc-chip--age dc-num">12+</span><span class="dc-chip" data-ar="للعائلة والأصدقاء" data-en="Family &amp; friends">للعائلة والأصدقاء</span></div>
+            <h3 class="dc-product__name"><a class="dc-shop-stretch" href="product.html?box=whoamong" data-ar="صندوق مين فينا" data-en="Who Among Us Box">صندوق مين فينا</a></h3>
+            <p class="dc-product__meta"
+               data-ar-html="<span class='dc-num'>45</span> بطاقة في <span class='dc-num'>3</span> مراحل · بروشور · <span class='dc-num'>5</span> لافتات تصويت"
+               data-en-html="<span class='dc-num'>45</span> cards in <span class='dc-num'>3</span> stages · booklet · <span class='dc-num'>5</span> voting signs"><span class="dc-num">45</span> بطاقة في <span class="dc-num">3</span> مراحل · بروشور · <span class="dc-num">5</span> لافتات تصويت</p>
+            <div class="dc-product__foot">
+              <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>119.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+              <button class="dc-btn dc-btn--cta dc-btn--sm dc-shop-add" type="button" data-pop data-add data-ar-label="أضف صندوق مين فينا إلى السلة" data-en-label="Add Who Among Us Box to cart" aria-label="أضف صندوق مين فينا إلى السلة"><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-shop-lbl"><span class="l-add" data-ar="أضف" data-en="Add">أضف</span><span class="l-done" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 3. صندوق رمضان للعائلة (out of season) -->
+      <li class="dc-shop-item" data-id="ramadan" data-audience="family" data-age="everyone" data-season="ramadan" data-name-ar="صندوق رمضان للعائلة" data-name-en="Ramadan Family Box">
+        <article class="dc-product is-off">
+          <div class="dc-product__art">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+              <g class="dc-product__peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/></g>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+              <circle cx="100" cy="124" r="13.5" fill="var(--on-red)"/><circle cx="105.5" cy="121" r="11.5" fill="var(--red)"/>
+              <path d="M113 113l1.6 3.6 3.9.4-2.9 2.6.8 3.8-3.4-2-3.4 2 .8-3.8-2.9-2.6 3.9-.4z" fill="var(--on-red)" transform="translate(-1 -2) scale(.9)"/>
+              <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+            </svg>
+          </div>
+          <div class="dc-product__body">
+            <div class="dc-row"><span class="dc-chip dc-chip--age" data-ar="لكل الأعمار" data-en="All ages">لكل الأعمار</span><span class="dc-chip dc-chip--season" data-ar="موسمي · رمضان" data-en="Seasonal · Ramadan">موسمي · رمضان</span></div>
+            <h3 class="dc-product__name"><a class="dc-shop-stretch" href="product.html?box=ramadan" data-ar="صندوق رمضان للعائلة" data-en="Ramadan Family Box">صندوق رمضان للعائلة</a></h3>
+            <p class="dc-product__meta"
+               data-ar-html="<span class='dc-num'>45</span> بطاقة: معلومات دينية، ألغاز، وذكريات رمضان"
+               data-en-html="<span class='dc-num'>45</span> cards: religious questions, riddles and Ramadan memories"><span class="dc-num">45</span> بطاقة: معلومات دينية، ألغاز، وذكريات رمضان</p>
+            <p class="dc-product__note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-ar="يرجع مع بداية رمضان · غير متوفر الآن" data-en="Back when Ramadan begins · not available now">يرجع مع بداية رمضان · غير متوفر الآن</span></p>
+            <div class="dc-product__foot">
+              <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>129.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+              <button class="dc-btn dc-btn--outline dc-btn--sm dc-shop-notify" type="button" aria-pressed="false" data-notify data-ar-label="نبّهني عندما يعود صندوق رمضان للعائلة" data-en-label="Notify me when the Ramadan Family Box is back" aria-label="نبّهني عندما يعود صندوق رمضان للعائلة">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                <span class="n-off" data-ar="نبّهني لما يرجع" data-en="Notify me">نبّهني لما يرجع</span><span class="n-on" data-ar="سجّلناك" data-en="On the list">سجّلناك</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- 4. صندوق دردشات مع الحب -->
+      <li class="dc-shop-item" data-id="love" data-audience="couples" data-age="18" data-season="year" data-name-ar="صندوق دردشات مع الحب" data-name-en="Dardachat with Love Box">
+        <article class="dc-product">
+          <div class="dc-product__art dc-product__art--sky">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+              <g class="dc-product__peek">
+                <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--red)" transform="translate(-12 -22) scale(.85)"/>
+                <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--surface)" transform="translate(30 -30) scale(.7)"/>
+                <path d="M62 84c0-8 6-13 12-13 4 0 7 2 9 5 2-3 5-5 9-5 6 0 12 5 12 13 0 11-21 24-21 24S62 95 62 84z" fill="var(--red)" transform="translate(58 -18) scale(.6)"/>
+              </g>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--pink)"/>
+              <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+              <circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
+              <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+            </svg>
+          </div>
+          <div class="dc-product__body">
+            <div class="dc-row"><span class="dc-chip dc-chip--age dc-num">18+</span><span class="dc-chip dc-chip--pink" data-ar="للأزواج" data-en="For couples">للأزواج</span></div>
+            <h3 class="dc-product__name"><a class="dc-shop-stretch" href="product.html?box=love" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</a></h3>
+            <p class="dc-product__meta"
+               data-ar-html="<span class='dc-num'>63</span> سؤالًا · <span class='dc-num'>16</span> تحدّيًا لشخصين · <span class='dc-num'>20</span> قلبًا كريستاليًا"
+               data-en-html="<span class='dc-num'>63</span> questions · <span class='dc-num'>16</span> duo challenges · <span class='dc-num'>20</span> crystal hearts"><span class="dc-num">63</span> سؤالًا · <span class="dc-num">16</span> تحدّيًا لشخصين · <span class="dc-num">20</span> قلبًا كريستاليًا</p>
+            <div class="dc-product__foot">
+              <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>169.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
+              <button class="dc-btn dc-btn--cta dc-btn--sm dc-shop-add" type="button" data-pop data-add data-ar-label="أضف صندوق دردشات مع الحب إلى السلة" data-en-label="Add Dardachat with Love Box to cart" aria-label="أضف صندوق دردشات مع الحب إلى السلة"><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-shop-lbl"><span class="l-add" data-ar="أضف" data-en="Add">أضف</span><span class="l-done" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <!-- empty state -->
+      <li class="dc-shop-empty" id="empty" hidden>
+        <div class="dc-qcard" id="emptyCard" aria-hidden="true"><span class="dc-qcard__inner">
+          <span class="dc-qcard__face dc-qcard__front"><span class="dc-qcard__disc" data-ar="؟" data-en="?">؟</span></span>
+          <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="لا نتائج" data-en="No match">لا نتائج</span><span class="dc-qcard__q" data-ar="ما لقينا صندوقًا بهذه المواصفات." data-en="We could not find a box like that.">ما لقينا صندوقًا بهذه المواصفات.</span></span>
+        </span></div>
+        <div class="dc-shop-empty__text">
+          <h3 data-ar="جرّب اختيارًا آخر" data-en="Try a different mix">جرّب اختيارًا آخر</h3>
+          <p data-ar-html="عندنا <span class='dc-num'>12+</span> للعائلة والأصدقاء، و<span class='dc-num'>18+</span> للأزواج، وصندوق رمضان لكل الأعمار."
+             data-en-html="We have <span class='dc-num'>12+</span> for family and friends, <span class='dc-num'>18+</span> for couples, and the Ramadan box for all ages.">عندنا <span class="dc-num">12+</span> للعائلة والأصدقاء، و<span class="dc-num">18+</span> للأزواج، وصندوق رمضان لكل الأعمار.</p>
+          <button type="button" class="dc-btn dc-btn--sm" id="emptyClear" data-ar="مسح التصفية" data-en="Clear filters">مسح التصفية</button>
+        </div>
+      </li>
+    </ul>
+
+    <p class="dc-shop-note">
+      <span class="dc-ph" data-ar="تجريبي" data-en="Placeholder">تجريبي</span>
+      <span data-ar-html="الرسوم والأسعار مؤقتة إلى أن نستلم صور الصناديق والأسعار النهائية. لست متأكدًا أي صندوق يناسبك؟ <a href='assistant.html'>اسأل مساعد دردشات</a>."
+            data-en-html="Artwork and prices are stand-ins until we receive the real box photos and final prices. Not sure which box suits you? <a href='assistant.html'>Ask the Dardachat assistant</a>.">الرسوم والأسعار مؤقتة إلى أن نستلم صور الصناديق والأسعار النهائية. لست متأكدًا أي صندوق يناسبك؟ <a href="assistant.html">اسأل مساعد دردشات</a>.</span>
+    </p>
+
+    <section class="dc-shop-after" aria-label="دردشات" data-ar-label="دردشات" data-en-label="Dardachat">
+      <figure class="dc-banner" style="margin:0">
+        <blockquote style="margin:0"><p class="dc-banner__quote" data-ar="«مفتاح المعرفة هو السؤال»" data-en="“The key to knowing is the question”">«مفتاح المعرفة هو السؤال»</p><figcaption class="dc-banner__sig" data-ar="دردشات" data-en="Dardachat">دردشات</figcaption></blockquote>
+        <svg class="dc-banner__blob" viewBox="0 0 120 120" aria-hidden="true">
+          <path class="b1 dc-float" d="M18 70c-8-26 10-52 38-54s50 18 46 44-24 44-50 42-28-8-34-32z"/>
+          <circle class="b2 dc-float" style="animation-delay:-2s" cx="84" cy="30" r="14"/>
+          <path class="b3" d="M52 62c0-6 5-10 10-10s10 4 10 10-10 14-10 14-10-8-10-14z"/>
+        </svg>
+      </figure>
+      <div class="dc-shop-play">
+        <h2 data-ar="تفضّل أن نلعب معك وجهًا لوجه؟" data-en="Would you rather play with us in person?">تفضّل أن نلعب معك وجهًا لوجه؟</h2>
+        <p data-ar="جلسات حوار، ليالي ألعاب وورشات للمجموعات. الحجز عبر واتساب." data-en="Dialogue sessions, game nights and workshops for groups. Book on WhatsApp.">جلسات حوار، ليالي ألعاب وورشات للمجموعات. الحجز عبر واتساب.</p>
+        <ul>
+          <li><a href="services.html#sessions"><div><b data-ar="الجلسات" data-en="Sessions">الجلسات</b><span data-ar-html="حتى <span class='dc-num'>10</span> أشخاص · ساعة · <span class='dc-num'>₪ 70</span> للشخص" data-en-html="Up to <span class='dc-num'>10</span> people · 1 hour · <span class='dc-num'>₪ 70</span> per person">حتى <span class="dc-num">10</span> أشخاص · ساعة · <span class="dc-num">₪ 70</span> للشخص</span></div><i><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></i></a></li>
+          <li><a href="services.html#game-nights"><div><b data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</b><span data-ar-html="فرق تلعب وتجمع النقاط · <span class='dc-num'>₪ 70</span> للشخص" data-en-html="Teams play and score points · <span class='dc-num'>₪ 70</span> per person">فرق تلعب وتجمع النقاط · <span class="dc-num">₪ 70</span> للشخص</span></div><i><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></i></a></li>
+          <li><a href="services.html#workshops"><div><b data-ar="الورشات" data-en="Workshops">الورشات</b><span data-ar-html="لعب ونشاط فني تخرج منه بذكرى · من <span class='dc-num'>₪ 100</span> للشخص" data-en-html="Play plus an art activity, with a keepsake · from <span class='dc-num'>₪ 100</span> per person">لعب ونشاط فني تخرج منه بذكرى · من <span class="dc-num">₪ 100</span> للشخص</span></div><i><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></i></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dc-shop-foot">
+    <div class="dc-page">
+      <img src="assets/dardachat-lockup-knockout.png" alt="دردشات Dardachat" data-ar-alt="دردشات" data-en-alt="Dardachat">
+      <address>
+        <div><small data-ar="العنوان" data-en="Address">العنوان</small><span data-ar="القدس – بيت حنينا" data-en="Beit Hanina, Jerusalem">القدس – بيت حنينا</span></div>
+        <div><small data-ar="واتساب وهاتف" data-en="WhatsApp and phone">واتساب وهاتف</small><a class="dc-num" href="https://wa.me/972543992424" target="_blank" rel="noopener">054 399 2424</a></div>
+        <div><small data-ar="البريد" data-en="Email">البريد</small><a href="mailto:dardchat.2023@gmail.com">dardchat.2023@gmail.com</a></div>
+        <div><small data-ar="إنستغرام" data-en="Instagram">إنستغرام</small><a class="dc-num" href="https://instagram.com/dard_chat" target="_blank" rel="noopener">@dard_chat</a></div>
+      </address>
+    </div>
+  </footer>
+
+<script>
+document.addEventListener('dc:ready', function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var SPRING = 'cubic-bezier(.34,1.56,.64,1)';
+  var grid = $('#grid'), items = $$('.dc-shop-item', grid), empty = $('#empty'), emptyCard = $('#emptyCard');
+  var countEl = $('#count'), clearBtn = $('#clearBtn'), cartCount = $('#cartCount'), cartLink = $('#cartLink');
+  var toast = $('#toast'), toastText = $('#toastText'), toastLink = $('#toastLink');
+  var state = { audience: 'any', age: 'any', season: 'any' };
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn = $('#menuBtn'), nav = $('#dc-nav');
+  function menu(open) { menuBtn.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); if (open) hideToast(); }
+  menuBtn.addEventListener('click', function () { menu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('is-open')) { menu(false); menuBtn.focus(); } });
+  document.addEventListener('click', function (e) { if (nav.classList.contains('is-open') && !e.target.closest('.dc-shop-top')) menu(false); });
+
+  /* ---------- cart (prototype state; shared key so other screens may read it) ---------- */
+  var cart = { total: 0, lines: {} }, shown = 0;
+  try { var saved = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); if (saved && typeof saved.total === 'number') cart = saved; } catch (e) {}
+  shown = cart.total;
+  function saveCart() { try { sessionStorage.setItem('dc-proto-cart', JSON.stringify(cart)); } catch (e) {} }
+  function paintCart() {
+    cartCount.textContent = String(shown);
+    cartCount.hidden = shown === 0;
+    cartLink.setAttribute('aria-label', shown ? DC.t('السلة، ' + shown + (shown === 1 ? ' منتج' : ' منتجات'), 'Cart, ' + shown + (shown === 1 ? ' item' : ' items')) : DC.t('السلة، فارغة', 'Cart, empty'));
+  }
+  paintCart();
+
+  /* ---------- result count ---------- */
+  function countLabel(n) {
+    if (n === 0) return DC.t('لا صناديق مطابقة', 'No matching boxes');
+    if (DC.lang === 'en') return '<span class="dc-num">' + n + '</span> ' + (n === 1 ? 'box' : 'boxes');
+    if (n === 1) return 'صندوق واحد';
+    if (n === 2) return 'صندوقان';
+    return '<span class="dc-num">' + n + '</span> صناديق';
+  }
+  var lastN = -1;
+  function paintCount(n, tick) {
+    countEl.innerHTML = countLabel(n);
+    if (tick && !DC.reducedMotion()) DC.restart(countEl, 'is-tick');
+    lastN = n;
+  }
+
+  /* filter rows on phones: drop the end fade once the row is scrolled to its end */
+  var rows = $$('.dc-shop-chips');
+  function rowEnd(r) { r.classList.toggle('is-end', Math.abs(r.scrollLeft) + r.clientWidth >= r.scrollWidth - 2 || r.scrollWidth <= r.clientWidth + 2); }
+  rows.forEach(function (r) { rowEnd(r); r.addEventListener('scroll', function () { rowEnd(r); }, { passive: true }); });
+  window.addEventListener('resize', function () { rows.forEach(rowEnd); });
+  document.addEventListener('dc:lang', function () { rows.forEach(rowEnd); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { rows.forEach(rowEnd); });
+  if ('ResizeObserver' in window) { var ro = new ResizeObserver(function (es) { es.forEach(function (e) { rowEnd(e.target); }); }); rows.forEach(function (r) { ro.observe(r); Array.prototype.forEach.call(r.children, function (c) { ro.observe(c); }); }); }
+
+  /* ---------- filtering: stayers glide (FLIP), newcomers are dealt in ---------- */
+  function match(li) {
+    return (state.audience === 'any' || li.dataset.audience.split(' ').indexOf(state.audience) > -1) &&
+           (state.age === 'any' || li.dataset.age === state.age) &&
+           (state.season === 'any' || li.dataset.season === state.season);
+  }
+  function apply(animate) {
+    var before = items.map(function (li) { return { li: li, vis: !li.hidden, r: li.hidden ? null : li.getBoundingClientRect() }; });
+    var n = 0;
+    items.forEach(function (li) { var ok = match(li); li.hidden = !ok; if (ok) n++; });
+    empty.hidden = n > 0;
+    var active = state.audience !== 'any' || state.age !== 'any' || state.season !== 'any';
+    clearBtn.hidden = !active;
+    paintCount(n, animate && n !== lastN);
+    if (n === 0) {
+      emptyCard.classList.remove('is-flipped');
+      if (animate) DC.restart(empty, 'is-in');
+      setTimeout(function () { if (!empty.hidden) emptyCard.classList.add('is-flipped'); }, DC.reducedMotion() || !animate ? 0 : 520);
+    }
+    if (!animate || DC.reducedMotion()) return;
+    var i = 0;
+    before.forEach(function (b) {
+      if (b.li.hidden) return;
+      if (!b.vis) {
+        b.li.animate([{ opacity: 0, transform: 'translateY(24px) rotate(-6deg) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: i++ * 80, easing: SPRING, fill: 'backwards' });
+      } else {
+        var r = b.li.getBoundingClientRect(), dx = b.r.left - r.left, dy = b.r.top - r.top;
+        if (dx || dy) b.li.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'none' }], { duration: 480, easing: SPRING });
+      }
+    });
+  }
+  function setFilter(key, val) {
+    state[key] = val;
+    $$('.dc-shop-fchip[data-key="' + key + '"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.val === val)); });
+    apply(true);
+  }
+  $$('.dc-shop-fchip').forEach(function (b) { b.addEventListener('click', function () { setFilter(b.dataset.key, b.dataset.val); }); });
+  function clearAll() { ['audience', 'age', 'season'].forEach(function (k) { state[k] = 'any'; $$('.dc-shop-fchip[data-key="' + k + '"]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.val === 'any')); }); }); apply(true); $('.dc-shop-fchip').focus(); }
+  clearBtn.addEventListener('click', clearAll);
+  $('#emptyClear').addEventListener('click', clearAll);
+  apply(false);
+
+  /* first deal-in once the grid is on screen */
+  function dealIn() {
+    if (DC.reducedMotion()) return;
+    items.forEach(function (li, i) {
+      li.animate([{ opacity: 0, transform: 'translateY(24px) rotate(-6deg) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 480, delay: i * 90, easing: SPRING, fill: 'backwards' });
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); dealIn(); } }, { threshold: 0.12 });
+    io.observe(grid);
+  } else dealIn();
+
+  /* ---------- add to cart: heart pop on the button, a heart flies to the bag, count bumps ---------- */
+  var toastTimer;
+  function showToast(name) {
+    toastText.textContent = DC.t('أُضيف «' + name + '»', '“' + name + '” added');
+    toast.classList.add('is-on'); toastLink.tabIndex = 0;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(hideToast, 3600);
+  }
+  function hideToast() { toast.classList.remove('is-on'); toastLink.tabIndex = -1; }
+  toast.addEventListener('focusin', function () { clearTimeout(toastTimer); });
+  toast.addEventListener('focusout', function () { toastTimer = setTimeout(hideToast, 2200); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideToast(); });
+
+  function landed(nm) { shown = cart.total; paintCart(); DC.bump(cartCount); showToast(nm); }
+  function fly(btn, nm) {
+    var a = btn.getBoundingClientRect(), b = cartLink.getBoundingClientRect();
+    var x0 = a.left + a.width / 2, y0 = a.top + a.height / 2, dx = (b.left + b.width / 2) - x0, dy = (b.top + b.height / 2) - y0;
+    var el = document.createElement('span'); el.className = 'dc-shop-fly'; el.setAttribute('aria-hidden', 'true');
+    el.style.left = x0 + 'px'; el.style.top = y0 + 'px';
+    el.innerHTML = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+    document.body.appendChild(el);
+    var lift = Math.min(90, Math.max(30, Math.abs(dy) * .4 + 40));
+    var an = el.animate([
+      { transform: 'translate(0,0) scale(.6)', opacity: 0 },
+      { transform: 'translate(' + dx * .15 + 'px,' + (-lift * .6) + 'px) scale(1.25)', opacity: 1, offset: .2 },
+      { transform: 'translate(' + dx * .6 + 'px,' + (dy * .6 - lift) + 'px) scale(1.05)', opacity: 1, offset: .62 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.55)', opacity: .9 }
+    ], { duration: 760, easing: 'cubic-bezier(.45,.05,.4,1)', fill: 'forwards' });
+    var done = function () { el.remove(); landed(nm); };
+    an.onfinish = done; an.oncancel = done;
+  }
+  $$('[data-add]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var li = btn.closest('.dc-shop-item');
+      cart.total++; cart.lines[li.dataset.id] = (cart.lines[li.dataset.id] || 0) + 1; saveCart();
+      btn.classList.add('is-added'); clearTimeout(btn._t); btn._t = setTimeout(function () { btn.classList.remove('is-added'); }, 1300);
+      var nm = DC.lang === 'en' ? li.dataset.nameEn : li.dataset.nameAr;
+      if (DC.reducedMotion()) landed(nm); else fly(btn, nm);
+    });
+  });
+
+  /* notify-me on the out-of-season box */
+  $$('[data-notify]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var on = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', String(on));
+    });
+  });
+
+  document.addEventListener('dc:lang', function () { paintCart(); paintCount(lastN, false); });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-ar="مساعد دردشات" data-en="Dardachat assistant">مساعد دردشات</title>
+<link rel="stylesheet" href="ds.css">
+<script src="_shared.js" defer></script>
+<style>
+/* ==========================================================================
+   assistant.html — a product page with the storefront assistant opening on it.
+   Screen-only classes: dc-asst-*. Tokens only.
+   ========================================================================== */
+
+/* ---------- backdrop page (context, kept quiet) ---------- */
+.dc-asst-band { background: var(--band); color: var(--on-band); }
+.dc-asst-hdr { background: transparent; color: var(--on-band); max-width: none; padding: 0; border-radius: 0; padding-block: var(--space-3); }
+.dc-asst-hdr .dc-header__logo { height: 52px; }
+.dc-asst-hdr nav a { color: var(--on-band); }
+.dc-asst-hdr .dc-cart { color: var(--on-band); }
+.dc-asst-hdr nav { display: none; }
+.dc-asst-hdr .dc-asst-spacer { flex: 1; }
+@media (min-width: 880px) { .dc-asst-hdr nav { display: flex; } .dc-asst-hdr .dc-asst-spacer { display: none; } }
+.dc-cart__count[hidden] { display: none; }
+
+.dc-asst-crumbs { padding-block: var(--space-4) 0; font: var(--type-small); color: var(--ink-soft); }
+.dc-asst-crumbs ol { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.dc-asst-crumbs li + li::before { content: "\203A"; margin-inline-end: var(--space-2); color: var(--line-strong); }
+[dir="rtl"] .dc-asst-crumbs li + li::before { content: "\2039"; }
+.dc-asst-crumbs a { color: var(--blue); }
+
+.dc-asst-prod { display: grid; gap: var(--space-5); padding-block: var(--space-5) var(--space-8); }
+@media (min-width: 880px) { .dc-asst-prod { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-7); align-items: start; padding-block: var(--space-6) var(--space-9); } }
+.dc-asst-art { position: relative; background: var(--pink); border-radius: var(--radius-lg); aspect-ratio: 1 / 1; display: grid; place-items: center; overflow: hidden; }
+.dc-asst-art svg { width: 68%; height: auto; overflow: visible; }
+.dc-asst-art .dc-ph { position: absolute; inset-block-start: var(--space-3); inset-inline-start: var(--space-3); }
+.dc-asst-art .dc-brush { position: absolute; inset-inline: 0; inset-block-end: 0; width: 100%; height: 34%; }
+.dc-asst-info { display: grid; gap: var(--space-4); align-content: start; }
+.dc-asst-info h1 { font: 700 32px/42px var(--font-display); margin: 0; text-wrap: balance; }
+@media (min-width: 880px) { .dc-asst-info h1 { font: var(--type-display-1); } }
+.dc-asst-lead { font: var(--type-body-lg); margin: 0; color: var(--ink); max-width: 46ch; }
+.dc-asst-contents { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-block: 1.5px solid var(--line); }
+.dc-asst-contents li { display: grid; grid-template-columns: 64px 1fr; align-items: baseline; gap: var(--space-3); padding-block: var(--space-3); }
+.dc-asst-contents li + li { border-block-start: 1px solid var(--line); }
+.dc-asst-contents.is-cited { animation: dc-cited 600ms var(--ease-out, ease-out) both; }
+@keyframes dc-cited { 0% { box-shadow: inset 0 0 0 3px var(--sky); } 100% { box-shadow: inset 0 0 0 3px transparent; } }
+@media (prefers-reduced-motion: reduce) { .dc-asst-contents.is-cited { animation: none; } }
+.dc-asst-contents b { font: 700 28px/1 var(--font-sans); font-variant-numeric: tabular-nums; color: var(--blue); text-align: start; }
+.dc-asst-contents span { font: var(--type-body); }
+.dc-asst-also { font: var(--type-small); color: var(--ink-soft); margin: 0; }
+.dc-asst-buy { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-4) var(--space-5); }
+.dc-asst-buy .dc-price__now { font-size: 30px; }
+.dc-asst-ask { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-md); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); }
+.dc-asst-ask p { margin: 0; font: var(--type-body); flex: 1 1 220px; }
+.dc-asst-foot-band { background: var(--surface-sunk); padding-block: var(--space-6); }
+.dc-asst-foot-band .dc-page { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-6); align-items: center; justify-content: space-between; }
+.dc-asst-foot-band q { font: var(--type-quote); quotes: none; color: var(--ink); text-wrap: balance; }
+.dc-asst-foot-band p { margin: 0; font: var(--type-small); color: var(--ink-soft); }
+
+/* ---------- launcher ---------- */
+.dc-asst-launch { position: fixed; z-index: 800; inset-inline-end: var(--space-4); inset-block-end: var(--space-4);
+  display: inline-flex; align-items: center; gap: var(--space-2); min-height: 56px; min-width: 56px; justify-content: center;
+  padding-inline: 16px; border: 0; border-radius: var(--radius-pill); background: var(--blue); color: var(--on-blue);
+  font: 600 16px/1 var(--font-sans); cursor: pointer; box-shadow: var(--shadow-lift);
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
+.dc-asst-launch:hover { background: var(--blue-strong); transform: translateY(-2px); }
+.dc-asst-launch:active { transform: scale(.97); }
+.dc-asst-launch svg { width: 24px; height: 24px; flex: none; }
+.dc-asst-launch__t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (min-width: 560px) { .dc-asst-launch { padding-inline: 20px 22px; } .dc-asst-launch__t { position: static; width: auto; height: auto; overflow: visible; clip: auto; } }
+body.is-asst-open .dc-asst-launch { opacity: 0; visibility: hidden; transform: scale(.9); }
+
+/* ---------- panel (extends .dc-chat) ---------- */
+.dc-asst { position: fixed; z-index: 950; inset-inline-end: var(--space-4); inset-block-end: var(--space-4);
+  width: min(392px, calc(100vw - 2 * var(--space-4))); height: min(640px, calc(100dvh - 2 * var(--space-4)));
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto auto; background: var(--surface); color: var(--ink);
+  transform-origin: 100% 100%; visibility: hidden; opacity: 0; transform: translateY(14px) scale(.94);
+  transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+[dir="rtl"] .dc-asst { transform-origin: 0 100%; }
+.dc-asst.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+@media (max-width: 559px) {
+  .dc-asst { inset: 0; width: auto; height: 100dvh; border-radius: 0; transform: translateY(28px); transform-origin: 50% 100%; }
+}
+
+.dc-asst-head { position: relative; display: flex; align-items: center; gap: var(--space-3); background: var(--band); color: var(--on-band); padding-block: var(--space-3) var(--space-4); padding-inline: var(--space-4) var(--space-2); }
+.dc-asst-head > div { flex: 1; min-width: 0; }
+.dc-asst-head small { color: var(--on-band); opacity: .92; }
+.dc-asst-avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--red); color: var(--on-red); display: grid; place-items: center; }
+.dc-asst-avatar svg { width: 20px; height: 20px; }
+.dc-asst-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: var(--on-band); display: grid; place-items: center; cursor: pointer; transition: background-color var(--dur-base) var(--ease-out); }
+.dc-asst-x:hover { background: rgba(255, 255, 255, .16); }
+.dc-asst-x svg { width: 22px; height: 22px; }
+.dc-asst-head :focus-visible { outline-color: #fff; }
+@media (max-width: 559px) { .dc-asst-head { padding-block-start: max(var(--space-3), env(safe-area-inset-top)); } }
+.dc-asst-brush { position: absolute; inset-inline: 0; inset-block-end: 2px; width: 100%; height: 12px; pointer-events: none; }
+.dc-asst-brush path { stroke-width: 4; }
+[dir="rtl"] .dc-asst-brush { transform: scaleX(-1); }
+
+.dc-asst .dc-chat__log { overflow-y: auto; align-content: start; gap: var(--space-3); padding: var(--space-5) var(--space-4) var(--space-4); scroll-behavior: smooth; overscroll-behavior: contain; }
+html[data-motion="reduce"] .dc-asst .dc-chat__log { scroll-behavior: auto; }
+.dc-asst-log.is-static * { animation: none !important; }
+.dc-asst-turn { display: grid; gap: var(--space-2); justify-items: start; }
+.dc-asst-turn--me { justify-items: end; }
+.dc-asst-turn .dc-msg { max-width: 88%; }
+.dc-asst-turn .dc-msg--bot .dc-msg__src { animation: dc-msg-in var(--dur-base) var(--ease-out) both; }
+.dc-asst .dc-msg__src { text-decoration: none; }
+.dc-asst .dc-msg__src:hover { text-decoration: underline; }
+.dc-asst-notice { background: var(--surface-sunk); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); font: var(--type-small); color: var(--ink); display: grid; gap: 2px; }
+.dc-asst-notice b { font: 700 14px/1.5 var(--font-sans); }
+.dc-asst-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.dc-asst-chip { font: 600 14px/1.3 var(--font-sans); color: var(--blue); background: transparent; border: 0; box-shadow: inset 0 0 0 1.5px var(--blue);
+  border-radius: var(--radius-pill); padding: 10px 14px; min-height: 40px; cursor: pointer; text-align: start;
+  transition: background-color var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+.dc-asst-chip:hover { background: var(--sky); color: var(--ink); }
+.dc-asst-chip:active { transform: scale(.97); }
+.dc-asst-chip[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* things the assistant deals into the chat (spring: they are objects) */
+.dc-asst-card { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); align-items: center; width: 100%; max-width: 100%; background: var(--surface); border-radius: var(--radius-md);
+  padding: var(--space-3); box-shadow: inset 0 0 0 1.5px var(--line), var(--shadow-card); animation: dc-deal-in var(--dur-slow) var(--ease-spring) both; transform-origin: 0 100%; }
+[dir="rtl"] .dc-asst-card { transform-origin: 100% 100%; }
+.dc-asst-card--plain { grid-template-columns: 1fr; }
+.dc-asst-card__art { width: 84px; aspect-ratio: 1; border-radius: var(--radius-sm); display: grid; place-items: center; overflow: hidden; background: var(--sky); }
+.dc-asst-card__art--pink { background: var(--pink); }
+.dc-asst-card__art svg { width: 84%; height: auto; overflow: visible; }
+.dc-asst-lid, .dc-asst-peek { transform-box: fill-box; transition: transform var(--dur-slow) var(--ease-spring); }
+.dc-asst-lid { transform-origin: 30% 100%; }
+.dc-asst-card:hover .dc-asst-lid { transform: translateY(-8px) rotate(-8deg); }
+.dc-asst-card:hover .dc-asst-peek { transform: translateY(-14px); }
+.dc-asst-card__body { display: grid; gap: 6px; min-width: 0; }
+.dc-asst-card__name { font: 700 17px/1.3 var(--font-display); margin: 0; color: var(--ink); }
+.dc-asst-card__meta { font: 400 13.5px/1.55 var(--font-sans); color: var(--ink-soft); margin: 0; }
+.dc-asst-card__acts { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-block-start: 2px; }
+.dc-asst-card .dc-chip { justify-self: start; padding-block: 5px; }
+
+.dc-asst-form { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-2); border-block-start: 1px solid var(--line); background: var(--surface); }
+.dc-asst-form input { flex: 1; min-width: 0; font: 400 16px/1.4 var(--font-sans); color: var(--ink); background: var(--cream); border: 1.5px solid var(--line-strong); border-radius: var(--radius-pill);
+  padding-block: 12px; padding-inline: 18px; transition: border-color var(--dur-quick), box-shadow var(--dur-quick); }
+.dc-asst-form input::placeholder { color: var(--ink-soft); opacity: 1; }
+.dc-asst-form input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--sky); }
+.dc-asst-send { width: 48px; height: 48px; padding: 0; justify-content: center; flex: none; }
+.dc-asst-send svg { width: 22px; height: 22px; }
+[dir="rtl"] .dc-asst-send svg { transform: scaleX(-1); }
+.dc-asst-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-3); padding: var(--space-1) var(--space-4) var(--space-3); background: var(--surface); font: var(--type-small); }
+.dc-asst-foot a { color: var(--blue); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; }
+.dc-asst-foot a:hover { text-decoration: underline; }
+.dc-asst-foot svg { width: 18px; height: 18px; }
+.dc-asst-foot .dc-num { color: var(--ink-soft); white-space: nowrap; }
+@media (max-width: 379px) { .dc-asst-foot .dc-num { display: none; } }
+@supports (padding: max(0px)) { @media (max-width: 559px) { .dc-asst-foot { padding-block-end: max(var(--space-3), env(safe-area-inset-bottom)); } } }
+</style>
+</head>
+<body>
+<a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+<div id="page">
+  <header class="dc-asst-band">
+    <div class="dc-page">
+      <div class="dc-header dc-asst-hdr">
+        <a href="index.html" aria-label="دردشات" data-ar-label="دردشات" data-en-label="Dardachat"><img class="dc-header__logo" src="assets/dardachat-lockup-knockout.png" alt="" width="95" height="52"></a>
+        <nav aria-label="القائمة الرئيسية" data-ar-label="القائمة الرئيسية" data-en-label="Main">
+          <a href="shop.html" aria-current="page" data-ar="الألعاب" data-en="Games">الألعاب</a>
+          <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+          <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+          <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+          <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+        </nav>
+        <span class="dc-asst-spacer"></span>
+        <button class="dc-cart" type="button" data-ar-label="السلة" data-en-label="Cart" aria-label="السلة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <span class="dc-cart__count dc-num" id="cart-count" hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="dc-page">
+      <nav class="dc-asst-crumbs" aria-label="مسار التصفح" data-ar-label="مسار التصفح" data-en-label="Breadcrumb">
+        <ol>
+          <li><a href="shop.html" data-ar="الألعاب" data-en="Games">الألعاب</a></li>
+          <li aria-current="page" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</li>
+        </ol>
+      </nav>
+
+      <article class="dc-asst-prod">
+        <div class="dc-asst-art">
+          <span class="dc-ph" data-ar="صورة تجريبية" data-en="Placeholder art">صورة تجريبية</span>
+          <svg viewBox="0 0 200 180" aria-hidden="true">
+            <g><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/></g>
+            <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+            <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+            <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+            <path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
+            <rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/>
+          </svg>
+        </div>
+
+        <div class="dc-asst-info">
+          <div class="dc-row"><span class="dc-chip dc-chip--age dc-num" data-ar="+18" data-en="18+">+18</span><span class="dc-chip" data-ar="للأزواج" data-en="For couples">للأزواج</span></div>
+          <h1 data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</h1>
+          <p class="dc-asst-lead" data-ar="أسئلة وتحديات وأدوات صغيرة تقرّب الشريكين من بعضهما، وتجدّد المشاعر بينهما." data-en="Questions, challenges and small props that bring two partners closer and renew the feeling between them.">أسئلة وتحديات وأدوات صغيرة تقرّب الشريكين من بعضهما، وتجدّد المشاعر بينهما.</p>
+          <ul class="dc-asst-contents" id="contents" aria-label="ماذا في الصندوق" data-ar-label="ماذا في الصندوق" data-en-label="What is in the box">
+            <li><b class="dc-num">63</b><span data-ar="سؤالًا في 3 مجموعات: معرفة الشريك، الاحتياجات والهدايا، المشاعر والمواقف" data-en="questions in 3 sets: knowing your partner, needs and gifts, feelings and situations">سؤالًا في 3 مجموعات: معرفة الشريك، الاحتياجات والهدايا، المشاعر والمواقف</span></li>
+            <li><b class="dc-num">16</b><span data-ar="تحدٍّ ثنائي رومانسي" data-en="romantic duo challenges">تحدٍّ ثنائي رومانسي</span></li>
+            <li><b class="dc-num">20</b><span data-ar="قلب كريستالي" data-en="crystal hearts">قلب كريستالي</span></li>
+          </ul>
+          <p class="dc-asst-also" data-ar="ومعها بطاقة «سرّ الحب الأبدي»، وبطاقتا رسائل سرّية، ونرد، ولوحة تفاعلية، وبروشور التعليمات." data-en="Plus the Eternal Love Secret card, 2 secret-message cards, a die, an interactive board and an instructions booklet.">ومعها بطاقة «سرّ الحب الأبدي»، وبطاقتا رسائل سرّية، ونرد، ولوحة تفاعلية، وبروشور التعليمات.</p>
+          <div class="dc-asst-buy">
+            <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>169.00</span><span class="dc-price__vat" data-ar="شامل ضريبة القيمة المضافة" data-en="Incl. VAT">شامل ضريبة القيمة المضافة</span></div>
+            <span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span>
+            <button class="dc-btn dc-btn--cta" type="button" data-pop data-add>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+              <span data-ar="أضف إلى السلة" data-en="Add to cart">أضف إلى السلة</span>
+              <svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
+            </button>
+          </div>
+          <div class="dc-asst-ask">
+            <p data-ar="هل الصندوق مناسب لك؟ اسأل المساعد قبل ما تقرّر." data-en="Not sure it fits? Ask the assistant before you decide.">هل الصندوق مناسب لك؟ اسأل المساعد قبل ما تقرّر.</p>
+            <button class="dc-btn dc-btn--outline dc-btn--sm" type="button" id="ask-here" aria-haspopup="dialog" aria-expanded="false" aria-controls="asst"><span data-ar="اسأل المساعد" data-en="Ask the assistant">اسأل المساعد</span></button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="dc-asst-foot-band">
+    <div class="dc-page">
+      <q data-ar="مفتاح المعرفة هو السؤال" data-en="The key to knowing is the question">مفتاح المعرفة هو السؤال</q>
+      <p><span data-ar="واتساب:" data-en="WhatsApp:">واتساب:</span> <span class="dc-num">+972 54 399 2424</span></p>
+    </div>
+  </footer>
+</div>
+
+<!-- Launcher -->
+<button class="dc-asst-launch" id="asst-launch" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="asst">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5c0 4-3.6 7-8 7-1 0-2-.15-2.9-.45L4.5 20l1.2-3.6C4.4 15.2 4 13.4 4 11.5c0-4 3.6-7 8-7s8 3 8 7z"/><path d="M12 14.4s-3-1.8-3-3.9a1.7 1.7 0 0 1 3-1.1 1.7 1.7 0 0 1 3 1.1c0 2.1-3 3.9-3 3.9z"/></svg>
+  <span class="dc-asst-launch__t" data-ar="اسأل دردشات" data-en="Ask Dardachat">اسأل دردشات</span>
+</button>
+
+<!-- Assistant panel -->
+<section class="dc-chat dc-asst" id="asst" role="dialog" aria-labelledby="asst-title" aria-describedby="asst-disc">
+  <div class="dc-chat__head dc-asst-head">
+    <span class="dc-asst-avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></span>
+    <div>
+      <span id="asst-title" data-ar="مساعد دردشات" data-en="Dardachat assistant">مساعد دردشات</span>
+      <small id="asst-disc" data-ar="مساعد آلي · الفريق على واتساب بأي وقت" data-en="Automated · team on WhatsApp, anytime">مساعد آلي · الفريق على واتساب بأي وقت</small>
+    </div>
+    <button class="dc-asst-x" id="asst-close" type="button" data-ar-label="إغلاق المساعد" data-en-label="Close assistant" aria-label="إغلاق المساعد">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <svg class="dc-brush dc-asst-brush" id="asst-brush" viewBox="0 0 360 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7C34 2 62 11 104 6s78-4 118 1 92 3 134-2"/></svg>
+  </div>
+
+  <div class="dc-chat__log dc-asst-log" id="asst-log" tabindex="0" role="group" data-ar-label="المحادثة" data-en-label="Conversation" aria-label="المحادثة"></div>
+
+  <form class="dc-asst-form" id="asst-form" autocomplete="off">
+    <label class="dc-sr" for="asst-in" data-ar="اكتب سؤالك" data-en="Type your question">اكتب سؤالك</label>
+    <input id="asst-in" type="text" dir="auto" maxlength="300" enterkeyhint="send" data-ar-placeholder="اكتب سؤالك هنا" data-en-placeholder="Type your question here" placeholder="اكتب سؤالك هنا">
+    <button class="dc-btn dc-asst-send" id="asst-send" type="submit" data-ar-label="إرسال" data-en-label="Send" aria-label="إرسال" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10.5 13.5"/><path d="M21 3l-6.5 18-4-7.5L3 9.5 21 3z"/></svg>
+    </button>
+  </form>
+  <div class="dc-asst-foot">
+    <a id="asst-wa" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5c0 4-3.6 7-8 7-1 0-2-.15-2.9-.45L4.5 20l1.2-3.6C4.4 15.2 4 13.4 4 11.5c0-4 3.6-7 8-7s8 3 8 7z"/></svg>
+      <span data-ar="تحدّث مع الفريق على واتساب" data-en="Talk to the team on WhatsApp">تحدّث مع الفريق على واتساب</span>
+    </a>
+    <span class="dc-num">+972 54 399 2424</span>
+  </div>
+  <div class="dc-sr" id="asst-live" role="status" aria-live="polite"></div>
+</section>
+
+<script>
+document.addEventListener('dc:ready', function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var panel = $('#asst'), log = $('#asst-log'), form = $('#asst-form'), input = $('#asst-in'), send = $('#asst-send');
+  var launch = $('#asst-launch'), live = $('#asst-live'), page = $('#page'), brush = $('#asst-brush');
+  var WA = '972543992424';
+  var wa = function (t) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(t); };
+  var T = function (p) { return DC.lang === 'en' ? p[1] : p[0]; };
+
+  /* ---------- what the assistant knows: real catalogue and service facts (DESIGN.md 6-7) ---------- */
+  var SRC = {
+    who: [['صفحة الألعاب · صندوق مين فينا', 'Shop · Who Among Us Box'], 'shop.html'],
+    shop: [['صفحة الألعاب', 'Shop'], 'shop.html'],
+    here: [['هذه الصفحة · محتويات الصندوق', 'This page · What is in the box'], '#contents'],
+    ramadan: [['صفحة المنتج · صندوق رمضان للعائلة', 'Product page · Ramadan Family Box'], 'shop.html'],
+    sessions: [['صفحة الجلسات', 'Sessions page'], 'services.html#sessions'],
+    nights: [['صفحة ليالي الألعاب', 'Game nights page'], 'services.html#game-nights'],
+    workshops: [['صفحة الورشات', 'Workshops page'], 'services.html#workshops']
+  };
+  var KB = {
+    friends: { re: /أصدقاء|اصدقاء|صحاب|قعدة|قعدات|عيلة|عائل|مين فينا|who among|friends|family (night|gathering|game)|for (my )?family|group of|recommend|بتنصح|ننصح/i,
+      ar: '«صندوق مين فينا» مناسب لقعدات الأصدقاء والعيلة من عمر +12. فيه 45 بطاقة على 3 مراحل (تعارف، فهم، واكتشاف ممتع)، وبروشور تعليمات، و5 لافتات تصويت. وإذا بدكم أسئلة أعمق مع بطاقات تحدٍّ، شوفوا «صندوق دردشات».',
+      en: 'The Who Among Us Box suits get-togethers with friends and family, ages 12+. It has 45 cards in 3 stages (getting to know, understanding, fun discovery), an instructions booklet and 5 voting signs. If you want deeper questions plus challenge cards, look at the Dardachat Box.',
+      src: 'who', card: 'who' },
+    age: { re: /عمر|(^|\s)سن(\s|$|[؟?])|\bages?\b|how old/i,
+      ar: 'العمر المناسب حسب الصندوق: «صندوق دردشات مع الحب» للأزواج من عمر +18. «صندوق دردشات» و«صندوق مين فينا» من عمر +12. و«صندوق رمضان للعائلة» لكل الأعمار.',
+      en: 'Ages by box: the Dardachat with Love Box is for couples, 18+. The Dardachat Box and the Who Among Us Box are 12+. The Ramadan Family Box is for all ages.',
+      src: 'shop' },
+    ramadan: { re: /رمضان|ramadan/i,
+      ar: '«صندوق رمضان للعائلة» صندوق موسمي لكل الأعمار، بيجمع العيلة بعد الإفطار بأجواء دافئة. فيه 15 بطاقة أسئلة ومعلومات دينية، و15 بطاقة ألغاز دينية، و15 بطاقة أسئلة اجتماعية عن ذكريات رمضان وعاداته. وبيرجع مع بداية رمضان.',
+      en: 'The Ramadan Family Box is seasonal and suits all ages, bringing the family together after iftar. It has 15 religious question and information cards, 15 religious riddle cards and 15 social question cards about Ramadan memories and customs. It comes back when Ramadan starts.',
+      src: 'ramadan' },
+    nights: { re: /ليالي|ليلة|game night/i,
+      ar: 'ليالي الألعاب للأصدقاء والعيلة: بتلعبوا ألعاب دردشات على فرق، ولكل تحدٍّ وسؤال جماعي نقاط. السعر 70 ₪ للشخص، أو 1400 ₪ للمجموعة، والمدة من ساعة لساعة ونصف.',
+      en: 'Game nights are for friends and family: teams play Dardachat games and win points for challenges and group questions. It costs ₪ 70 per person or ₪ 1400 per group, and lasts 1 to 1.5 hours.',
+      src: 'nights', book: { ar: 'ليالي الألعاب', en: 'Game nights', meta: ['[70] للشخص · [1400] للمجموعة · ساعة إلى ساعة ونصف', '[70] per person · [1400] per group · 1 to 1.5 hours'], say: ['مرحبا دردشات، بدي أحجز ليلة ألعاب.', 'Hello Dardachat, I would like to book a game night.'] } },
+    sessions: { re: /جلس|session/i,
+      ar: 'الجلسات حوار جماعي بأسئلة دردشات، لمجموعات لحد 10 أشخاص. السعر 70 ₪ للشخص، أو 500 ₪ للمجموعة كاملة، ومدة الجلسة ساعة.',
+      en: 'Sessions are group dialogues using Dardachat question cards, for groups of up to 10. It costs ₪ 70 per person or ₪ 500 for the whole group, and lasts 1 hour.',
+      src: 'sessions', book: { ar: 'الجلسات', en: 'Sessions', meta: ['[70] للشخص · [500] للمجموعة · ساعة', '[70] per person · [500] per group · 1 hour'], say: ['مرحبا دردشات، بدي أحجز جلسة.', 'Hello Dardachat, I would like to book a session.'] } },
+    workshops: { re: /ورش|workshop/i,
+      ar: 'الورشات لمجموعات من 20 إلى 25 مشارك (ورشة الورود مع الحب لـ 8–10 أشخاص فقط): لعب مع نشاط فني بتطلعوا منه بذكرى. السعر من 100 لـ 180 ₪ للشخص حسب الورشة، والمدة من ساعتين لـ 3 ساعات. سعر المجموعة بيتغيّر حسب عدد المشاركين وعدد الورشات.',
+      en: 'Workshops are for groups of 20 to 25 (Roses with Love is for 8–10 people only): play plus an art activity that ends with a keepsake. It costs ₪ 100 to ₪ 180 per person depending on the workshop, and lasts 2 to 3 hours. The group price depends on participants and number of workshops.',
+      src: 'workshops', book: { ar: 'الورشات', en: 'Workshops', meta: ['[100] إلى [180] للشخص · ساعتان إلى 3 ساعات', '[100] to [180] per person · 2 to 3 hours'], say: ['مرحبا دردشات، بدي أحجز ورشة.', 'Hello Dardachat, I would like to book a workshop.'] } },
+    gift: { re: /هدية|هديّة|شريك|زوج|خطيب|حبيب|gift|couple|partner|romantic/i,
+      ar: '«صندوق دردشات مع الحب» للأزواج من عمر +18، ومصمم لتقوية العلاقة وتجديد المشاعر. فيه 63 سؤالًا و16 تحدٍّ ثنائي رومانسي وبطاقة «سرّ الحب الأبدي» و20 قلب كريستالي، ونرد ولوحة تفاعلية.',
+      en: 'The Dardachat with Love Box is for couples, ages 18+, and is designed to strengthen the relationship and renew feelings. It has 63 questions, 16 romantic duo challenges, the Eternal Love Secret card, 20 crystal hearts, a die and an interactive board.',
+      src: 'here' },
+    inside: { re: /داخل|محتوى|محتويات|شو في|شو بيجي|inside|contain|what.?s in/i,
+      ar: 'في «صندوق دردشات مع الحب» 3 مجموعات أسئلة (63 سؤالًا) عن معرفة الشريك، والاحتياجات والهدايا، والمشاعر والمواقف. وفيه 16 تحدٍّ ثنائي رومانسي، وبطاقة «سرّ الحب الأبدي»، وبطاقتا رسائل سرّية، و20 قلب كريستالي، ونرد، ولوحة تفاعلية، وبروشور تعليمات.',
+      en: 'The Dardachat with Love Box has 3 sets of questions (63 in all) on knowing your partner, needs and gifts, and feelings and situations. It also has 16 romantic duo challenges, the Eternal Love Secret card, 2 secret-message cards, 20 crystal hearts, a die, an interactive board and an instructions booklet.',
+      src: 'here' }
+  };
+  var ORDER = ['ramadan', 'nights', 'sessions', 'workshops', 'age', 'friends', 'gift', 'inside'];
+  /* out-of-scope topics the pages do not answer: never guess, escalate to the team */
+  var OOS = /توصيل|شحن|خصم|دفع|استلام|إرجاع|ارجاع|ترجيع|لغة|إنجليزي|delivery|\bship|discount|\bpay|refund|\breturn|language|english/i;
+  var FALLBACK = {
+    ar: 'ما عندي جواب مؤكد على هذا السؤال من صفحات الموقع، وما بحب أخمّن. فريق دردشات بيقدر يجاوبك على واتساب.',
+    en: 'I don\'t have a confirmed answer to this from the site pages, and I\'d rather not guess. The Dardachat team can answer you on WhatsApp.'
+  };
+  function match(q) { if (OOS.test(q)) return null; for (var i = 0; i < ORDER.length; i++) if (KB[ORDER[i]].re.test(q)) return KB[ORDER[i]]; return null; }
+
+  var CHIPS = [
+    ['شو في داخل الصندوق؟', "What's inside the box?"],
+    ['شو بتنصحوا لقعدة أصدقاء؟', 'What do you recommend for friends?'],
+    ['كم سعر الجلسة؟', 'How much is a session?'],
+    ['كم بياخد التوصيل؟', 'How long does delivery take?']
+  ];
+
+  /* ---------- state ---------- */
+  var msgs = [{ role: 'hello' }], busy = false, timers = [], flight = null, cartN = 0;
+  function later(fn, ms) { var id = setTimeout(function () { timers = timers.filter(function (t) { return t !== id; }); fn(); }, ms); timers.push(id); return id; }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function scrollEnd() { log.scrollTop = log.scrollHeight; }
+  function announce(t) { live.textContent = ''; later(function () { live.textContent = t; }, 60); }
+
+  /* ---------- DOM builders ---------- */
+  function h(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  var HEART = '<svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+  var CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5c0 4-3.6 7-8 7-1 0-2-.15-2.9-.45L4.5 20l1.2-3.6C4.4 15.2 4 13.4 4 11.5c0-4 3.6-7 8-7s8 3 8 7z"/></svg>';
+  function boxArt(fill) {
+    return '<svg viewBox="0 0 200 180" aria-hidden="true"><g class="dc-asst-peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/></g>' +
+      '<rect x="30" y="78" width="140" height="92" rx="10" fill="var(--' + fill + ')"/><rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>' +
+      '<circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>' +
+      '<g class="dc-asst-lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g></svg>';
+  }
+  function boxCard() {
+    var c = h('div', 'dc-asst-card');
+    c.innerHTML = '<div class="dc-asst-card__art">' + boxArt('sky') + '</div><div class="dc-asst-card__body"><span class="dc-chip dc-chip--age dc-num"></span>' +
+      '<h3 class="dc-asst-card__name"></h3><p class="dc-asst-card__meta"></p><div class="dc-asst-card__acts"></div></div>';
+    c.querySelector('.dc-chip').textContent = DC.lang === 'en' ? '12+' : '+12';
+    c.querySelector('h3').textContent = T(['صندوق مين فينا', 'Who Among Us Box']);
+    c.querySelector('p').textContent = T(['45 بطاقة في 3 مراحل · 5 لافتات تصويت', '45 cards in 3 stages · 5 voting signs']);
+    var a = c.querySelector('.dc-asst-card__acts');
+    var view = h('a', 'dc-btn dc-btn--ghost dc-btn--sm', T(['شوف الصندوق', 'View the box'])); view.href = 'shop.html';
+    var add = h('button', 'dc-btn dc-btn--outline dc-btn--sm'); add.type = 'button'; add.setAttribute('data-pop', ''); add.setAttribute('data-add', '');
+    add.innerHTML = '<span></span>' + HEART; add.firstChild.textContent = T(['أضف للسلة', 'Add to cart']);
+    a.appendChild(view); a.appendChild(add);
+    return c;
+  }
+  function waCard(kind, opts) {
+    var c = h('div', 'dc-asst-card dc-asst-card--plain'), b = h('div', 'dc-asst-card__body'), acts = h('div', 'dc-asst-card__acts');
+    var link = h('a', 'dc-btn dc-btn--sm'); link.target = '_blank'; link.rel = 'noopener';
+    if (kind === 'book') {
+      b.appendChild(h('h3', 'dc-asst-card__name', T([opts.ar, opts.en])));
+      var meta = h('p', 'dc-asst-card__meta');
+      T(opts.meta).split(/\[(\d+)\]/).forEach(function (part, i) { if (i % 2) meta.appendChild(h('span', 'dc-num', '₪ ' + part)); else if (part) meta.appendChild(document.createTextNode(part)); });
+      b.appendChild(meta);
+      link.href = wa(T(opts.say)); link.innerHTML = CHAT_ICON + '<span></span>'; link.lastChild.textContent = T(['احجز عبر واتساب', 'Book on WhatsApp']);
+      link.className = 'dc-btn dc-btn--cta dc-btn--sm';
+    } else {
+      b.appendChild(h('h3', 'dc-asst-card__name', T(['كمّل مع الفريق', 'Continue with the team'])));
+      b.appendChild(h('p', 'dc-asst-card__meta', T(['رح نفتح واتساب برسالة جاهزة فيها سؤالك، وحدا من الفريق بيرد عليك.', 'This opens WhatsApp with a ready message that holds your question. Someone from the team will reply.'])));
+      link.href = wa(T(['مرحبا دردشات، عندي سؤال: ', 'Hello Dardachat, I have a question: ']) + opts.q);
+      link.innerHTML = CHAT_ICON + '<span></span>'; link.lastChild.textContent = T(['افتح واتساب', 'Open WhatsApp']);
+    }
+    acts.appendChild(link); b.appendChild(acts); c.appendChild(b);
+    return c;
+  }
+  function srcLink(key) {
+    var s = SRC[key], a = h('a', 'dc-msg__src'); a.href = s[1];
+    a.textContent = T(['المصدر: ', 'Source: ']) + T(s[0]);
+    return a;
+  }
+  function chipsRow() {
+    var r = h('div', 'dc-asst-chips');
+    CHIPS.forEach(function (c) {
+      var b = h('button', 'dc-asst-chip', T(c)); b.type = 'button'; b.setAttribute('data-i', String(CHIPS.indexOf(c))); r.appendChild(b);
+    });
+    return r;
+  }
+  function typingEl() { var t = h('div', 'dc-typing'); t.setAttribute('role', 'img'); t.setAttribute('aria-label', T(['المساعد يكتب', 'The assistant is typing'])); t.innerHTML = '<i></i><i></i><i></i>'; t.setAttribute('data-typing', ''); return t; }
+
+  /* add one turn; returns {turn, bubble} */
+  function addTurn(m, anim) {
+    var turn = h('div', 'dc-asst-turn dc-asst-turn--' + (m.role === 'me' ? 'me' : 'bot')), bubble = null;
+    if (m.role === 'hello') {
+      var n = h('div', 'dc-asst-notice');
+      n.appendChild(h('b', null, T(['أنا مساعد آلي، مش شخص', 'I\'m an automated assistant, not a person'])));
+      n.appendChild(h('span', null, T(['بجاوب من صفحات الموقع فقط وممكن أغلط. لا تكتب هون معلومات دفع أو كلمات سر.', 'I answer from the site pages only, and I can be wrong. Don\'t type payment details or passwords here.'])));
+      turn.appendChild(n);
+      bubble = h('div', 'dc-msg dc-msg--bot', T(['أهلًا فيك في دردشات. شو بتحب تعرف؟', 'Welcome to Dardachat. What would you like to know?']));
+      turn.appendChild(bubble); turn.appendChild(chipsRow());
+    } else if (m.role === 'me') {
+      bubble = h('div', 'dc-msg dc-msg--me', m.chip != null ? T(CHIPS[m.chip]) : m.text); bubble.dir = 'auto'; turn.appendChild(bubble);
+    } else {
+      bubble = h('div', 'dc-msg dc-msg--bot'); var tx = h('span', 'dc-asst-txt', anim ? '' : T(m.txt)); bubble.appendChild(tx); turn.appendChild(bubble);
+      if (!anim) extras(turn, bubble, m);
+    }
+    log.appendChild(turn);
+    return { turn: turn, bubble: bubble };
+  }
+  function extras(turn, bubble, m) {
+    if (m.src) bubble.appendChild(srcLink(m.src));
+    if (m.card === 'who') turn.appendChild(boxCard());
+    if (m.book) turn.appendChild(waCard('book', m.book));
+    if (m.esc) turn.appendChild(waCard('esc', { q: m.chip != null ? T(CHIPS[m.chip]) : m.q }));
+  }
+  function rebuild() {
+    log.classList.add('is-static'); log.textContent = '';
+    msgs.forEach(function (m) { addTurn(m, false); });
+    scrollEnd(); requestAnimationFrame(function () { log.classList.remove('is-static'); });
+  }
+
+  /* ---------- the conversation ---------- */
+  function setBusy(b) { busy = b; send.disabled = b || !input.value.trim(); log.querySelectorAll('.dc-asst-chip').forEach(function (c) { c.disabled = b; }); }
+  function stream(node, text, done) {
+    var words = text.match(/\S+\s*/g) || [text], i = 0, out = '';
+    (function step() {
+      out += words[i++]; node.textContent = out; scrollEnd();
+      if (i < words.length) later(step, 42); else done();
+    })();
+  }
+  function ask(q, chip) {
+    q = (q || '').trim(); if (!q || busy) return;
+    setBusy(true); input.value = '';
+    var me = { role: 'me', text: q, chip: chip }; msgs.push(me); addTurn(me, true); scrollEnd();
+    var hit = match(q), reduced = DC.reducedMotion();
+    var bot = { role: 'bot', src: hit && hit.src, card: hit && hit.card, book: hit && hit.book, esc: !hit, q: q, chip: chip };
+    Object.defineProperty(bot, 'txt', { get: function () { return hit ? [hit.ar, hit.en] : [FALLBACK.ar, FALLBACK.en]; } });
+    flight = { bot: bot, typing: typingEl() };
+    var t = h('div', 'dc-asst-turn'); t.appendChild(flight.typing); log.appendChild(t); flight.wrap = t; scrollEnd();
+    later(function () {
+      t.remove(); msgs.push(bot); flight.pushed = true;
+      var r = addTurn(bot, true), full = T(bot.txt);
+      r.bubble.setAttribute('aria-hidden', 'true');
+      var finish = function () {
+        r.bubble.removeAttribute('aria-hidden'); announce(full);
+        var seq = [];
+        if (bot.src) { r.bubble.appendChild(srcLink(bot.src)); scrollEnd(); }
+        var rest = { card: bot.card, book: bot.book, esc: bot.esc, q: q, chip: chip };
+        later(function () { extras(r.turn, { appendChild: function () {} }, rest); scrollEnd(); flight = null; setBusy(false); input.focus({ preventScroll: true }); }, reduced ? 0 : 280);
+      };
+      if (reduced) { r.bubble.firstChild.textContent = full; finish(); } else stream(r.bubble.firstChild, full, finish);
+    }, reduced ? 350 : 1000 + Math.round(Math.random() * 400));
+  }
+  /* language switch mid-flight: land on the finished state, then redraw in the new language */
+  function settle() {
+    if (!flight) return;
+    clearTimers();
+    if (!flight.pushed) msgs.push(flight.bot);
+    flight = null; busy = false;
+  }
+  document.addEventListener('dc:lang', function () { settle(); rebuild(); setBusy(false); });
+
+  /* ---------- open / close ---------- */
+  var askHere = $('#ask-here'), mobile = window.matchMedia('(max-width: 559px)'), opened = false, lastFocus = null;
+  function setOpen(on, focusInput) {
+    if (on === panel.classList.contains('is-open')) return;
+    panel.classList.toggle('is-open', on); document.body.classList.toggle('is-asst-open', on);
+    launch.setAttribute('aria-expanded', String(on)); askHere.setAttribute('aria-expanded', String(on));
+    if (mobile.matches) { page.inert = on; }
+    if (on) {
+      lastFocus = document.activeElement === document.body ? launch : document.activeElement;
+      if (!opened) { opened = true; DC.draw(brush); }
+      scrollEnd();
+      later(function () { if (focusInput !== false) input.focus({ preventScroll: true }); }, 60);
+    } else {
+      page.inert = false;
+      (lastFocus && document.contains(lastFocus) ? lastFocus : launch).focus({ preventScroll: true });
+    }
+  }
+  launch.addEventListener('click', function () { setOpen(true); });
+  askHere.addEventListener('click', function () { setOpen(true); });
+  $('#asst-close').addEventListener('click', function () { setOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && panel.classList.contains('is-open')) { e.preventDefault(); setOpen(false); } });
+  /* on phones the sheet is modal: keep Tab inside it */
+  panel.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || !mobile.matches) return;
+    var f = [].slice.call(panel.querySelectorAll('a[href],button:not([disabled]),input,[tabindex="0"]')).filter(function (x) { return x.offsetParent !== null; });
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  mobile.addEventListener && mobile.addEventListener('change', function () { page.inert = panel.classList.contains('is-open') && mobile.matches; });
+
+  /* in-page sources: on phones the sheet covers the page, so close it first, then bring the target into view */
+  log.addEventListener('click', function (e) {
+    var a = e.target.closest('a.dc-msg__src'); if (!a) return;
+    var href = a.getAttribute('href') || ''; if (href.charAt(0) !== '#') return;
+    var t = document.getElementById(href.slice(1)); if (!t) return;
+    e.preventDefault();
+    var sheet = mobile.matches; if (sheet) setOpen(false);
+    requestAnimationFrame(function () {
+      t.scrollIntoView({ behavior: DC.reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+      if (sheet) { t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true }); }
+      if (!DC.reducedMotion()) { t.classList.remove('is-cited'); void t.offsetWidth; t.classList.add('is-cited'); setTimeout(function () { t.classList.remove('is-cited'); }, 700); }
+    });
+  });
+
+  /* ---------- input ---------- */
+  form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); });
+  input.addEventListener('input', function () { send.disabled = busy || !input.value.trim(); });
+  log.addEventListener('click', function (e) { var c = e.target.closest('.dc-asst-chip'); if (c && !busy) { var i = +c.getAttribute('data-i'); ask(T(CHIPS[i]), i); } });
+
+  /* ---------- cart (shared with the page's own add button; heart pop is automatic via data-pop) ---------- */
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-add]')) return;
+    var n = $('#cart-count'); cartN++; n.textContent = cartN; n.hidden = false; DC.bump(n);
+    announce(T(['أُضيف إلى السلة. في السلة ' + cartN, 'Added to cart. Cart has ' + cartN]));
+  });
+
+  /* ---------- WhatsApp footer link ---------- */
+  function paintWa() { $('#asst-wa').href = wa(T(['مرحبا دردشات، عندي سؤال.', 'Hello Dardachat, I have a question.'])); }
+  paintWa(); document.addEventListener('dc:lang', paintWa);
+
+  rebuild(); setBusy(false);
+  /* Review helpers: ?open=1 opens the panel, ?ask=<text> also plays a question. */
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('open') || qs.get('ask')) setOpen(true, false);
+  if (qs.get('ask')) later(function () { ask(qs.get('ask')); }, 500);
+});
+</script>
+</body>
+</html>

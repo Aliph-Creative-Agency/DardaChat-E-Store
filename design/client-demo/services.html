@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-ar="الخدمات · دردشات" data-en="Services · Dardachat">الخدمات · دردشات</title>
+  <link rel="stylesheet" href="ds.css">
+  <script src="_shared.js" defer></script>
+  <script>
+    /* scroll-reveal is opt-in: sections are fully visible unless this flag is set (so no script = everything readable) */
+    (function () { try { if ('IntersectionObserver' in window) document.documentElement.classList.add('dc-js'); } catch (e) {} })();
+  </script>
+  <noscript><style>.dc-js .dc-rv { opacity: 1 !important; }</style></noscript>
+  <style>
+    /* ==== services screen only. Tokens from ds.css; nothing hard-coded except geometry. ==== */
+    :root { --hdr: 68px; }
+    html { scroll-padding-block-start: calc(var(--hdr) + 64px); scroll-behavior: smooth; }
+    html[data-motion="reduce"] { scroll-behavior: auto; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    /* ---- header: same brand band as the other screens ---- */
+    .dc-svc-top { position: sticky; inset-block-start: 0; z-index: 50; background: var(--band); color: var(--on-band); }
+    .dc-svc-top .dc-header { max-width: 1200px; margin-inline: auto; background: transparent; color: var(--on-band); border-radius: 0;
+      padding-block: var(--space-2); padding-inline: var(--space-4); gap: var(--space-4); position: relative; }
+    @media (min-width: 768px) { .dc-svc-top .dc-header { padding-inline: var(--space-5); gap: var(--space-5); } }
+    .dc-svc-brand { display: block; line-height: 0; border-radius: var(--radius-sm); }
+    .dc-svc-top .dc-header__logo { height: 52px; }
+    .dc-svc-top nav a, .dc-svc-top .dc-cart, .dc-svc-menu { color: var(--on-band); }
+    .dc-svc-actions { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-1); }
+    .dc-svc-top .dc-cart { text-decoration: none; }
+    .dc-svc-top .dc-cart:hover, .dc-svc-menu:hover { background: rgb(255 255 255 / .12); }
+    .dc-svc-top :focus-visible { outline-color: var(--on-band); }
+    .dc-svc-menu { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; border-radius: 50%; cursor: pointer; }
+    .dc-svc-menu svg { width: 24px; height: 24px; }
+    .dc-svc-menu .i-close, .dc-svc-menu[aria-expanded="true"] .i-open { display: none; }
+    .dc-svc-menu[aria-expanded="true"] .i-close { display: block; }
+    .dc-svc-top nav { position: absolute; inset-inline: 0; inset-block-start: 100%; background: var(--band); flex-direction: column; gap: 0;
+      padding: var(--space-2) var(--space-4) var(--space-4); visibility: hidden; opacity: 0; transform: translateY(-8px);
+      transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+      box-shadow: var(--shadow-lift); border-block-start: 1px solid rgb(255 255 255 / .16); }
+    .dc-svc-top nav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+    .dc-svc-top nav a { padding-block: 14px; font-size: 16px; }
+    .dc-svc-top nav a::after { inset-block-end: 6px; }
+    @media (min-width: 900px) {
+      .dc-svc-menu { display: none; }
+      .dc-svc-top nav { position: static; visibility: visible; opacity: 1; transform: none; flex-direction: row; gap: var(--space-4); padding: 0; box-shadow: none; border: 0; background: none; flex-wrap: nowrap; }
+      .dc-svc-top nav a { padding-block: 8px; font-size: 15px; }
+      .dc-svc-top nav a::after { inset-block-end: 0; }
+      .dc-svc-actions { margin-inline-start: 0; }
+    }
+
+    /* ---- hero: the brand band with its pink strokes, and the three services dealt as cards ---- */
+    .dc-svc-hero { position: relative; overflow: hidden; background: var(--band); color: var(--on-band); }
+    .dc-svc-stroke { position: absolute; inset-block: 0; width: 34%; max-width: 300px; height: 100%; pointer-events: none; }
+    .dc-svc-stroke--s { inset-inline-start: -10%; } .dc-svc-stroke--e { inset-inline-end: -10%; }
+    @media (max-width: 899px) { .dc-svc-stroke { inset-block: auto 0; height: 34%; width: 30%; } .dc-svc-stroke path { stroke-width: 36; } }
+    .dc-svc-stroke path { stroke-width: 44; }
+    @media (min-width: 900px) { .dc-svc-stroke { width: 12vw; } .dc-svc-stroke--s { inset-inline-start: -3vw; } .dc-svc-stroke--e { inset-inline-end: -3vw; } .dc-svc-stroke path { stroke-width: 50; } .dc-svc-hero__in { padding-inline: max(var(--space-5), 9vw); } }
+    .dc-svc-hero__in { position: relative; display: grid; gap: var(--space-6); padding-block: var(--space-7) var(--space-7); align-items: center; }
+    .dc-svc-hero__kick { justify-self: start; }
+    .dc-svc-hero h1 { font: var(--type-display-1); margin: var(--space-3) 0 var(--space-3); color: var(--on-band); text-wrap: balance; }
+    .dc-svc-hero p { font: var(--type-body-lg); margin: 0; max-width: 46ch; text-wrap: pretty; color: var(--on-band); }
+    .dc-svc-hint { display: flex; align-items: center; gap: var(--space-2); margin-block-start: var(--space-5) !important; font: var(--type-small) !important; opacity: .92; }
+    .dc-svc-hint svg { width: 20px; height: 20px; flex: none; }
+    @media (min-width: 900px) {
+      .dc-svc-hero__in { grid-template-columns: 1.1fr .9fr; gap: var(--space-8); padding-block: var(--space-8) var(--space-8); }
+      .dc-svc-hero h1 { font: var(--type-display-hero); }
+    }
+    .dc-svc-deck { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); max-width: 520px; width: 100%; justify-self: center; padding-block: var(--space-3); }
+    @media (min-width: 900px) { .dc-svc-deck { gap: var(--space-4); } }
+    @media (min-width: 1024px) {
+      .dc-svc-hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: var(--space-6); padding-inline: max(var(--space-5), 8vw); }
+      .dc-svc-deck { max-width: 700px; gap: var(--space-5); padding-block: var(--space-6); }
+      .dc-svc-deck .dc-qcard:nth-child(1) { transform: rotate(-7deg) translateY(14px); }
+      .dc-svc-deck .dc-qcard:nth-child(2) { transform: translateY(-30px) scale(1.05); z-index: 1; }
+      .dc-svc-deck .dc-qcard:nth-child(3) { transform: rotate(7deg) translateY(14px); }
+      .dc-svc-deck .dc-qcard:hover, .dc-svc-deck .dc-qcard:focus-visible { transform: translateY(-14px) rotate(0) scale(1.04); z-index: 2; }
+      .dc-svc-deck .dc-qcard__face { padding: var(--space-3); }
+      .dc-svc-disc { width: 92px; height: 92px; } .dc-svc-disc svg { width: 44px; height: 44px; }
+      .dc-svc-front b { font-size: 22px; }
+      .dc-svc-back strong { font-size: 52px; } .dc-svc-back small { font-size: 15px; } .dc-svc-back .dc-qcard__kicker { font-size: 18px; }
+    }
+    .dc-svc-deck .dc-qcard { width: 100%; aspect-ratio: 4 / 5; transition: transform var(--dur-base) var(--ease-spring); }
+    .dc-svc-deck .dc-qcard:nth-child(1) { transform: rotate(-5deg); }
+    .dc-svc-deck .dc-qcard:nth-child(2) { transform: translateY(-14px); }
+    .dc-svc-deck .dc-qcard:nth-child(3) { transform: rotate(5deg); }
+    .dc-svc-deck .dc-qcard:hover, .dc-svc-deck .dc-qcard:focus-visible { transform: translateY(-8px) rotate(0); }
+    .dc-svc-deck .dc-qcard__face { padding: var(--space-2); }
+    .dc-svc-deck :focus-visible { outline-color: var(--on-band); outline-offset: 4px; }
+    .dc-svc-front { display: grid; justify-items: center; gap: var(--space-3); }
+    .dc-svc-disc { width: 52px; height: 52px; border-radius: 50%; background: var(--red); color: var(--on-red); display: grid; place-items: center; }
+    .dc-svc-disc svg { width: 26px; height: 26px; }
+    .dc-svc-front b { font: 700 14px/1.3 var(--font-display); color: var(--ink); }
+    @media (min-width: 900px) { .dc-svc-disc { width: 76px; height: 76px; } .dc-svc-disc svg { width: 36px; height: 36px; } .dc-svc-front b { font-size: 19px; } }
+    .dc-svc-back { display: grid; justify-items: center; gap: 2px; text-align: center; }
+    .dc-svc-back .dc-qcard__kicker { font-size: 13px; line-height: 1.3; }
+    .dc-svc-back strong { font: 700 28px/1.1 var(--font-sans); color: var(--ink); }
+    .dc-svc-back small { font: 500 12.5px/1.4 var(--font-sans); color: var(--ink-soft); }
+    .dc-svc-back__group { margin-block-start: var(--space-2); padding-block-start: var(--space-2); border-block-start: 1.5px dashed var(--line-strong); color: var(--ink) !important; }
+    .dc-svc-back__group b { font-weight: 700; }
+    @media (min-width: 900px) { .dc-svc-back strong { font-size: 40px; } .dc-svc-back small { font-size: 14px; } .dc-svc-back .dc-qcard__kicker { font-size: 16px; } }
+
+    /* placeholder tag: ds.css --warning on the sunk surface is 4.4:1 in Cream; darken for AA (Night keeps its token) */
+    :root:not([data-theme="dark"]) .dc-ph { color: #6F4700; }
+
+    /* ---- sticky in-page nav ---- */
+    .dc-svc-sub { position: sticky; inset-block-start: var(--hdr); z-index: 40; background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 8px 18px -14px rgba(19,40,79,.4); }
+    .dc-svc-sub .dc-page { display: flex; gap: 6px; padding-block: 10px; overflow-x: auto; scrollbar-width: none; }
+    .dc-svc-sub a { flex: none; display: inline-flex; align-items: center; min-height: 40px; padding-inline: 12px; border-radius: var(--radius-pill); text-decoration: none;
+      font: 600 14px/1 var(--font-sans); color: var(--ink); background: var(--surface-sunk);
+      transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+    @media (max-width: 379px) { .dc-svc-sub .dc-page { padding-inline: var(--space-2); } .dc-svc-sub a { padding-inline: 8px !important; } }
+    @media (max-width: 419px) { .dc-svc-sub .dc-page { gap: 4px; padding-inline: var(--space-3); } .dc-svc-sub a { padding-inline: 10px; font-size: 13px; flex: 1 0 auto; justify-content: center; } }
+    .dc-svc-sub a:hover { background: var(--sky); }
+    .dc-svc-sub a:active { transform: scale(.96); }
+    .dc-svc-sub a[aria-current="true"] { background: var(--blue); color: var(--on-blue); }
+
+    /* ---- section rhythm + scroll reveal (an entrance, not scroll-jacking: each block rises once) ---- */
+    .dc-svc-sec { padding-block: var(--space-7); }
+    @media (min-width: 768px) { .dc-svc-sec { padding-block: var(--space-8); } }
+    .dc-svc-band { background: var(--sky); }
+    .dc-svc-band--pink { background: var(--pink); }
+    .dc-svc-band .dc-svc-sec { padding-block: var(--space-7); }
+    @media (min-width: 768px) { .dc-svc-band .dc-svc-sec { padding-block: var(--space-8); } }
+    @keyframes dc-svc-rise { from { opacity: 0; transform: translateY(20px); } }
+    .dc-js .dc-rv:not(.is-in) { opacity: 0; }
+    .dc-rv.is-in { animation: dc-svc-rise var(--dur-slow) var(--ease-out) calc(var(--i, 0) * 80ms) backwards; }
+
+    .dc-svc-head { display: grid; gap: var(--space-2); margin-block-end: var(--space-6); max-width: 60ch; }
+    .dc-svc-head .dc-chip { justify-self: start; }
+    .dc-svc-head h2 { font: var(--type-display-2); margin: var(--space-2) 0 0; color: var(--ink); }
+    .dc-svc-head p { font: var(--type-body-lg); color: var(--ink-soft); margin: 0; text-wrap: pretty; }
+    .dc-svc-band .dc-svc-head p { color: var(--ink); }
+    @media (min-width: 768px) { .dc-svc-head h2 { font: var(--type-display-1); } }
+    .dc-svc-underline { display: block; width: 150px; height: 14px; }
+    .dc-svc-underline path { stroke-width: 7; }
+
+    /* ---- stats (prices are content; they use the sans face, never the display face) ---- */
+    .dc-svc-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); margin: 0 0 var(--space-5); padding: 0; }
+    .dc-svc-stats div { background: var(--surface); border-radius: var(--radius-md); padding: var(--space-4); box-shadow: var(--shadow-card); }
+    .dc-svc-stats dt { font: var(--type-small); color: var(--ink-soft); }
+    .dc-svc-stats dd { margin: var(--space-1) 0 0; font: 700 28px/1.15 var(--font-sans); color: var(--ink); }
+    .dc-svc-stats dd small { display: block; font: 500 13px/1.4 var(--font-sans); color: var(--ink-soft); margin-block-start: 2px; }
+    .dc-svc-stats dd:not(.dc-num) { font-size: 20px; line-height: 1.4; }
+    .dc-svc-stats--3 { grid-template-columns: auto auto minmax(0, 1fr); }
+    .dc-svc-stats--3 dd.dc-num { white-space: nowrap; }
+    @media (min-width: 481px) and (max-width: 1179px) { .dc-svc-stats--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dc-svc-stats--3 div:last-child { grid-column: 1 / -1; } }
+    @media (max-width: 480px) { .dc-svc-stats dd:not(.dc-num) { font-size: 20px; line-height: 1.4; }
+    .dc-svc-stats dd { font-size: 22px; } }
+    .dc-svc-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+    .dc-svc-cta .dc-btn { min-height: 48px; }
+    .dc-svc-note { font: var(--type-small); color: var(--ink-soft); margin: var(--space-3) 0 0; }
+    .dc-svc-band .dc-svc-note { color: var(--ink); }
+
+    /* ---- workshops ---- */
+    .dc-svc-wsnote { display: flex; gap: var(--space-3); align-items: start; background: var(--surface-sunk); border-radius: var(--radius-md); padding: var(--space-4); margin-block-end: var(--space-5); font: var(--type-small); color: var(--ink); }
+    .dc-svc-wsnote svg { width: 22px; height: 22px; flex: none; color: var(--blue); margin-block-start: 2px; }
+    .dc-svc-wsnote p { margin: 0; }
+    .dc-svc-filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .dc-svc-fchip { min-height: 40px; padding-inline: 14px; font-size: 14px; border: 0; cursor: pointer; color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line-strong);
+      transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+    .dc-svc-fchip:hover { background: var(--sky); box-shadow: none; }
+    .dc-svc-fchip:active { transform: scale(.95); }
+    .dc-svc-fchip[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); box-shadow: none; }
+    .dc-svc-result { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; margin-block: var(--space-4) var(--space-4); }
+    .dc-svc-count { margin: 0; font: var(--type-body-strong); color: var(--ink); }
+    .dc-svc-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+    @media (min-width: 640px) { .dc-svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1000px) { .dc-svc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); } }
+    .dc-svc-card { width: auto; display: flex; flex-direction: column; gap: var(--space-3); }
+    .dc-svc-titlebox { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+    .dc-svc-card[hidden] { display: none; }
+    .dc-svc-card.is-dealt { animation: dc-deal-in var(--dur-slow) var(--ease-spring) calc(var(--i, 0) * 70ms) both; }
+    .dc-svc-card > .dc-btn { align-self: flex-start; margin-block-start: auto; }
+    .dc-svc-card .dc-service__desc { flex: 1 0 auto; }
+    /* facts size to their content and wrap as whole tiles; values never break mid-phrase */
+    .dc-svc-card .dc-service__facts { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .dc-svc-card .dc-service__facts > div { flex: 1 1 auto; }
+    .dc-svc-card .dc-service__facts dd { font-size: 14px; white-space: nowrap; }
+    .dc-svc-card .dc-service__facts--2 > div { flex: 1 1 0; }
+    .dc-svc-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .dc-svc-chips:empty { display: none; }
+    @media (max-width: 599px) {
+      .dc-svc-card { display: grid; grid-template-columns: 96px minmax(0, 1fr); column-gap: var(--space-3); row-gap: var(--space-2); padding: 14px; }
+      .dc-svc-card > :not(.dc-svc-art):not(.dc-svc-titlebox) { grid-column: 1 / -1; }
+      .dc-svc-card .dc-svc-art { width: 96px; height: 96px; align-self: start; }
+      .dc-svc-card .dc-svc-art svg { height: 100%; }
+      .dc-svc-titlebox { align-self: center; gap: var(--space-2); }
+      .dc-svc-card .dc-service__title { font-size: 19px; }
+      .dc-svc-card .dc-service__desc { font-size: 14px; line-height: 1.7; }
+      .dc-svc-card > .dc-btn { width: 100%; justify-content: center; min-height: 44px; margin-block-start: 2px; }
+      .dc-svc-grid { gap: var(--space-3); }
+      .dc-svc-sec { padding-block: var(--space-6); }
+      .dc-svc-head { margin-block-end: var(--space-4); gap: var(--space-2); }
+      .dc-svc-band .dc-svc-sec { padding-block: var(--space-6); }
+      .dc-svc-card .dc-service__facts > div { padding: 6px var(--space-2); }
+      .dc-svc-stats { gap: var(--space-2); margin-block-end: var(--space-4); }
+      .dc-svc-stats div { padding: var(--space-3); }
+      .dc-svc-stats dd:not(.dc-num) { font-size: 17px; line-height: 1.35; }
+      .dc-svc-split { gap: var(--space-6); }
+      .dc-svc-drawn { gap: var(--space-4); }
+      .dc-svc-drawn__stage { width: min(240px, 68vw); }
+      .dc-svc-hero__in { padding-block: var(--space-6); gap: var(--space-5); }
+      .dc-svc-steps { gap: var(--space-4); }
+      .dc-svc-steps li { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: var(--space-3); padding-block-start: var(--space-3); }
+      .dc-svc-steps .n { grid-row: 1 / span 2; margin: 0; }
+      .dc-svc-steps h3 { margin: 0 0 2px; align-self: center; }
+      .dc-svc-quote { padding: var(--space-5); gap: var(--space-4); }
+      .dc-svc-foot { margin-block-start: var(--space-6); }
+      .dc-svc-foot img { height: 64px; }
+      .dc-svc-drawn__stage { width: min(220px, 64vw); }
+      .dc-svc-foot .dc-page { padding-block: var(--space-6); }
+    }
+    .dc-svc-art { border-radius: var(--radius-md); overflow: hidden; background: var(--pink); }
+    .dc-svc-art--sky { background: var(--sky); }
+    .dc-svc-art svg { display: block; width: 100%; height: auto; transition: transform var(--dur-slow) var(--ease-spring); }
+    .dc-svc-card:hover .dc-svc-art svg { transform: scale(1.06) rotate(-1.5deg); }
+    .dc-svc-art .k1 { fill: var(--brush); } .dc-svc-art .k2 { fill: var(--sky); } .dc-svc-art .k3 { fill: var(--red); } .dc-svc-art .k4 { fill: var(--surface); }
+    .dc-svc-art .k5 { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .dc-svc-art--sky .k2 { fill: var(--surface); }
+
+    /* ---- sessions: draw a card ---- */
+    .dc-svc-split { display: grid; gap: var(--space-7); align-items: center; }
+    @media (min-width: 900px) { .dc-svc-split { grid-template-columns: 1fr 1fr; gap: var(--space-8); } .dc-svc-split--flip > :first-child { order: 2; } }
+    .dc-svc-drawn { display: grid; justify-items: center; gap: var(--space-5); }
+    .dc-svc-drawn__stage { position: relative; width: min(280px, 78vw); aspect-ratio: 1 / 1; }
+    .dc-svc-drawn__stage > i { position: absolute; inset: 0; border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-card); }
+    .dc-svc-drawn__stage > i:nth-child(1) { transform: rotate(-7deg) translateY(6px); background: var(--pink); }
+    .dc-svc-drawn__stage > i:nth-child(2) { transform: rotate(5deg) translateY(3px); background: var(--brush); }
+    .dc-svc-drawn__card { position: absolute; inset: 0; transition: transform var(--dur-base) var(--ease-in-out), opacity var(--dur-base) var(--ease-out); }
+    .dc-svc-drawn__card .dc-qcard { width: 100%; }
+    .dc-svc-drawn__card.is-out { transform: translateX(calc(var(--dir, 1) * 60%)) rotate(calc(var(--dir, 1) * 14deg)); opacity: 0; }
+    .dc-svc-drawn__card.is-dealt { animation: dc-deal-in var(--dur-slow) var(--ease-spring) both; }
+    .dc-svc-drawn .dc-qcard__q { font: 600 17px/1.65 var(--font-sans); text-wrap: balance; }
+    .dc-svc-drawn .dc-qcard__face { padding: var(--space-5); }
+    @media (min-width: 900px) { .dc-svc-drawn .dc-qcard__q { font-size: 19px; } }
+    .dc-svc-drawn .dc-qcard__back { place-content: center; }
+    .dc-svc-drawn .dc-qcard__front { background: var(--surface); }
+    .dc-svc-front--big .dc-svc-disc { width: 96px; height: 96px; font: 700 40px/1 var(--font-display); }
+    .dc-svc-front--big small { font: 500 13px/1.4 var(--font-sans); color: var(--ink-soft); }
+
+    /* ---- game nights: scoreboard ---- */
+    .dc-svc-score { background: var(--surface); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-lift); display: grid; gap: var(--space-4); max-width: 480px; width: 100%; justify-self: center; }
+    .dc-svc-score__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font: 700 18px/1.3 var(--font-display); color: var(--blue); }
+    .dc-svc-team { display: grid; grid-template-columns: 96px 1fr 36px; gap: var(--space-3); align-items: center; font: var(--type-body-strong); }
+    .dc-svc-team__bar { height: 16px; border-radius: 8px; background: var(--surface-sunk); overflow: hidden; }
+    .dc-svc-team__bar i { display: block; height: 100%; border-radius: 8px; background: var(--red); inline-size: var(--w); transition: inline-size 1100ms var(--ease-out); }
+    .dc-svc-team--b .dc-svc-team__bar i { background: var(--blue); }
+    .dc-js .dc-svc-score:not(.is-in) .dc-svc-team__bar i { inline-size: 0; }
+    .dc-svc-team b { font: 700 20px/1 var(--font-sans); text-align: end; }
+    .dc-svc-how { list-style: none; margin: 0; padding: var(--space-3) 0 0; border-block-start: 1.5px dashed var(--line-strong); display: grid; gap: var(--space-2); font: var(--type-small); color: var(--ink); }
+    .dc-svc-how li { display: flex; gap: var(--space-2); align-items: start; }
+    .dc-svc-how svg { width: 18px; height: 18px; flex: none; color: var(--red-text); margin-block-start: 3px; }
+
+    /* ---- booking steps ---- */
+    .dc-svc-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); }
+    @media (min-width: 768px) { .dc-svc-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); } }
+    .dc-svc-steps li { position: relative; border-block-start: 3px solid var(--line); padding-block-start: var(--space-4); }
+    .dc-svc-steps li::before { content: ""; position: absolute; inset-block-start: -3px; inset-inline-start: 0; height: 3px; inline-size: 100%; background: var(--red); border-radius: 3px; }
+    .dc-svc-steps li.is-in::before { animation: dc-svc-line var(--dur-draw) var(--ease-in-out) calc(var(--i, 0) * 260ms) backwards; }
+    @keyframes dc-svc-line { from { inline-size: 0; } }
+    .dc-svc-steps .n { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--blue); color: var(--on-blue); font: 700 20px/1 var(--font-display); margin-block-end: var(--space-3); }
+    .dc-svc-steps h3 { font: var(--type-display-3); margin: 0 0 var(--space-2); color: var(--ink); }
+    .dc-svc-steps p { margin: 0; color: var(--ink-soft); font: var(--type-body); max-width: 34ch; }
+
+    /* ---- brand quote ---- */
+    .dc-svc-quote { position: relative; overflow: hidden; background: var(--surface); border-radius: var(--radius-lg); padding: var(--space-6) var(--space-5); display: grid; gap: var(--space-5); align-items: center; box-shadow: var(--shadow-card); }
+    @media (min-width: 768px) { .dc-svc-quote { grid-template-columns: 1fr auto; padding: var(--space-7); gap: var(--space-7); } }
+    .dc-svc-quote blockquote { margin: 0; }
+    .dc-svc-quote p { font: 600 20px/1.85 var(--font-display); margin: 0; color: var(--ink); text-wrap: pretty; }
+    @media (min-width: 768px) { .dc-svc-quote p { font: var(--type-quote); } }
+    .dc-svc-quote footer, .dc-svc-quote cite { font: 500 13px/1 var(--font-sans); color: var(--ink-soft); font-style: normal; display: block; margin-block-start: var(--space-3); }
+    .dc-svc-quote .dc-svc-cta { margin-block-start: var(--space-5); }
+    .dc-svc-quote .dc-banner__blob { width: 140px; height: 140px; justify-self: center; }
+    .dc-svc-quote .dc-banner__blob .b1 { fill: var(--brush); } .dc-svc-quote .dc-banner__blob .b2 { fill: var(--sky); } .dc-svc-quote .dc-banner__blob .b3 { fill: var(--red); }
+
+    /* ---- footer ---- */
+    .dc-svc-foot { background: var(--band); color: var(--on-band); margin-block-start: var(--space-8); }
+    .dc-svc-foot .dc-page { display: grid; gap: var(--space-5); padding-block: var(--space-7); align-items: center; }
+    @media (min-width: 768px) { .dc-svc-foot .dc-page { grid-template-columns: auto 1fr; gap: var(--space-7); } }
+    .dc-svc-foot img { height: 84px; width: auto; }
+    .dc-svc-foot address { font-style: normal; display: grid; gap: var(--space-2) var(--space-6); font: var(--type-small); }
+    @media (min-width: 768px) { .dc-svc-foot address { grid-template-columns: repeat(2, auto); justify-content: start; } }
+    .dc-svc-foot a { color: var(--on-band); text-underline-offset: 3px; }
+    .dc-svc-foot :focus-visible { outline-color: var(--on-band); }
+    .dc-svc-foot small { display: block; opacity: .85; margin-block-end: 2px; }
+    main { padding-block-end: 0; }
+  </style>
+</head>
+<body>
+  <a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+  <header class="dc-svc-top" id="top">
+    <div class="dc-header">
+      <a class="dc-svc-brand" href="home.html" data-ar-label="دردشات، الصفحة الرئيسية" data-en-label="Dardachat, home" aria-label="دردشات، الصفحة الرئيسية">
+        <img class="dc-header__logo" src="assets/dardachat-lockup-knockout.png" alt="">
+      </a>
+      <nav id="dc-nav" data-ar-label="القائمة الرئيسية" data-en-label="Main menu" aria-label="القائمة الرئيسية">
+        <a href="shop.html" data-ar="الصناديق" data-en="Boxes">الصناديق</a>
+        <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+        <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+        <a href="home.html#about" data-ar="من نحن" data-en="About">من نحن</a>
+      </nav>
+      <div class="dc-svc-actions">
+        <a class="dc-cart" href="cart-checkout.html" data-ar-label="السلة" data-en-label="Cart" aria-label="السلة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        </a>
+        <button class="dc-svc-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
+          <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================= -->
+    <section class="dc-svc-hero" aria-labelledby="h-services">
+      <!-- the logo band's pink strokes, drawn on once (decorative) -->
+      <svg class="dc-brush dc-svc-stroke dc-svc-stroke--s" data-autodraw viewBox="0 0 200 420" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+        <path d="M60 50 C 140 20, 190 80, 110 110 S 20 150, 120 170 S 30 240, 130 260 S 60 330, 150 350"/>
+      </svg>
+      <svg class="dc-brush dc-svc-stroke dc-svc-stroke--e" data-autodraw viewBox="0 0 200 420" preserveAspectRatio="xMinYMid slice" aria-hidden="true" focusable="false">
+        <path d="M140 70 C 60 40, 10 110, 90 130 S 180 190, 80 210 S 170 280, 70 300 S 140 370, 60 400"/>
+      </svg>
+      <div class="dc-page dc-svc-hero__in">
+        <div>
+          <span class="dc-chip dc-chip--pink dc-svc-hero__kick" data-ar="خدمات دردشات" data-en="Dardachat services">خدمات دردشات</span>
+          <h1 id="h-services" data-ar="ورشات، جلسات، وليالي ألعاب" data-en="Workshops, sessions and game nights">ورشات، جلسات، وليالي ألعاب</h1>
+          <p data-ar="بيئة ممتعة وملهمة تجمع الناس بروح التواصل الإيجابي، حول طاولة واحدة وأسئلة تفتح الحديث." data-en="A fun, inspiring setting that brings people together in a spirit of positive connection, around one table and questions that open the conversation.">بيئة ممتعة وملهمة تجمع الناس بروح التواصل الإيجابي، حول طاولة واحدة وأسئلة تفتح الحديث.</p>
+          <p class="dc-svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 4v4h-4M20 12a8 8 0 0 1-14 5.3M4 20v-4h4"/></svg><span data-ar="اقلبوا بطاقة لتروا السعر" data-en="Flip a card to see the price">اقلبوا بطاقة لتروا السعر</span></p>
+        </div>
+        <div class="dc-svc-deck dc-deal">
+          <button class="dc-qcard" type="button" aria-pressed="false" data-ar-label="ورشات العمل، اقلب البطاقة لترى السعر" data-en-label="Workshops, flip the card to see the price" aria-label="ورشات العمل، اقلب البطاقة لترى السعر">
+            <span class="dc-qcard__inner">
+              <span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-svc-front"><span class="dc-svc-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19z"/><path d="M14 7l3 3"/></svg></span><b data-ar="ورشات العمل" data-en="Workshops">ورشات العمل</b></span></span>
+              <span class="dc-qcard__face dc-qcard__back"><span class="dc-svc-back"><span class="dc-qcard__kicker" data-ar="ورشات العمل" data-en="Workshops">ورشات العمل</span><small data-ar="ابتداءً من" data-en="From">ابتداءً من</small><strong class="dc-num">₪100</strong><small data-ar="للفرد" data-en="per person">للفرد</small></span></span>
+            </span>
+          </button>
+          <button class="dc-qcard" type="button" aria-pressed="false" data-ar-label="الجلسات، اقلب البطاقة لترى السعر" data-en-label="Sessions, flip the card to see the price" aria-label="الجلسات، اقلب البطاقة لترى السعر">
+            <span class="dc-qcard__inner">
+              <span class="dc-qcard__face dc-qcard__front"><span class="dc-svc-front"><span class="dc-svc-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg></span><b data-ar="الجلسات" data-en="Sessions">الجلسات</b></span></span>
+              <span class="dc-qcard__face dc-qcard__back"><span class="dc-svc-back"><span class="dc-qcard__kicker" data-ar="الجلسات" data-en="Sessions">الجلسات</span><strong class="dc-num">₪70</strong><small data-ar="للفرد" data-en="per person">للفرد</small><small class="dc-svc-back__group"><b class="dc-num">₪500</b> <span data-ar="للمجموعة الكاملة" data-en="per full group">للمجموعة الكاملة</span></small></span></span>
+            </span>
+          </button>
+          <button class="dc-qcard" type="button" aria-pressed="false" data-ar-label="ليالي الألعاب، اقلب البطاقة لترى السعر" data-en-label="Game nights, flip the card to see the price" aria-label="ليالي الألعاب، اقلب البطاقة لترى السعر">
+            <span class="dc-qcard__inner">
+              <span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-svc-front"><span class="dc-svc-disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span><b data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</b></span></span>
+              <span class="dc-qcard__face dc-qcard__back"><span class="dc-svc-back"><span class="dc-qcard__kicker" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</span><strong class="dc-num">₪70</strong><small data-ar="للفرد" data-en="per person">للفرد</small><small class="dc-svc-back__group"><b class="dc-num">₪1400</b> <span data-ar="للمجموعة" data-en="per group">للمجموعة</span></small></span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STICKY SUB-NAV ================= -->
+    <nav class="dc-svc-sub" id="sub" data-ar-label="أقسام الصفحة" data-en-label="On this page" aria-label="أقسام الصفحة">
+      <div class="dc-page">
+        <a href="#workshops" data-sec="workshops" data-ar="ورشات العمل" data-en="Workshops">ورشات العمل</a>
+        <a href="#sessions" data-sec="sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="#game-nights" data-sec="game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="#how" data-sec="how" data-ar="الحجز" data-en="Booking">الحجز</a>
+      </div>
+    </nav>
+
+    <!-- ================= WORKSHOPS ================= -->
+    <section class="dc-page dc-svc-sec" id="workshops" aria-labelledby="h-ws">
+      <header class="dc-svc-head dc-rv">
+        <span class="dc-chip" data-ar="مجموعات من 20 إلى 25 شخصًا" data-en="Groups of 20 to 25">مجموعات من 20 إلى 25 شخصًا</span>
+        <h2 id="h-ws" data-ar="ورشات العمل" data-en="Workshops">ورشات العمل</h2>
+        <svg class="dc-brush dc-svc-underline" data-draw viewBox="0 0 150 14" aria-hidden="true" focusable="false"><path d="M4 8 C 26 2, 52 13, 80 7 S 126 3, 146 8"/></svg>
+        <p data-ar="نلعب أولًا، ثم نصنع شيئًا بأيدينا، وتخرجون من الورشة بقطعة تذكارية تحملونها معكم." data-en="We play first, then make something with our hands, and you leave the workshop with a keepsake to take home.">نلعب أولًا، ثم نصنع شيئًا بأيدينا، وتخرجون من الورشة بقطعة تذكارية تحملونها معكم.</p>
+      </header>
+
+      <div class="dc-svc-wsnote dc-rv" style="--i:1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+        <p data-ar="السعر مرن ويختلف حسب عدد المشاركين وعدد الورشات. سعر المجموعة أدناه هو نطاق تقريبي، ونؤكده معكم على واتساب." data-en="Pricing is flexible and depends on the number of participants and workshops. The group price below is a range, and we confirm it with you on WhatsApp.">السعر مرن ويختلف حسب عدد المشاركين وعدد الورشات. سعر المجموعة أدناه هو نطاق تقريبي، ونؤكده معكم على واتساب.</p>
+      </div>
+
+      <div class="dc-svc-filters dc-rv" role="group" data-ar-label="تصفية الورشات" data-en-label="Filter workshops" aria-label="تصفية الورشات" id="wsFilters" style="--i:2">
+        <button class="dc-chip dc-svc-fchip" type="button" data-f="all" aria-pressed="true" data-ar="الكل" data-en="All">الكل</button>
+        <button class="dc-chip dc-svc-fchip" type="button" data-f="groups" aria-pressed="false" data-ar="للمجموعات" data-en="For groups">للمجموعات</button>
+        <button class="dc-chip dc-svc-fchip" type="button" data-f="mothers" aria-pressed="false" data-ar="أمهات وأبناء" data-en="Mothers &amp; children">أمهات وأبناء</button>
+        <button class="dc-chip dc-svc-fchip" type="button" data-f="couples" aria-pressed="false" data-ar="للأزواج" data-en="Couples">للأزواج</button>
+        <button class="dc-chip dc-svc-fchip" type="button" data-f="series" aria-pressed="false" data-ar="سلاسل" data-en="Series">سلاسل</button>
+      </div>
+      <div class="dc-svc-result">
+        <p class="dc-svc-count" id="wsCount" role="status" aria-live="polite"></p>
+        <span class="dc-ph" data-ar="رسوم تجريبية" data-en="Sample art">رسوم تجريبية</span>
+      </div>
+
+      <div class="dc-svc-grid" id="wsGrid">
+      <article class="dc-service dc-svc-card" data-rv data-grp="groups" style="--i:0" id="ws-gift">
+        <div class="dc-svc-art dc-svc-art--pink" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" x="44" y="10" width="72" height="58" rx="8"/><rect class="k2" x="54" y="20" width="24" height="16" rx="4"/><rect class="k1" x="84" y="20" width="22" height="16" rx="4"/><rect class="k1" x="54" y="42" width="24" height="16" rx="4"/><path class="k3" transform="translate(86 38) scale(1.15)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><h3 class="dc-service__title" data-ar="ورشة هدية لذاتي" data-en="A Gift to Myself">ورشة هدية لذاتي</h3></div>
+        <p class="dc-service__desc" data-ar="تفكير إيجابي ينتهي بلوحة أهداف سنوية تصنعونها بأيديكم وتعلّقونها في بيتكم." data-en="Positive thinking that ends in an annual goals board you make by hand and hang at home.">تفكير إيجابي ينتهي بلوحة أهداف سنوية تصنعونها بأيديكم وتعلّقونها في بيتكم.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪100</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1300–1500</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعتان" data-en="2 hours">ساعتان</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D9%87%D8%AF%D9%8A%D8%A9%20%D9%84%D8%B0%D8%A7%D8%AA%D9%8A%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة هدية لذاتي" data-svc-en="A Gift to Myself"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card" data-rv data-grp="groups" style="--i:1" id="ws-shape">
+        <div class="dc-svc-art dc-svc-art--sky" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><path class="k1" d="M50 64C42 44 54 22 78 20s36 14 32 38c-1 6-7 7-13 6-9-1-15 3-24 3-9 0-19 2-23-3z"/><ellipse class="k3" cx="108" cy="52" rx="9" ry="7"/><path class="k5" d="M68 38q6 4 12 0M72 48q6 4 12 0"/></svg></div><div class="dc-svc-titlebox"><h3 class="dc-service__title" data-ar="ورشة شكل وحس" data-en="Shape & Feel">ورشة شكل وحس</h3></div>
+        <p class="dc-service__desc" data-ar="نفهم المشاعر السلبية ونعبّر عنها بتشكيل الطين، جلسة هادئة تترك في اليد شيئًا نلمسه." data-en="We make sense of difficult feelings by shaping them in clay, a calm session that leaves you something to hold.">نفهم المشاعر السلبية ونعبّر عنها بتشكيل الطين، جلسة هادئة تترك في اليد شيئًا نلمسه.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪120</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1400–1700</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعتان" data-en="2 hours">ساعتان</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D8%B4%D9%83%D9%84%20%D9%88%D8%AD%D8%B3%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة شكل وحس" data-svc-en="Shape & Feel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card" data-rv data-grp="groups" style="--i:2" id="ws-stitch">
+        <div class="dc-svc-art dc-svc-art--pink" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" x="40" y="12" width="80" height="60" rx="6"/><path class="k5" stroke-dasharray="5 6" d="M48 56c14-22 28 12 44-6s16-14 22-8"/><path class="k5" style="stroke:var(--red)" d="M96 18l20 18"/><circle class="k3" cx="96" cy="18" r="3"/></svg></div><div class="dc-svc-titlebox"><h3 class="dc-service__title" data-ar="ورشة سؤال وغرزة" data-en="A Question and a Stitch">ورشة سؤال وغرزة</h3></div>
+        <p class="dc-service__desc" data-ar="أسئلة عميقة من دردشات مع تطريز فلسطيني، جلسة حوارية دافئة تركّز على العمل اليدوي لتعزيز التواصل مع النفس." data-en="Deep Dardachat questions with Palestinian embroidery: a warm dialogue session built around handwork, to connect with yourself.">أسئلة عميقة من دردشات مع تطريز فلسطيني، جلسة حوارية دافئة تركّز على العمل اليدوي لتعزيز التواصل مع النفس.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪130</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1250–1700</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعتان ونصف" data-en="2.5 hours">ساعتان ونصف</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D8%B3%D8%A4%D8%A7%D9%84%20%D9%88%D8%BA%D8%B1%D8%B2%D8%A9%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة سؤال وغرزة" data-svc-en="A Question and a Stitch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card" data-rv data-grp="mothers" style="--i:0" id="ws-alike">
+        <div class="dc-svc-art dc-svc-art--sky" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><path class="k4" d="M48 30h64l4 40H44z"/><path class="k5" d="M64 30c0-18 32-18 32 0"/><circle class="k1" cx="66" cy="52" r="8"/><circle class="k2" cx="92" cy="60" r="6"/><path class="k3" transform="translate(74 34) scale(1.3)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><div class="dc-svc-chips"><span class="dc-chip dc-chip--pink" data-ar="أمهات وأبناء" data-en="Mothers & children">أمهات وأبناء</span><span class="dc-chip dc-chip--outline" data-ar="10–16 سنة" data-en="Ages 10–16">10–16 سنة</span></div><h3 class="dc-service__title" data-ar="ورشة متشابه بمشاعرنا" data-en="Alike in Our Feelings">ورشة متشابه بمشاعرنا</h3></div>
+        <p class="dc-service__desc" data-ar="للأمهات وأبنائهن من عمر 10 إلى 16 سنة: رسم على حقائب قماشية وتعرّف على علم نفس الألوان." data-en="For mothers and their children aged 10 to 16: painting on tote bags and getting to know colour psychology.">للأمهات وأبنائهن من عمر 10 إلى 16 سنة: رسم على حقائب قماشية وتعرّف على علم نفس الألوان.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪100</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1800–2000</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعتان" data-en="2 hours">ساعتان</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D9%85%D8%AA%D8%B4%D8%A7%D8%A8%D9%87%20%D8%A8%D9%85%D8%B4%D8%A7%D8%B9%D8%B1%D9%86%D8%A7%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة متشابه بمشاعرنا" data-svc-en="Alike in Our Feelings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card" data-rv data-grp="couples" style="--i:1" id="ws-roses">
+        <div class="dc-svc-art dc-svc-art--pink" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><path class="k5" d="M54 42 q3 14 -1 30"/><circle class="k1" cx="47" cy="36" r="8"/><circle class="k1" cx="61" cy="36" r="8"/><circle class="k1" cx="54" cy="29" r="8"/><circle class="k3" cx="54" cy="36" r="6"/><path class="k5" d="M80 32 q3 14 -1 30"/><circle class="k1" cx="73" cy="26" r="8"/><circle class="k1" cx="87" cy="26" r="8"/><circle class="k1" cx="80" cy="19" r="8"/><circle class="k3" cx="80" cy="26" r="6"/><path class="k5" d="M106 44 q3 14 -1 30"/><circle class="k1" cx="99" cy="38" r="8"/><circle class="k1" cx="113" cy="38" r="8"/><circle class="k1" cx="106" cy="31" r="8"/><circle class="k3" cx="106" cy="38" r="6"/></svg></div><div class="dc-svc-titlebox"><div class="dc-svc-chips"><span class="dc-chip dc-chip--age" data-ar="+18" data-en="18+">+18</span><span class="dc-chip dc-chip--pink" data-ar="للأزواج" data-en="Couples">للأزواج</span></div><h3 class="dc-service__title" data-ar="ورشة الورود مع الحب" data-en="Roses with Love">ورشة الورود مع الحب</h3></div>
+        <p class="dc-service__desc" data-ar="للأزواج: تنسيق الورد معًا بين اثنين. المقاعد محدودة، من 8 إلى 10 أشخاص فقط." data-en="For couples: arranging flowers side by side. Seats are limited, 8 to 10 people only.">للأزواج: تنسيق الورد معًا بين اثنين. المقاعد محدودة، من 8 إلى 10 أشخاص فقط.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪180</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1500–1800</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعتان" data-en="2 hours">ساعتان</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D8%A7%D9%84%D9%88%D8%B1%D9%88%D8%AF%20%D9%85%D8%B9%20%D8%A7%D9%84%D8%AD%D8%A8%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة الورود مع الحب" data-svc-en="Roses with Love"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card" data-rv data-grp="couples" style="--i:2" id="ws-lovestitch">
+        <div class="dc-svc-art dc-svc-art--sky" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" x="44" y="10" width="72" height="62" rx="6"/><rect class="k1" x="54" y="20" width="52" height="42" rx="4"/><rect class="k5" fill="none" stroke-dasharray="4 5" x="49" y="15" width="62" height="52" rx="5"/><path class="k3" transform="translate(68 30) scale(1.9)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><div class="dc-svc-chips"><span class="dc-chip dc-chip--age" data-ar="+18" data-en="18+">+18</span><span class="dc-chip dc-chip--pink" data-ar="للأزواج" data-en="Couples">للأزواج</span></div><h3 class="dc-service__title" data-ar="ورشة سؤال بالحب وغرزة من القلب" data-en="A Question of Love, a Stitch from the Heart">ورشة سؤال بالحب وغرزة من القلب</h3></div>
+        <p class="dc-service__desc" data-ar="للأزواج: أسئلة بالحب وتطريز على صورة تجمعكما، تخرجون منها بقطعة تذكارية." data-en="For couples: questions about love and embroidery on a photo of the two of you, and a keepsake to take home.">للأزواج: أسئلة بالحب وتطريز على صورة تجمعكما، تخرجون منها بقطعة تذكارية.</p>
+        <dl class="dc-service__facts">
+          <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪150</dd></div>
+          <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1500–1700</dd></div>
+          <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="3 ساعات" data-en="3 hours">3 ساعات</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%88%D8%B1%D8%B4%D8%A9%20%D8%B3%D8%A4%D8%A7%D9%84%20%D8%A8%D8%A7%D9%84%D8%AD%D8%A8%20%D9%88%D8%BA%D8%B1%D8%B2%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D9%82%D9%84%D8%A8%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ورشة سؤال بالحب وغرزة من القلب" data-svc-en="A Question of Love, a Stitch from the Heart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+      </article>
+      <article class="dc-service dc-svc-card dc-svc-card--series" data-rv data-grp="series" style="--i:0" id="ws-imagination">
+        <div class="dc-svc-art dc-svc-art--pink" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" transform="rotate(-12 62 44)" x="40" y="16" width="46" height="52" rx="6"/><rect class="k2" transform="rotate(0 80 44)" x="58" y="14" width="46" height="52" rx="6"/><rect class="k1" transform="rotate(12 98 44)" x="76" y="16" width="46" height="52" rx="6"/><path class="k3" transform="translate(67 28) scale(1.3)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><div class="dc-svc-chips"><span class="dc-chip dc-chip--pink" data-ar="أطفال" data-en="Children">أطفال</span></div><h3 class="dc-service__title" data-ar="سلسلة الخيال" data-en="The Imagination Series">سلسلة الخيال</h3></div>
+        <p class="dc-service__desc" data-ar="سلسلة ورشات للأطفال. يُحسب السعر للسلسلة كاملة حسب مدتها وعدد المشاركين." data-en="A workshop series for children. Priced for the whole series, by its length and the number of participants.">سلسلة ورشات للأطفال. يُحسب السعر للسلسلة كاملة حسب مدتها وعدد المشاركين.</p>
+        <dl class="dc-service__facts dc-service__facts--2">
+          <div><dt data-ar="اللقاءات" data-en="Meetings">اللقاءات</dt><dd data-ar="3 أو أكثر" data-en="3 or more">3 أو أكثر</dd></div>
+          <div><dt data-ar="السعر" data-en="Price">السعر</dt><dd data-ar="للسلسلة كاملة" data-en="Per series">للسلسلة كاملة</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D8%B3%D9%84%D8%B3%D9%84%D8%A9%20%D8%A7%D9%84%D8%AE%D9%8A%D8%A7%D9%84%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="سلسلة الخيال" data-svc-en="The Imagination Series"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="اسألوا عن السعر" data-en="Ask for a quote">اسألوا عن السعر</span></a>
+      </article>
+      <article class="dc-service dc-svc-card dc-svc-card--series" data-rv data-grp="series" style="--i:1" id="ws-between">
+        <div class="dc-svc-art dc-svc-art--sky" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k1" transform="rotate(-12 62 44)" x="40" y="16" width="46" height="52" rx="6"/><rect class="k4" transform="rotate(0 80 44)" x="58" y="14" width="46" height="52" rx="6"/><rect class="k2" transform="rotate(12 98 44)" x="76" y="16" width="46" height="52" rx="6" style="fill:var(--pink)"/><path class="k3" transform="translate(67 28) scale(1.3)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><div class="dc-svc-chips"><span class="dc-chip dc-chip--pink" data-ar="نساء" data-en="Women">نساء</span></div><h3 class="dc-service__title" data-ar="سلسلة بيني وبين نفسي" data-en="The Between Me and Myself Series">سلسلة بيني وبين نفسي</h3></div>
+        <p class="dc-service__desc" data-ar="سلسلة ورشات للنساء. يُحسب السعر للسلسلة كاملة حسب مدتها وعدد المشاركات." data-en="A workshop series for women. Priced for the whole series, by its length and the number of participants.">سلسلة ورشات للنساء. يُحسب السعر للسلسلة كاملة حسب مدتها وعدد المشاركات.</p>
+        <dl class="dc-service__facts dc-service__facts--2">
+          <div><dt data-ar="اللقاءات" data-en="Meetings">اللقاءات</dt><dd data-ar="3 أو أكثر" data-en="3 or more">3 أو أكثر</dd></div>
+          <div><dt data-ar="السعر" data-en="Price">السعر</dt><dd data-ar="للسلسلة كاملة" data-en="Per series">للسلسلة كاملة</dd></div>
+        </dl>
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D8%B3%D9%84%D8%B3%D9%84%D8%A9%20%D8%A8%D9%8A%D9%86%D9%8A%20%D9%88%D8%A8%D9%8A%D9%86%20%D9%86%D9%81%D8%B3%D9%8A%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="سلسلة بيني وبين نفسي" data-svc-en="The Between Me and Myself Series"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="اسألوا عن السعر" data-en="Ask for a quote">اسألوا عن السعر</span></a>
+      </article>
+
+      </div>
+    </section>
+
+    <!-- ================= SESSIONS ================= -->
+    <div class="dc-svc-band">
+      <section class="dc-page dc-svc-sec" id="sessions" aria-labelledby="h-se">
+        <div class="dc-svc-split">
+          <div>
+            <header class="dc-svc-head dc-rv">
+              <span class="dc-chip dc-chip--pink" data-ar="حتى 10 أشخاص" data-en="Up to 10 people">حتى 10 أشخاص</span>
+              <h2 id="h-se" data-ar="الجلسات" data-en="Sessions">الجلسات</h2>
+              <svg class="dc-brush dc-svc-underline" data-draw viewBox="0 0 150 14" aria-hidden="true" focusable="false"><path d="M4 8 C 26 2, 52 13, 80 7 S 126 3, 146 8"/></svg>
+              <p data-ar="جلسات حوارية نلعب فيها ببطاقات دردشات: سؤال على الطاولة، وحديث يفتح أبوابًا لم نتوقعها." data-en="Dialogue sessions played with Dardachat question cards: one question on the table, and a conversation that opens doors we did not expect.">جلسات حوارية نلعب فيها ببطاقات دردشات: سؤال على الطاولة، وحديث يفتح أبوابًا لم نتوقعها.</p>
+            </header>
+            <dl class="dc-svc-stats dc-svc-stats--3 dc-rv" style="--i:1">
+              <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪70</dd></div>
+              <div><dt data-ar="للمجموعة الكاملة" data-en="Per full group">للمجموعة الكاملة</dt><dd class="dc-num">₪500</dd></div>
+              <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعة واحدة" data-en="1 hour">ساعة واحدة</dd></div>
+            </dl>
+            <div class="dc-svc-cta dc-rv" style="--i:2">
+              <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D8%A7%D9%84%D8%AC%D9%84%D8%B3%D8%A7%D8%AA%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="الجلسات" data-svc-en="Sessions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+            </div>
+          </div>
+
+          <div class="dc-svc-drawn dc-rv" style="--i:1">
+            <div class="dc-svc-drawn__stage">
+              <i aria-hidden="true"></i><i aria-hidden="true"></i>
+              <div class="dc-svc-drawn__card" id="drawWrap">
+                <button class="dc-qcard" id="drawCard" type="button" aria-pressed="false" data-ar-label="بطاقة من دردشات، اقلبها لتقرأ" data-en-label="A Dardachat card, flip it to read" aria-label="بطاقة من دردشات، اقلبها لتقرأ">
+                  <span class="dc-qcard__inner">
+                    <span class="dc-qcard__face dc-qcard__front"><span class="dc-svc-front dc-svc-front--big"><span class="dc-svc-disc" data-ar="؟" data-en="?">؟</span><small data-ar="اقلبوا البطاقة" data-en="Flip the card">اقلبوا البطاقة</small></span></span>
+                    <span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker" data-ar="من دردشات" data-en="From Dardachat">من دردشات</span><span class="dc-qcard__q" id="drawText">«مفتاح المعرفة هو السؤال»</span></span>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <button class="dc-btn dc-btn--outline" id="drawNext" type="button"><span data-ar="بطاقة أخرى" data-en="Another card">بطاقة أخرى</span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= GAME NIGHTS ================= -->
+    <div class="dc-svc-band dc-svc-band--pink">
+      <section class="dc-page dc-svc-sec" id="game-nights" aria-labelledby="h-gn">
+        <div class="dc-svc-split dc-svc-split--flip">
+          <div>
+            <header class="dc-svc-head dc-rv">
+              <span class="dc-chip" data-ar="للأصدقاء والعائلة" data-en="Friends and family">للأصدقاء والعائلة</span>
+              <h2 id="h-gn" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</h2>
+              <svg class="dc-brush dc-svc-underline" data-draw viewBox="0 0 150 14" aria-hidden="true" focusable="false"><path d="M4 8 C 26 2, 52 13, 80 7 S 126 3, 146 8"/></svg>
+              <p data-ar="تلعب الفرق ألعاب دردشات، وتجمع نقاطًا على كل تحدٍّ وعلى كل سؤال جماعي." data-en="Teams play Dardachat games and collect points for every challenge and every group question.">تلعب الفرق ألعاب دردشات، وتجمع نقاطًا على كل تحدٍّ وعلى كل سؤال جماعي.</p>
+            </header>
+            <dl class="dc-svc-stats dc-svc-stats--3 dc-rv" style="--i:1">
+              <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪70</dd></div>
+              <div><dt data-ar="للمجموعة" data-en="Per group">للمجموعة</dt><dd class="dc-num">₪1400</dd></div>
+              <div><dt data-ar="المدة" data-en="Duration">المدة</dt><dd data-ar="ساعة إلى ساعة ونصف" data-en="1 to 1.5 hours">ساعة إلى ساعة ونصف</dd></div>
+            </dl>
+            <div class="dc-svc-cta dc-rv" style="--i:2">
+              <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%A3%D9%88%D8%AF%D9%91%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AD%D8%AC%D8%B2%20%C2%AB%D9%84%D9%8A%D8%A7%D9%84%D9%8A%20%D8%A7%D9%84%D8%A3%D9%84%D8%B9%D8%A7%D8%A8%C2%BB" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="ليالي الألعاب" data-svc-en="Game nights"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="احجز عبر واتساب" data-en="Book on WhatsApp">احجز عبر واتساب</span></a>
+            </div>
+          </div>
+
+          <div class="dc-svc-score dc-rv" id="score" style="--i:1" role="img" data-ar-label="لوحة نقاط توضيحية: فريقان يتنافسان على النقاط" data-en-label="An illustrative scoreboard: two teams competing for points" aria-label="لوحة نقاط توضيحية: فريقان يتنافسان على النقاط">
+            <div class="dc-svc-score__head"><span data-ar="لوحة النقاط" data-en="Scoreboard">لوحة النقاط</span><span class="dc-ph" data-ar="رسم توضيحي" data-en="Illustration">رسم توضيحي</span></div>
+            <div class="dc-svc-team"><span data-ar="الفريق الأول" data-en="Team one">الفريق الأول</span><span class="dc-svc-team__bar"><i style="--w:82%"></i></span><b class="dc-num" data-to="18">18</b></div>
+            <div class="dc-svc-team dc-svc-team--b"><span data-ar="الفريق الثاني" data-en="Team two">الفريق الثاني</span><span class="dc-svc-team__bar"><i style="--w:66%"></i></span><b class="dc-num" data-to="14">14</b></div>
+            <ul class="dc-svc-how">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="نقاط على كل تحدٍّ ينجزه الفريق" data-en="Points for every challenge a team completes">نقاط على كل تحدٍّ ينجزه الفريق</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="ونقاط على كل سؤال جماعي" data-en="And points for every group question">ونقاط على كل سؤال جماعي</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= HOW TO BOOK ================= -->
+    <section class="dc-page dc-svc-sec" id="how" aria-labelledby="h-how">
+      <header class="dc-svc-head dc-rv">
+        <h2 id="h-how" data-ar="كيف نحجز؟" data-en="How to book">كيف نحجز؟</h2>
+        <svg class="dc-brush dc-svc-underline" data-draw viewBox="0 0 150 14" aria-hidden="true" focusable="false"><path d="M4 8 C 26 2, 52 13, 80 7 S 126 3, 146 8"/></svg>
+        <p data-ar="الحجز عبر واتساب فقط. لا حجز ولا دفع عبر الموقع." data-en="Booking is on WhatsApp only. There is no booking or payment on the site.">الحجز عبر واتساب فقط. لا حجز ولا دفع عبر الموقع.</p>
+      </header>
+      <ol class="dc-svc-steps">
+        <li class="dc-rv" style="--i:0"><span class="n dc-num">1</span><h3 data-ar="اختاروا الخدمة" data-en="Pick a service">اختاروا الخدمة</h3><p data-ar="ورشة، جلسة أو ليلة ألعاب. الأسعار أعلاه." data-en="A workshop, a session or a game night. Prices are above.">ورشة، جلسة أو ليلة ألعاب. الأسعار أعلاه.</p></li>
+        <li class="dc-rv" style="--i:1"><span class="n dc-num">2</span><h3 data-ar="راسلونا على واتساب" data-en="Message us on WhatsApp">راسلونا على واتساب</h3><p data-ar="زر الحجز يفتح محادثة جاهزة فيها اسم الخدمة." data-en="The booking button opens a chat with the service name already in it.">زر الحجز يفتح محادثة جاهزة فيها اسم الخدمة.</p></li>
+        <li class="dc-rv" style="--i:2"><span class="n dc-num">3</span><h3 data-ar="نتفق على الموعد والسعر" data-en="We agree the date and price">نتفق على الموعد والسعر</h3><p data-ar="نحدد معكم عدد المشاركين والموعد، ونؤكد السعر النهائي." data-en="We settle the number of participants and the date, and confirm the final price.">نحدد معكم عدد المشاركين والموعد، ونؤكد السعر النهائي.</p></li>
+      </ol>
+    </section>
+
+    <!-- ================= BRAND QUOTE ================= -->
+    <section class="dc-page" aria-label="من نحن" data-ar-label="من نحن" data-en-label="About us">
+      <div class="dc-svc-quote dc-rv">
+        <blockquote>
+          <p data-ar="نحن في «دردشات» نؤمن بأن التواصل هو جوهر العلاقات الإنسانية. من قلب القدس، أطلقنا مشروعًا يعزز الروابط بين الأفراد من خلال ألعاب لوحية وبطاقات وخدمات اجتماعية تلهم الحوار والتفاعل." data-en="At Dardachat we believe connection is the heart of human relationships. From the heart of Jerusalem, we started a project that strengthens the bonds between people through board games, cards and social services that inspire conversation.">نحن في «دردشات» نؤمن بأن التواصل هو جوهر العلاقات الإنسانية. من قلب القدس، أطلقنا مشروعًا يعزز الروابط بين الأفراد من خلال ألعاب لوحية وبطاقات وخدمات اجتماعية تلهم الحوار والتفاعل.</p>
+          <cite data-ar="دردشات، القدس" data-en="Dardachat, Jerusalem">دردشات، القدس</cite>
+        </blockquote>
+        <svg class="dc-banner__blob" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+          <circle class="b1 dc-float" cx="44" cy="66" r="38"/><circle class="b2 dc-float" cx="78" cy="42" r="30" style="animation-delay:-2s"/>
+          <path class="b3 dc-float" style="animation-delay:-4s" transform="translate(58 62) scale(1.5)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>
+        </svg>
+      </div>
+      <div class="dc-svc-cta dc-rv" style="margin-block-start:var(--space-5)">
+        <a class="dc-btn dc-btn--cta" href="https://wa.me/972543992424?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D8%AF%D8%B1%D8%AF%D8%B4%D8%A7%D8%AA%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%B3%D8%A4%D8%A7%D9%84%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%83%D9%85" target="_blank" rel="noopener" data-wa data-pop data-svc-ar="خدمات دردشات" data-svc-en="Dardachat services" data-msg-ar="مرحبًا دردشات، عندي سؤال عن خدماتكم" data-msg-en="Hello Dardachat, I have a question about your services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/></svg><svg class="dc-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-ar="تواصلوا معنا على واتساب" data-en="Message us on WhatsApp">تواصلوا معنا على واتساب</span></a>
+        <a class="dc-btn dc-btn--outline" href="shop.html"><span data-ar="تصفحوا الصناديق" data-en="Browse the boxes">تصفحوا الصناديق</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="dc-svc-foot">
+    <div class="dc-page">
+      <img src="assets/dardachat-lockup-knockout.png" alt="دردشات Dardachat" data-ar-alt="دردشات" data-en-alt="Dardachat">
+      <address>
+        <div><small data-ar="العنوان" data-en="Address">العنوان</small><span data-ar="القدس – بيت حنينا" data-en="Beit Hanina, Jerusalem">القدس – بيت حنينا</span></div>
+        <div><small data-ar="واتساب وهاتف" data-en="WhatsApp and phone">واتساب وهاتف</small><a class="dc-num" href="https://wa.me/972543992424" target="_blank" rel="noopener">054 399 2424</a></div>
+        <div><small data-ar="البريد" data-en="Email">البريد</small><a href="mailto:dardchat.2023@gmail.com">dardchat.2023@gmail.com</a></div>
+        <div><small data-ar="إنستغرام" data-en="Instagram">إنستغرام</small><a class="dc-num" href="https://instagram.com/dard_chat" target="_blank" rel="noopener">@dard_chat</a></div>
+      </address>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('dc:ready', function () {
+    'use strict';
+    var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+    var reduced = function () { return DC.reducedMotion(); };
+
+    /* header menu (mobile) */
+    var menuBtn = $('#menuBtn'), nav = $('#dc-nav');
+    function menu(open) { menuBtn.setAttribute('aria-expanded', String(open)); nav.classList.toggle('is-open', open); }
+    menuBtn.addEventListener('click', function () { menu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('is-open')) { menu(false); menuBtn.focus(); } });
+    $$('a', nav).forEach(function (a) { a.addEventListener('click', function () { menu(false); }); });
+
+    /* sticky offsets follow the real header height */
+    var top = $('#top');
+    function measure() { document.documentElement.style.setProperty('--hdr', top.offsetHeight + 'px'); }
+    measure(); window.addEventListener('resize', measure);
+    if (window.ResizeObserver) new ResizeObserver(measure).observe(top);
+
+    /* WhatsApp links: pre-filled message that names the service, in the current language */
+    function waLinks() {
+      $$('[data-wa]').forEach(function (a) {
+        var name = DC.t(a.getAttribute('data-svc-ar'), a.getAttribute('data-svc-en'));
+        var msg = a.hasAttribute('data-msg-ar')
+          ? DC.t(a.getAttribute('data-msg-ar'), a.getAttribute('data-msg-en'))
+          : DC.t('مرحبًا دردشات، أودّ الاستفسار عن حجز «' + name + '»', 'Hello Dardachat, I would like to ask about booking “' + name + '”');
+        a.href = 'https://wa.me/972543992424?text=' + encodeURIComponent(msg);
+      });
+    }
+    waLinks();
+
+    /* scroll reveal: each block rises once. Brush underlines draw on when their heading arrives. */
+    var revealEls = $$('.dc-rv'), drawEls = $$('svg[data-draw]'), score = $('#score');
+    function countUp() {
+      $$('b[data-to]', score).forEach(function (b) {
+        var to = +b.getAttribute('data-to'), t0 = null;
+        if (reduced()) { b.textContent = to; return; }
+        b.textContent = '0';
+        (function step(t) { if (t0 === null) t0 = t; var p = Math.min(1, (t - t0) / 1100); b.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); })(performance.now());
+      });
+    }
+    function reveal(el) {
+      el.classList.add('is-in');
+      if (el === score) countUp();
+    }
+    if ('IntersectionObserver' in window && !reduced()) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { reveal(en.target); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+      revealEls.forEach(function (el) { io.observe(el); });
+      var io2 = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { DC.draw(en.target); io2.unobserve(en.target); } });
+      }, { threshold: 0.6 });
+      drawEls.forEach(function (el) { io2.observe(el); });
+    } else { revealEls.forEach(reveal); }
+
+    /* scroll-spy for the sub-nav */
+    var subLinks = $$('#sub a'), secs = subLinks.map(function (a) { return document.getElementById(a.getAttribute('data-sec')); });
+    function mark(id) { subLinks.forEach(function (a) { a.getAttribute('data-sec') === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current'); }); }
+    if ('IntersectionObserver' in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) mark(en.target.id); });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      secs.forEach(function (s) { s && spy.observe(s); });
+    }
+
+    /* workshop filter */
+    var cards = $$('#wsGrid .dc-svc-card'), fbtns = $$('#wsFilters button'), countEl = $('#wsCount'), current = 'all';
+    function paintCount(n) {
+      countEl.textContent = DC.lang === 'ar' ? (n === 1 ? 'ورشة واحدة' : n === 2 ? 'ورشتان' : n + (n <= 10 ? ' ورشات' : ' ورشة')) : (n + (n === 1 ? ' workshop' : ' workshops'));
+    }
+    function filter(f, animate) {
+      current = f;
+      var n = 0;
+      cards.forEach(function (c) {
+        var show = f === 'all' || c.getAttribute('data-grp') === f;
+        c.hidden = !show;
+        if (show) {
+          c.style.setProperty('--i', n % 3); n++;
+          if (animate && !reduced()) DC.restart(c, 'is-dealt');
+        }
+      });
+      fbtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-f') === f)); });
+      paintCount(n);
+    }
+    fbtns.forEach(function (b) { b.addEventListener('click', function () { filter(b.getAttribute('data-f'), true); }); });
+    filter('all', false);
+
+    /* sessions: draw a card (deal and flip, then send it off and deal the next) */
+    var lines = [
+      ['«مفتاح المعرفة هو السؤال»', '“The key to knowledge is the question.”'],
+      ['«قبل ما نتعمق بمعرفة الأشخاص من حولنا مهم نتعمق في معرفة ذاتنا»', '“Before we get to know the people around us, it matters to get to know ourselves.”'],
+      ['«دردشات تأخذنا خطوة إلى الوراء في الزمن لنرجع ذكرياتنا الدافئة من جديد»', '“Dardachat takes us a step back in time, to bring our warm memories back.”']
+    ];
+    var idx = 0, wrap = $('#drawWrap'), dcard = $('#drawCard'), dtext = $('#drawText'), busy = false;
+    function paintLine() { dtext.textContent = DC.t(lines[idx][0], lines[idx][1]); }
+    function nextCard() {
+      if (busy) return;
+      var swap = function () {
+        idx = (idx + 1) % lines.length; paintLine();
+        var inner = $('.dc-qcard__inner', dcard);
+        inner.style.transition = 'none'; DC.flip(dcard, false); void inner.offsetWidth; inner.style.transition = '';
+      };
+      if (reduced()) { swap(); return; }
+      busy = true;
+      wrap.style.setProperty('--dir', DC.lang === 'ar' ? -1 : 1);
+      wrap.classList.add('is-out');
+      setTimeout(function () {
+        swap();
+        wrap.classList.remove('is-out'); DC.restart(wrap, 'is-dealt');
+        setTimeout(function () { busy = false; }, 480);
+      }, 260);
+    }
+    $('#drawNext').addEventListener('click', nextCard);
+    paintLine();
+
+    /* the score bars and heart pops follow the language / motion settings */
+    document.addEventListener('dc:lang', function () { waLinks(); paintCount(cards.filter(function (c) { return !c.hidden; }).length); paintLine(); });
+    document.addEventListener('dc:motion', function (e) { if (e.detail.reduced) { revealEls.forEach(function (el) { el.classList.add('is-in'); }); } });
+  });
+  </script>
+</body>
+</html>
