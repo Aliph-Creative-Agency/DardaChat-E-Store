@@ -1,0 +1,90 @@
+{
+ "box-dardachat-1.jpg": {
+  "px": [
+   92,
+   138
+  ],
+  "subject": "Dardachat box, closed, on a surface",
+  "slot": "home main card, shop card, product?box=dardachat slide 1"
+ },
+ "box-dardachat-open-1.jpg": {
+  "px": [
+   120,
+   175
+  ],
+  "subject": "Dardachat box open with card decks and props",
+  "slot": "product?box=dardachat slide 2"
+ },
+ "cards-question-1.jpg": {
+  "px": [
+   93,
+   139
+  ],
+  "subject": "Hand holding blue and pink question cards",
+  "slot": "product?box=dardachat slide 3"
+ },
+ "card-question-1.jpg": {
+  "px": [
+   120,
+   160
+  ],
+  "subject": "Hand holding a question card outdoors",
+  "slot": "product?box=dardachat slide 4"
+ },
+ "cards-challenge-1.jpg": {
+  "px": [
+   120,
+   80
+  ],
+  "subject": "Hand with challenge cards (unused, spare)",
+  "slot": "unused"
+ },
+ "box-whoamong-1.jpg": {
+  "px": [
+   86,
+   129
+  ],
+  "subject": "Player holding the Who Among Us box/booklet",
+  "slot": "home row card, shop card, product?box=whoamong slide 1"
+ },
+ "session-1.jpg": {
+  "px": [
+   120,
+   80
+  ],
+  "subject": "Three men in a conversation session",
+  "slot": "home services ticket: sessions"
+ },
+ "gamenight-1.jpg": {
+  "px": [
+   120,
+   90
+  ],
+  "subject": "Women crafting around a table (labelled game nights in the capture)",
+  "slot": "home services ticket: game nights"
+ },
+ "workshop-1.jpg": {
+  "px": [
+   120,
+   90
+  ],
+  "subject": "Women doing an art activity outdoors (workshop)",
+  "slot": "home services ticket: workshops; services ws-gift card art"
+ },
+ "community-1.jpg": {
+  "px": [
+   120,
+   95
+  ],
+  "subject": "Group at an outdoor picnic table (Dardachat community)",
+  "slot": "unused, spare"
+ },
+ "board-love-1.jpg": {
+  "px": [
+   120,
+   120
+  ],
+  "subject": "Love box dotted board (pale blue)",
+  "slot": "unused, spare"
+ }
+}

@@ -684,7 +684,7 @@ document.addEventListener('dc:ready', function () {
       b.setAttribute('aria-current', String(i === cur));
       b.setAttribute('aria-label', lang(slideData[i].ar, slideData[i].en) + ' ' + (i + 1) + ' / ' + slides.length);
     });
-    var phTag = $('.dc-pdp-ph'); if (phTag) phTag.hidden = !!slideData[cur].img;
+    var phTag = $('.dc-pdp-ph'); if (phTag) phTag.style.display = slideData[cur].img ? 'none' : '';
     $$('img[data-ar-alt]', stage).concat($$('img[data-ar-alt]', thumbs)).forEach(function (im) { im.alt = lang(im.dataset.arAlt, im.dataset.enAlt); });
     status.textContent = lang(slideData[cur].ar, slideData[cur].en) + ', ' + (cur + 1) + ' / ' + slides.length;
   }
