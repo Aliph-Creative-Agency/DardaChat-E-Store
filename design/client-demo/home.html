@@ -312,7 +312,7 @@
       </nav>
       <div class="dc-home-actions">
         <a class="dc-cart" href="cart-checkout.html" id="cartLink" data-ar-label="السلة" data-en-label="Cart" aria-label="السلة">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h2.4l2.2 10.6a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 7.5H5.7"/><circle cx="9.5" cy="19.3" r="1.4"/><circle cx="17" cy="19.3" r="1.4"/></svg>
           <span class="dc-cart__count dc-num is-empty" id="cartCount">0</span>
         </a>
         <button class="dc-home-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
@@ -489,6 +489,26 @@
                 <div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>169.00</span><span class="dc-ph" data-ar="سعر تجريبي" data-en="Sample price">سعر تجريبي</span></div>
                 <button class="dc-btn dc-btn--cta dc-btn--sm dc-home-add" type="button" data-pop data-add data-id="love" data-name-ar="صندوق دردشات مع الحب" data-name-en="Dardachat with Love Box" data-ar-label="أضف صندوق دردشات مع الحب إلى السلة" data-en-label="Add Dardachat with Love Box to cart" aria-label="أضف صندوق دردشات مع الحب إلى السلة"><svg class="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><svg class="i-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span class="dc-home-lbl"><span data-ar="أضف" data-en="Add">أضف</span><span class="dc-home-lbl__alt" aria-hidden="true" data-ar="أُضيف" data-en="Added">أُضيف</span></span><svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
               </div>
+            </div>
+          </article>
+
+          <!-- سمبوسك ولا قطايف (coming soon) -->
+          <article class="dc-home-box dc-home-box--row is-off" data-reveal style="--d:320ms">
+            <div class="dc-product__art dc-product__art--sky">
+              <svg viewBox="0 0 200 180" aria-hidden="true">
+                <g class="dc-product__peek"><path d="M52 66l20-30 20 30z" fill="var(--surface)" transform="rotate(-8 72 56)"/><path d="M106 68a22 22 0 0 1 44 0z" fill="var(--pink)" transform="rotate(8 128 58)"/></g>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+                <path d="M80 133l10-19 10 19z" fill="var(--on-red)"/><path d="M103 133a9.5 9.5 0 0 1 19 0z" fill="var(--on-red)"/>
+                <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+              </svg>
+            </div>
+            <div class="dc-home-box__body">
+              <div class="dc-row"><span class="dc-chip" data-ar="لعبة جديدة" data-en="New game">لعبة جديدة</span></div>
+              <h3 class="dc-product__name"><a class="dc-home-stretch" href="product.html?box=sambousek" data-ar="سمبوسك ولا قطايف" data-en="Sambousek or Qatayef">سمبوسك ولا قطايف</a></h3>
+              <p class="dc-product__tempnote"><span class="dc-ph" data-ar="قريبًا · التفاصيل قيد الإعداد" data-en="Coming soon · details in preparation">قريبًا · التفاصيل قيد الإعداد</span></p>
+              <p class="dc-product__meta" data-ar="لعبة جديدة من دردشات." data-en="A new game from Dardachat.">لعبة جديدة من دردشات.</p>
             </div>
           </article>
         </div>
@@ -733,6 +753,8 @@ document.addEventListener('dc:ready', function () {
   /* same session cart as shop/product, so the count carries across pages */
   try { var saved = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); if (saved && typeof saved.total === 'number') cart = saved; } catch (e) {}
   n = cart.total; if (n) { cartCount.textContent = String(n); cartCount.classList.remove('is-empty'); }
+  /* the shared cart drawer (_shared.js) edited the cart: re-read it so the next add starts from the right numbers */
+  document.addEventListener('dc:cart', function () { try { var s2 = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); cart = (s2 && typeof s2.total === 'number') ? s2 : { total: 0, lines: {} }; } catch (e) {} n = cart.total; cartCount.textContent = String(n); cartCount.classList.toggle('is-empty', !n); });
   $$('[data-add]').forEach(function (b) {
     b.addEventListener('click', function () {
       n++; cart.total = n; cart.lines[b.getAttribute('data-id')] = (cart.lines[b.getAttribute('data-id')] || 0) + 1;

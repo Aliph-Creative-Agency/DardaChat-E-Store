@@ -22,10 +22,11 @@
     [dir="ltr"] .dc-co-nav a::after { transform-origin: left; }
     .dc-co-nav a:hover::after { transform: scaleX(1); }
     .dc-co-bar :focus-visible { outline-color: var(--on-band); }
-    .dc-co-bar .dc-cart { color: var(--on-band); margin-inline-start: auto; }
+    .dc-co-bar .dc-cart { color: var(--on-band); }
+    .dc-co-bar .dc-hbtns { margin-inline-start: auto; }
     .dc-co-bar .dc-cart:hover { background: rgba(255,255,255,.14); }
     .dc-co-back { display: none; }
-    @media (min-width: 980px) { .dc-co-nav { display: flex; } .dc-co-bar .dc-cart { margin-inline-start: 0; } .dc-co-bar__logo img { height: 60px; } }
+    @media (min-width: 980px) { .dc-co-nav { display: flex; } .dc-co-bar .dc-hbtns { margin-inline-start: 0; } .dc-co-bar__logo img { height: 60px; } }
 
     .dc-co-main { padding-block: var(--space-6) var(--space-8); }
     @media (min-width: 768px) { .dc-co-main { padding-block: var(--space-7) var(--space-9); } }
@@ -324,7 +325,7 @@
         <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
       </nav>
       <button class="dc-cart" id="cartBtn" type="button" data-act="open-cart" aria-haspopup="dialog" aria-expanded="false" aria-label="السلة">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h2.4l2.2 10.6a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 7.5H5.7"/><circle cx="9.5" cy="19.3" r="1.4"/><circle cx="17" cy="19.3" r="1.4"/></svg>
         <span class="dc-cart__count dc-num" id="cartCount">0</span>
       </button>
     </div>
@@ -348,7 +349,7 @@
 
     <!-- ================= VIEW 1: checkout ================= -->
     <section id="viewCheckout" hidden aria-labelledby="coTitle">
-      <div class="dc-co-eyebrow"><a class="dc-btn dc-btn--ghost dc-btn--sm" href="#" data-act="to-shelf"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="متابعة التسوق" data-en="Keep shopping">متابعة التسوق</span></a></div>
+      <div class="dc-co-eyebrow"><a class="dc-btn dc-btn--ghost dc-btn--sm" href="shop.html"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="متابعة التسوق" data-en="Keep shopping">متابعة التسوق</span></a></div>
       <h1 class="dc-co-title" id="coTitle" data-ar="إتمام الطلب" data-en="Checkout">إتمام الطلب</h1>
 
       <ol class="dc-steps dc-co-steps" id="steps" data-ar-label="خطوات الدفع" data-en-label="Checkout steps" aria-label="خطوات الدفع"></ol>
@@ -545,7 +546,7 @@
       } catch (e) {}
     }
     const SHARED0 = sharedCart();
-    const S = { cart: Object.keys(SHARED0).length ? SHARED0 : { chat: 1, love: 1 }, promo: null, zone: null, zoneAuto: false, method: null, step: 0, view: 'shelf', order: null, lastRemoved: null };
+    const S = { cart: SHARED0, promo: null, zone: null, zoneAuto: false, method: null, step: 0, view: 'shelf', order: null, lastRemoved: null };
     const HASH = ['checkout', 'address', 'delivery', 'payment'];
     let opener = null, undoTimer = null, prevHash = '';
 
@@ -824,9 +825,11 @@
       $('#viewShelf').hidden = v !== 'shelf'; $('#viewCheckout').hidden = v !== 'checkout'; $('#viewDone').hidden = v !== 'done';
     }
     function route() {
-      const h = location.hash.replace('#', '');
+      let h = location.hash.replace('#', '');
       if (h === 'cart') { openCart(); return; } // the drawer sits over whichever view the user is on
       closeCart(false);
+      /* the box list shows only while the cart is empty: with items, the first screen is checkout */
+      if (h !== 'done' && HASH.indexOf(h) < 0 && count()) { h = 'checkout'; history.replaceState(null, '', location.pathname + location.search + '#checkout'); }
       if (h === 'done') { if (!S.order) { location.replace('#checkout'); return; } if (S.view !== 'done') { showView('done'); renderDone(); } return; }
       const i = HASH.indexOf(h);
       if (i < 0) { showView('shelf'); return; }

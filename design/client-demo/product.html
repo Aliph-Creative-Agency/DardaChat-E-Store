@@ -329,7 +329,7 @@
       </nav>
       <div class="dc-pdp-actions">
         <a class="dc-cart" href="cart-checkout.html" id="cartLink" aria-label="السلة">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h2.4l2.2 10.6a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 7.5H5.7"/><circle cx="9.5" cy="19.3" r="1.4"/><circle cx="17" cy="19.3" r="1.4"/></svg>
           <span class="dc-cart__count dc-num" id="cartCount" hidden>0</span>
         </a>
         <button class="dc-pdp-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
@@ -385,6 +385,7 @@
         <h1 id="pName" data-ar="صندوق دردشات مع الحب" data-en="Dardachat with Love Box">صندوق دردشات مع الحب</h1>
         <svg class="dc-brush dc-brush--blue" data-autodraw viewBox="0 0 150 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8c22-7 42 4 66-1s48-4 76 1"/></svg>
         <p class="dc-pdp-lede" id="pLede" data-ar="صندوق مخصص للأزواج والشركاء لتقوية العلاقة العاطفية وتجديد المشاعر: أسئلة تعرّفكما أكثر، وتحدّيات ثنائية، وقلوب كريستالية، وبطاقة «سرّ الحب الأبدي»." data-en="A box made for couples and partners, to strengthen the emotional relationship and renew feelings: questions that help you know each other more, duo challenges, crystal hearts, and the “Eternal Love Secret” card.">صندوق مخصص للأزواج والشركاء لتقوية العلاقة العاطفية وتجديد المشاعر: أسئلة تعرّفكما أكثر، وتحدّيات ثنائية، وقلوب كريستالية، وبطاقة «سرّ الحب الأبدي».</p>
+        <p class="dc-pdp-soon" id="soonNote" hidden><span class="dc-ph" data-ar="قريبًا · التفاصيل قيد الإعداد" data-en="Coming soon · details in preparation">قريبًا · التفاصيل قيد الإعداد</span></p>
 
         <dl class="dc-pdp-facts" id="facts">
           <div><dt data-ar="الفئة العمرية" data-en="Age group">الفئة العمرية</dt><dd class="dc-pdp-fact-num dc-num" id="factAge">18+</dd></div>
@@ -559,6 +560,9 @@ document.addEventListener('dc:ready', function () {
         ['deck-sky', 45, 'بطاقة', 'cards', 'بطاقات في ثلاث مراحل', 'Cards in three stages', 'نتعرّف، ثم نفهم، ثم نكتشف بمرح.', 'We get to know, then understand, then discover with a smile.'],
         ['booklet', 1, 'كتيّب', 'booklet', 'كتيّب التعليمات', 'Instructions booklet', 'طريقة اللعب خطوة بخطوة.', 'How to play, step by step.'],
         ['signs', 5, 'لافتات', 'signs', 'لافتات التصويت', 'Voting signs', 'ارفعها مع كل سؤال لتكشف كيف يراك الآخرون.', 'Raise them with each question to reveal how the others see you.'] ] },
+    sambousek: { id: 'sambousek', ar: 'سمبوسك ولا قطايف', en: 'Sambousek or Qatayef', price: 0, age: '', off: true, soon: true,
+      chipAr: 'لعبة جديدة', chipEn: 'New game', forAr: 'قيد الإعداد', forEn: 'In preparation', ground: ['sky', 'pink'], boxFill: 'sky', emblem: 'pastry', peek: 'cards', scatter: 'cards',
+      ledeAr: 'لعبة جديدة من دردشات.', ledeEn: 'A new game from Dardachat.', items: [] },
     ramadan: { id: 'ramadan', ar: 'صندوق رمضان للعائلة', en: 'Ramadan Family Box', price: 129, age: '', off: true,
       chipAr: 'موسمي · رمضان', chipEn: 'Seasonal · Ramadan', forAr: 'العائلة', forEn: 'Family', ground: ['sky', 'pink'], boxFill: 'sky', emblem: 'moon', peek: 'cards', scatter: 'cards', season: true,
       ledeAr: 'صُمم ليجمع العائلة خلال شهر رمضان حول لحظات من الدفء والذكريات والمعلومات الجميلة، بأجواء روحانية ومرحة بعد الإفطار.', ledeEn: 'Designed to gather the family during Ramadan around warm moments, memories and lovely knowledge, in a spiritual, fun atmosphere after iftar.',
@@ -597,6 +601,7 @@ document.addEventListener('dc:ready', function () {
     var s = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="var(--red)"/>';
     if (o.emblem === 'heart') s += H(cx - r * .62, cy - r * .62, r * 1.24, 'var(--on-red)');
     else if (o.emblem === 'dots') s += [[-.5, .18], [0, -.42], [.5, .18]].map(function (p) { return '<circle cx="' + (cx + p[0] * r) + '" cy="' + (cy + p[1] * r) + '" r="' + (r * .19) + '" fill="var(--on-red)"/>'; }).join('');
+    else if (o.emblem === 'pastry') s += '<path transform="translate(' + cx + ' ' + cy + ') scale(' + (r / 24) + ')" d="M-16 10l8-18 8 18z M4 10a8 8 0 0 1 16 0z" fill="var(--on-red)"/>';
     else s += '<path transform="translate(' + cx + ' ' + cy + ') scale(' + (r / 24) + ')" d="M4 -12 A13 13 0 1 0 12 8 A10.5 10.5 0 1 1 4 -12z" fill="var(--on-red)"/>';
     return s;
   }
@@ -642,6 +647,10 @@ document.addEventListener('dc:ready', function () {
   };
   function slideSet(o) {
     var g = o.ground, ph = PHOTOS[o.id];
+    if (o.soon) return [
+      { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
+      { cls: g[1], svg: ART.open(o), ar: 'الصندوق مفتوحًا', en: 'The box, open' }
+    ];
     if (ph) return ph.map(function (p, i) { return { cls: g[i % 2], img: 'assets/photos/' + p[0] + '.jpg', ar: p[1], en: p[2], fit: p[3] || '' }; });
     return [
       { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
@@ -864,7 +873,7 @@ document.addEventListener('dc:ready', function () {
     var a = xvState.active; buildExploded();
     xvState.active = -1; if (a >= 0 && !xv.classList.contains('is-packed')) setActive(a);
   }
-  mqWide.addEventListener('change', rebuildExploded);
+  mqWide.addEventListener('change', function () { if (!B.soon) rebuildExploded(); });
   function initExplode() {
     var rows = buildExploded();
     wireRows();
@@ -896,7 +905,7 @@ document.addEventListener('dc:ready', function () {
   function miniHTML(o) {
     var art = svgWrap(ART.closed(o));
     return '<li><a class="dc-pdp-mini" href="product.html?box=' + o.id + '"><span class="dc-pdp-mini__art dc-pdp-slide--' + o.ground[0] + '">' + art + '</span><span><b data-ar="' + esc(o.ar) + '" data-en="' + esc(o.en) + '">' + esc(o.ar) + '</b>' +
-      '<span data-ar="' + esc(o.chipAr) + '" data-en="' + esc(o.chipEn) + '">' + esc(o.chipAr) + '</span><span class="dc-num">' + fmt(o.price) + '</span></span></a></li>';
+      '<span data-ar="' + esc(o.chipAr) + '" data-en="' + esc(o.chipEn) + '">' + esc(o.chipAr) + '</span>' + (o.soon ? '<span data-ar="قريبًا" data-en="Coming soon">قريبًا</span>' : '<span class="dc-num">' + fmt(o.price) + '</span>') + '</span></a></li>';
   }
   function applyBox() {
     if (B.id !== 'love') {
@@ -909,18 +918,28 @@ document.addEventListener('dc:ready', function () {
       $('#factAge').textContent = B.age || '';
       if (!B.age) { $('#factAge').className = 'dc-pdp-fact-num'; setL($('#factAge'), 'كل الأعمار', 'All ages'); }
       setL($('#factFor'), B.forAr, B.forEn);
-      $('#unitPrice').innerHTML = '<small>₪</small>' + DC.num(B.price, 2);
+      if (!B.soon) $('#unitPrice').innerHTML = '<small>₪</small>' + DC.num(B.price, 2);
       $('#barName').setAttribute('data-ar', B.ar); $('#barName').setAttribute('data-en', B.en);
       setLabel($('#addBtn'), 'أضف ' + B.ar + ' إلى السلة', 'Add ' + B.en + ' to cart');
       $('#waLink').href = 'https://wa.me/972543992424?text=' + encodeURIComponent('مرحبا، عندي سؤال عن ' + B.ar);
-      rowsEl.innerHTML = B.items.map(rowHTML).join('');
-      $('#cards').innerHTML = SAMPLES[B.id].map(cardHTML).join('');
+      if (B.soon) {
+        /* coming soon: no price, no cart, no contents list, no sample cards; a quiet note and a notify button */
+        $('#facts').style.display = 'none'; $('.dc-pdp-priceline').style.display = 'none'; $('#inside').style.display = 'none'; $('#try').style.display = 'none';
+        var soonNote = $('#soonNote'); if (soonNote) soonNote.hidden = false;
+        var offNote = $('.dc-pdp-off__note'); if (offNote) offNote.style.display = 'none';
+        var nOff = $('#notifyBtn .n-off'), nOn = $('#notifyBtn .n-on');
+        nOff.setAttribute('data-ar', 'أبلغني عند توفره'); nOff.setAttribute('data-en', 'Notify me'); nOn.setAttribute('data-ar', 'سنبلغك عند توفره'); nOn.setAttribute('data-en', 'We will let you know');
+        var cod = $('.dc-pdp-notes li'); if (cod) cod.style.display = 'none';
+      } else {
+        rowsEl.innerHTML = B.items.map(rowHTML).join('');
+        $('#cards').innerHTML = SAMPLES[B.id].map(cardHTML).join('');
+      }
       if (B.off) $('#buy').classList.add('is-off');
       $('#bar').setAttribute('data-off', B.off ? '1' : '');
     }
     var others = Object.keys(BOXES).filter(function (k) { return k !== B.id; }).map(function (k) { return BOXES[k]; });
     $('#more').innerHTML = others.map(miniHTML).join('');
-    $('#barPrice').textContent = fmt(B.price);
+    if (!B.soon) $('#barPrice').textContent = fmt(B.price);
     DC.applyLang(document);
   }
 
@@ -929,6 +948,8 @@ document.addEventListener('dc:ready', function () {
   try { var saved = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); if (saved && typeof saved.total === 'number') cart = saved; } catch (e) {}
   shown = cart.total;
   var cartCount = $('#cartCount'), cartLink = $('#cartLink');
+  /* the shared cart drawer (_shared.js) edited the cart: re-read it so the next add starts from the right numbers */
+  document.addEventListener('dc:cart', function () { try { var s2 = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); cart = (s2 && typeof s2.total === 'number') ? s2 : { total: 0, lines: {} }; } catch (e) {} shown = cart.total; paintCart(); });
   function saveCart() { try { sessionStorage.setItem('dc-proto-cart', JSON.stringify(cart)); } catch (e) {} }
   function paintCart() {
     cartCount.textContent = String(shown); cartCount.hidden = shown === 0;
@@ -939,7 +960,7 @@ document.addEventListener('dc:ready', function () {
     var tot = $('#total'), b = $('#totalNum');
     tot.classList.toggle('is-on', qty > 1);
     b.textContent = fmt(B.price * qty);
-    $('#barPrice').textContent = fmt(B.price * qty);
+    if (!B.soon) $('#barPrice').textContent = fmt(B.price * qty);
   }
   $('#qMinus').addEventListener('click', function () { if (qty > 1) { qty--; paintQty(); if (!reduced()) DC.restart($('#totalNum'), 'is-tick'); } });
   $('#qPlus').addEventListener('click', function () { if (qty < 9) { qty++; paintQty(); if (!reduced()) DC.restart($('#totalNum'), 'is-tick'); } });
@@ -1025,9 +1046,9 @@ document.addEventListener('dc:ready', function () {
   /* ------------------------------------------------------------------ boot ------------------------------------------------------------------ */
   applyBox();
   buildGallery();
-  initExplode();
+  if (!B.soon) initExplode();
   paintCart(); paintQty();
-  document.addEventListener('dc:lang', function () { rebuildExploded(); paintCap(); paintCart(); paintSlides(0, false); paintQty(); });
+  document.addEventListener('dc:lang', function () { if (!B.soon) { rebuildExploded(); paintCap(); } paintCart(); paintSlides(0, false); paintQty(); });
 });
 </script>
 </body>

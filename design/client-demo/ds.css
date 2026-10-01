@@ -320,17 +320,90 @@ img, svg { max-width: 100%; }
   background: var(--surface); color: var(--warning); box-shadow: inset 0 0 0 1px currentColor; } /* client-demo: --surface (not -sunk) keeps warning text >= 4.5:1 (was 4.42) */
 /* Language swap: [data-ar]/[data-en] text is swapped by _shared.js; these hide whole blocks per language */
 html[lang="ar"] [data-only="en"], html[lang="en"] [data-only="ar"] { display: none !important; }
-/* Manual reduced-motion (toggle in _shared.js sets html[data-motion="reduce"]) mirrors the media query */
-html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-motion="reduce"] *::after {
-  animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
-html[data-motion="reduce"] .dc-brush.is-drawing path { stroke-dashoffset: 0; }
-/* Prototype toolbar injected by _shared.js (lang / theme / motion) */
-.dc-proto-bar { position: fixed; inset-block-end: var(--space-3); inset-inline-start: var(--space-3); z-index: 900; display: flex; gap: 4px; padding: 4px;
-  background: var(--surface); border-radius: var(--radius-pill); box-shadow: var(--shadow-lift); font: 600 12px/1 var(--font-sans); }
-.dc-proto-bar button { font: inherit; color: var(--ink); background: transparent; border: 0; border-radius: var(--radius-pill); padding: 8px 10px; cursor: pointer; min-height: 32px; }
-.dc-proto-bar button:hover { background: var(--surface-sunk); }
-.dc-proto-bar button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
-@media print { .dc-proto-bar { display: none; } }
+/* ---------- 4. Shell (round 2): header buttons, cart drawer, page transitions (all driven by _shared.js) ---------- */
+/* header theme + language buttons (icon buttons on the blue band) */
+.dc-hbtns { display: inline-flex; align-items: center; gap: 2px; flex: none; }
+.dc-hbtn { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: transparent;
+  color: var(--on-band); cursor: pointer; font: 700 14px/1 var(--font-sans); transition: background-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+.dc-hbtn:hover { background: rgb(255 255 255 / .14); }
+.dc-hbtn:active { transform: scale(.94); }
+.dc-hbtn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.dc-hbtn svg { width: 22px; height: 22px; }
+.dc-hbtn--theme .i-sun { display: none; }
+[data-theme="dark"] .dc-hbtn--theme .i-sun { display: block; }
+[data-theme="dark"] .dc-hbtn--theme .i-moon { display: none; }
+.dc-hbtn--lang span { display: block; border: 1.8px solid currentColor; border-radius: 999px; padding: 5px 7px; min-width: 18px; text-align: center; font-size: 12.5px; line-height: 1; }
+.dc-hbtn--lang[lang="ar"] span { font-family: var(--font-sans); font-size: 15px; padding: 4px 8px 5px; }
+header .dc-cart { color: var(--on-band); }
+header .dc-cart:hover { background: rgb(255 255 255 / .14); }
+header .dc-cart:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.dc-cart__count[hidden], .dc-cart__count.is-empty { display: none; }
+@media (max-width: 480px) { .dc-hbtn, .dc-cart { width: 40px; height: 40px; } .dc-hbtns { gap: 0; } }
+
+/* shared cart drawer */
+.shell-scrim { position: fixed; inset: 0; z-index: 2000; background: rgb(19 40 79 / .5); opacity: 0; visibility: hidden;
+  transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+.shell-scrim.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+.shell-drawer { position: fixed; inset-block: 0; inset-inline-end: 0; z-index: 2010; width: min(430px, 100vw); background: var(--cream); color: var(--ink);
+  display: grid; grid-template-rows: auto 1fr auto; box-shadow: var(--shadow-lift); transform: translateX(100%); visibility: hidden;
+  transition: transform var(--dur-slow) var(--ease-out), visibility 0s linear var(--dur-slow); }
+[dir="rtl"] .shell-drawer { transform: translateX(-100%); }
+.shell-drawer.is-open { transform: none; visibility: visible; transition-delay: 0s; }
+.shell-drawer__head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-3); }
+.shell-drawer__head h2 { flex: 1; margin: 0; font: var(--type-display-3); color: var(--ink); }
+.shell-x { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
+.shell-x:hover { background: var(--surface-sunk); }
+.shell-x svg { width: 22px; height: 22px; }
+.shell-drawer :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.shell-drawer__body { overflow-y: auto; padding: var(--space-2) var(--space-4) var(--space-4); overscroll-behavior: contain; }
+.shell-drawer__foot { display: grid; gap: var(--space-3); padding: var(--space-4); background: var(--surface); box-shadow: 0 -12px 24px -20px rgb(19 40 79 / .4); }
+.shell-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.shell-line { display: flex; gap: var(--space-3); padding: var(--space-3); background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); }
+.shell-thumb { flex: none; display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--sky); color: var(--red); }
+.shell-thumb[data-tone="pink"] { background: var(--pink); }
+.shell-thumb svg { width: 26px; height: 26px; }
+.shell-line__body { flex: 1; min-width: 0; }
+.shell-line__body h3 { margin: 0; font: 700 16px/1.4 var(--font-sans); color: var(--ink); }
+.shell-line__body p { margin: 2px 0 0; font: var(--type-small); color: var(--ink-soft); }
+.shell-line__foot { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin-block-start: var(--space-3); }
+.shell-qty { display: inline-flex; align-items: center; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.shell-qty button { display: inline-grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
+.shell-qty button:hover:not([disabled]) { background: var(--surface-sunk); }
+.shell-qty button[disabled] { opacity: .4; cursor: not-allowed; }
+.shell-qty svg { width: 18px; height: 18px; }
+.shell-qty output { min-width: 24px; text-align: center; font: 700 15px/1 var(--font-sans); }
+.shell-price { margin-inline-start: auto; font: 700 16px/1 var(--font-sans); }
+.shell-rm, .shell-link { border: 0; background: transparent; color: var(--blue); font: 600 14px/1 var(--font-sans); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 10px 4px; }
+.shell-total { display: flex; align-items: baseline; justify-content: space-between; font: 600 17px/1.3 var(--font-sans); }
+.shell-total span { font-size: 20px; font-weight: 700; }
+.shell-fine { margin: 0; font: var(--type-small); color: var(--ink-soft); }
+.shell-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font: var(--type-small); color: var(--ink-soft); }
+.shell-empty { margin: var(--space-6) 0; text-align: center; color: var(--ink-soft); font: var(--type-body-lg); }
+.shell-arrow { width: 20px; height: 20px; }
+[dir="rtl"] .shell-arrow { transform: scaleX(-1); }
+.shell-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* page transitions: a short brand-blue veil with a card flip and the heart drawing in.
+   Arrival: the veil is already there at first paint (pure CSS) and fades away; departure: _shared.js adds .shell-veil.is-on. */
+html::after { content: ""; position: fixed; inset: 0; z-index: 3000; background: var(--band); pointer-events: none; animation: shell-arrive 300ms var(--ease-out) both; }
+@keyframes shell-arrive { 0%, 25% { opacity: 1; } 100% { opacity: 0; } }
+.shell-veil { position: fixed; inset: 0; z-index: 3001; display: grid; place-items: center; background: var(--band); color: var(--on-band); opacity: 0; pointer-events: none;
+  transition: opacity 240ms var(--ease-out); }
+.shell-veil.is-on { opacity: 1; transition-duration: 110ms; pointer-events: auto; }
+.shell-veil__card { display: grid; place-items: center; width: 64px; height: 82px; border-radius: var(--radius-md); border: 2px solid rgb(255 255 255 / .55); background: rgb(255 255 255 / .1);
+  transform: perspective(500px) rotateY(0deg); }
+.shell-veil__card svg { width: 30px; height: 30px; }
+.shell-veil__card path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.shell-veil.is-on .shell-veil__card { animation: shell-flip 300ms var(--ease-in-out) both; }
+.shell-veil.is-on .shell-veil__card path { animation: shell-heart 260ms var(--ease-in-out) 70ms both; }
+@keyframes shell-flip { from { transform: perspective(500px) rotateY(-90deg); } to { transform: perspective(500px) rotateY(0deg); } }
+@keyframes shell-heart { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  html::after { animation-duration: 120ms; animation-name: shell-arrive-quick; }
+  @keyframes shell-arrive-quick { from { opacity: 1; } to { opacity: 0; } }
+  .shell-drawer, .shell-scrim { transition-duration: 1ms; }
+}
+@media print { html::after, .shell-veil, .shell-drawer, .shell-scrim, .dc-hbtns { display: none !important; } }
 
 /* Client-demo photo crop (supervisor, 2026-10-01): the Ramadan "game" photo has the cards at the bottom and lights at the top;
    anchor the cover crop low so the cards stay in frame in square/landscape slots (shop card, product slide at 390). */

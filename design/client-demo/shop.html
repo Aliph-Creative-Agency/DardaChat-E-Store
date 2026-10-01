@@ -249,7 +249,7 @@
       </nav>
       <div class="dc-shop-actions">
         <a class="dc-cart" href="cart-checkout.html" id="cartLink" aria-label="السلة">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.5h2.4l2.2 10.6a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L20.5 7.5H5.7"/><circle cx="9.5" cy="19.3" r="1.4"/><circle cx="17" cy="19.3" r="1.4"/></svg>
           <span class="dc-cart__count dc-num" id="cartCount">0</span>
         </a>
         <button class="dc-shop-menu" type="button" id="menuBtn" aria-expanded="false" aria-controls="dc-nav" data-ar-label="القائمة" data-en-label="Menu" aria-label="القائمة">
@@ -444,6 +444,33 @@
         </article>
       </li>
 
+      <!-- 5. سمبوسك ولا قطايف (coming soon, not in the cart catalog) -->
+      <li class="dc-shop-item" data-id="sambousek" data-audience="none" data-age="tbd" data-season="soon" data-name-ar="سمبوسك ولا قطايف" data-name-en="Sambousek or Qatayef">
+        <article class="dc-product is-off">
+          <div class="dc-product__art dc-product__art--sky">
+            <svg viewBox="0 0 200 180" aria-hidden="true">
+                <g class="dc-product__peek"><path d="M52 66l20-30 20 30z" fill="var(--surface)" transform="rotate(-8 72 56)"/><path d="M106 68a22 22 0 0 1 44 0z" fill="var(--pink)" transform="rotate(8 128 58)"/></g>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
+                <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+                <circle cx="100" cy="124" r="22" fill="var(--red)"/>
+                <path d="M80 133l10-19 10 19z" fill="var(--on-red)"/><path d="M103 133a9.5 9.5 0 0 1 19 0z" fill="var(--on-red)"/>
+                <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
+              </svg>
+          </div>
+          <div class="dc-product__body">
+            <div class="dc-row"><span class="dc-chip" data-ar="لعبة جديدة" data-en="New game">لعبة جديدة</span></div>
+            <h3 class="dc-product__name"><a class="dc-shop-stretch" href="product.html?box=sambousek" data-ar="سمبوسك ولا قطايف" data-en="Sambousek or Qatayef">سمبوسك ولا قطايف</a></h3>
+            <p class="dc-product__tempnote"><span class="dc-ph" data-ar="قريبًا · التفاصيل قيد الإعداد" data-en="Coming soon · details in preparation">قريبًا · التفاصيل قيد الإعداد</span></p>
+            <p class="dc-product__meta" data-ar="لعبة جديدة من دردشات." data-en="A new game from Dardachat.">لعبة جديدة من دردشات.</p>
+            <div class="dc-product__foot">
+              <button class="dc-btn dc-btn--outline dc-btn--sm dc-shop-notify" type="button" aria-pressed="false" data-notify data-ar-label="أبلغني عند توفر سمبوسك ولا قطايف" data-en-label="Notify me when Sambousek or Qatayef is available" aria-label="أبلغني عند توفر سمبوسك ولا قطايف">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                <span class="n-off" data-ar="أبلغني عند توفره" data-en="Notify me">أبلغني عند توفره</span><span class="n-on" data-ar="تم تسجيلك" data-en="On the list">تم تسجيلك</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </li>
       <!-- empty state -->
       <li class="dc-shop-empty" id="empty" hidden>
         <div class="dc-qcard" id="emptyCard" aria-hidden="true"><span class="dc-qcard__inner">
@@ -519,6 +546,8 @@ document.addEventListener('dc:ready', function () {
   var cart = { total: 0, lines: {} }, shown = 0;
   try { var saved = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); if (saved && typeof saved.total === 'number') cart = saved; } catch (e) {}
   shown = cart.total;
+  /* the shared cart drawer (_shared.js) edited the cart: re-read it so the next add starts from the right numbers */
+  document.addEventListener('dc:cart', function () { try { var s2 = JSON.parse(sessionStorage.getItem('dc-proto-cart') || 'null'); cart = (s2 && typeof s2.total === 'number') ? s2 : { total: 0, lines: {} }; } catch (e) {} shown = cart.total; paintCart(); });
   function saveCart() { try { sessionStorage.setItem('dc-proto-cart', JSON.stringify(cart)); } catch (e) {} }
   function paintCart() {
     cartCount.textContent = String(shown);
