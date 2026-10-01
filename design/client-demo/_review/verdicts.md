@@ -27,3 +27,13 @@
 ## Final rerun
 
 00–05, 10 and 11 at 390/1440 × ar/en, toolbar hidden. The results are in the supervisor's final report.
+
+# Copy pass (against _review/VOICE.md)
+
+## Copy B (cart-checkout, services): APPROVE
+
+- Scripted audit of every `data-ar`/`data-en` string and every JS `t('ar','en')` pair in both pages: no exclamation marks, no emoji, no hype or urgency words, no «ورش» (always «ورشات»), no «شريك الحياة», no «ابتداءً», no «حضرتك», no colloquial UI words (شو/بدك/لما/عندك/راسلنا…), and the brand is always spelled "Dardachat". The initial Arabic text matches `data-ar` everywhere (0 mismatches).
+- Facts are unchanged against `design/prototypes/`: every ₪ price and every `wa.me/972543992424` link is identical. Duration «ساعة واحدة»→«ساعة» and «للمجموعة الكاملة»→«للمجموعة كاملة» follow the client's spelling.
+- Voice matches §2: services use the plural (تواصلوا، تصفحوا), checkout uses the singular and MSA (هل لديك رمز خصم؟، أبلغني عند عودته), and specs use label lines (التكلفة:، المدة الزمنية). The client's words are used: توت باج، تنسيق الورود، تشكيل الصلصال، الأزواج والشركاء، صناديق الألعاب. The fixed CTA «احجز عبر واتساب» is kept.
+- Minor, accepted: «التكلفة: من» keeps a "from" sense where the price is a minimum. It is factual and not salesy, so no change.
+- No revise round needed.
