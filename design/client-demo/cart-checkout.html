@@ -336,8 +336,8 @@
     <section id="viewShelf" class="dc-co-shelf" aria-labelledby="shelfTitle">
       <div class="dc-co-shelf__intro">
         <div class="dc-co-eyebrow"><span class="dc-ph" data-ar="عرض مختصر لتجربة السلة" data-en="Short shelf to try the cart">عرض مختصر لتجربة السلة</span></div>
-        <h1 class="dc-co-title" id="shelfTitle" data-ar="صناديق دردشات" data-en="Dardachat boxes">صناديق دردشات</h1>
-        <p class="dc-co-lede" data-ar="أضف صندوقاً إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات." data-en="Add a box to your cart, then open it and finish your order in four steps.">أضف صندوقاً إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات.</p>
+        <h1 class="dc-co-title" id="shelfTitle" data-ar="صناديق الألعاب" data-en="Game boxes">صناديق الألعاب</h1>
+        <p class="dc-co-lede" data-ar="أضف صندوقًا من صناديق الألعاب إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات." data-en="Add a game box to your cart, then open it and finish your order in four steps.">أضف صندوقًا من صناديق الألعاب إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات.</p>
         <div class="dc-co-shelf__cta">
           <button class="dc-btn" type="button" data-act="open-cart"><span data-ar="افتح السلة" data-en="Open cart">افتح السلة</span></button>
           <a class="dc-btn dc-btn--outline" href="#checkout"><span data-ar="اذهب إلى الدفع" data-en="Go to checkout">اذهب إلى الدفع</span></a>
@@ -369,7 +369,7 @@
 
           <!-- Step 2 · address (6 fields) -->
           <form class="dc-co-panel" id="p1" data-step="1" hidden novalidate autocomplete="on">
-            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="أين نوصّل الصندوق؟" data-en="Where should we deliver?">أين نوصّل الصندوق؟</h2>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="عنوان التوصيل" data-en="Delivery address">عنوان التوصيل</h2>
               <p data-ar="اكتب العنوان كما يعرفه المندوب. لا نحتاج رمزاً بريدياً." data-en="Write the address the way the courier will know it. No postcode needed.">اكتب العنوان كما يعرفه المندوب. لا نحتاج رمزاً بريدياً.</p></div>
             <div class="dc-co-form">
               <div class="dc-field" data-f="name"><label for="f-name" data-ar="الاسم الكامل" data-en="Full name">الاسم الكامل</label>
@@ -394,7 +394,7 @@
 
           <!-- Step 3 · delivery zone -->
           <form class="dc-co-panel" id="p2" data-step="2" hidden novalidate>
-            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="كيف يوصلك الصندوق؟" data-en="How does your box get to you?">كيف يوصلك الصندوق؟</h2>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="التوصيل إلى منطقتك" data-en="Delivery to your area">التوصيل إلى منطقتك</h2>
               <p data-ar="نوصّل عبر شركة شحن. السعر والموعد يعتمدان على منطقتك." data-en="We deliver through a courier. Price and timing depend on your area.">نوصّل عبر شركة شحن. السعر والموعد يعتمدان على منطقتك.</p>
               <p><span class="dc-ph" data-ar="أسعار ومواعيد تجريبية" data-en="Sample prices and timings">أسعار ومواعيد تجريبية</span></p></div>
             <p class="dc-co-suggest" id="zoneSuggest" hidden></p>
@@ -408,7 +408,7 @@
 
           <!-- Step 4 · payment -->
           <form class="dc-co-panel" id="p3" data-step="3" hidden novalidate>
-            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="كيف تدفع؟" data-en="How would you like to pay?">كيف تدفع؟</h2>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="الدفع وتأكيد الطلب" data-en="Payment and confirmation">الدفع وتأكيد الطلب</h2>
               <p data-ar="لا نطلب بيانات بطاقتك هنا. الدفع الإلكتروني يتم في صفحة مزوّد الدفع." data-en="We never ask for your card details here. Online payment happens on the payment provider's page.">لا نطلب بيانات بطاقتك هنا. الدفع الإلكتروني يتم في صفحة مزوّد الدفع.</p></div>
             <fieldset class="dc-co-opts" id="payOpts"><legend data-ar="طريقة الدفع" data-en="Payment method">طريقة الدفع</legend></fieldset>
             <p class="dc-co-paynote" id="payNote" aria-live="polite"></p>
@@ -503,9 +503,9 @@
     /* ---------- data (prices are placeholders, DESIGN.md §6) ---------- */
     const PRODUCTS = [
       { id: 'chat', ar: 'صندوق دردشات', en: 'Dardachat Box', price: 149, tone: 'sky', age: ['+12', '12+'], aud: ['للجمعات العائلية والأصدقاء', 'Family and friends'], meta: ['50 بطاقة أسئلة · 25 بطاقة تحديات · 10 قطع', '50 question cards · 25 challenge cards · 10 props'] },
-      { id: 'who', ar: 'صندوق مين فينا', en: 'Who Among Us Box', price: 119, tone: 'pink', age: ['+12', '12+'], aud: ['للعائلة والأصدقاء', 'Family and friends'], meta: ['45 بطاقة في 3 مراحل · بروشور · 5 لافتات تصويت', '45 cards in 3 stages · booklet · 5 voting signs'] },
-      { id: 'ramadan', ar: 'صندوق رمضان للعائلة', en: 'Ramadan Family Box', price: 129, tone: 'sky', age: ['لكل الأعمار', 'All ages'], season: true, off: true, aud: ['موسمي · رمضان', 'Seasonal · Ramadan'], meta: ['45 بطاقة: أسئلة دينية وألغاز وذكريات رمضان', '45 cards: religious questions, riddles and Ramadan memories'] },
-      { id: 'love', ar: 'صندوق دردشات مع الحب', en: 'Dardachat with Love Box', price: 169, tone: 'pink', age: ['+18', '18+'], aud: ['للأزواج', 'For couples'], meta: ['63 سؤالاً · 16 تحدياً · 20 قلباً كريستالياً', '63 questions · 16 duo challenges · 20 crystal hearts'] }
+      { id: 'who', ar: 'صندوق مين فينا', en: 'Who Among Us Box', price: 119, tone: 'pink', age: ['+12', '12+'], aud: ['للعائلة والأصدقاء', 'Family and friends'], meta: ['45 بطاقة في 3 مراحل · كتيب تعليمات · 5 لافتات تصويت', '45 cards in 3 stages · instructions booklet · 5 voting signs'] },
+      { id: 'ramadan', ar: 'صندوق رمضان للعائلة', en: 'Ramadan Family Box', price: 129, tone: 'sky', age: ['لكل الأعمار', 'All ages'], season: true, off: true, aud: ['موسمي · رمضان', 'Seasonal · Ramadan'], meta: ['45 بطاقة: أسئلة دينية، ألغاز، وذكريات رمضان', '45 cards: religious questions, riddles and Ramadan memories'] },
+      { id: 'love', ar: 'صندوق دردشات مع الحب', en: 'Dardachat with Love Box', price: 169, tone: 'pink', age: ['+18', '18+'], aud: ['للأزواج والشركاء', 'For couples and partners'], meta: ['63 سؤالاً · 16 تحدياً · 20 قلباً كريستالياً', '63 questions · 16 duo challenges · 20 crystal hearts'] }
     ];
     const P = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
     const ZONES = [
@@ -572,7 +572,7 @@
         const chips = '<div class="dc-row" style="gap:6px"><span class="dc-chip dc-chip--age">' + t(p.age[0], p.age[1]) + '</span>' + (p.season ? '<span class="dc-chip dc-chip--season">' + t(p.aud[0], p.aud[1]) + '</span>' : '<span class="dc-chip">' + t(p.aud[0], p.aud[1]) + '</span>') + '</div>';
         const price = '<div class="dc-co-row__price"><div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>' + DC.num(p.price) + '</span><span class="dc-price__vat">' + t('شامل ضريبة القيمة المضافة', 'Incl. VAT') + '</span></div><span class="dc-ph">' + t('سعر تجريبي', 'Sample price') + '</span></div>';
         const act = p.off
-          ? '<p class="dc-product__note" style="margin:0">' + t('يرجع مع بداية رمضان · غير متوفر الآن', 'Back when Ramadan starts · not available now') + '</p><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-act="notify">' + t('نبّهني لما يرجع', 'Notify me when it is back') + '</button>'
+          ? '<p class="dc-product__note" style="margin:0">' + t('يعود مع بداية رمضان · غير متوفر الآن', 'Back when Ramadan starts · not available now') + '</p><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-act="notify">' + t('أبلغني عند عودته', 'Notify me when it is back') + '</button>'
           : '<span class="dc-co-incart" data-incart="' + p.id + '" aria-live="polite"></span><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-pop data-act="add" data-id="' + p.id + '">' + t('أضف إلى السلة', 'Add to cart') + I.heart + '</button>';
         return '<li class="dc-co-row' + (p.off ? ' is-off' : '') + '">' + thumb(p) + '<div class="dc-co-row__body"><h3 class="dc-co-row__name">' + name(p) + '</h3>' + chips + '<p class="dc-co-row__meta">' + t(p.meta[0], p.meta[1]) + '</p></div><div class="dc-co-row__foot">' + price + '<div style="display:grid;gap:8px;justify-items:end">' + act + '</div></div></li>';
       }).join('');
@@ -600,14 +600,14 @@
     /* ---------- drawer ---------- */
     function emptyCard() {
       return '<div class="dc-co-empty"><button class="dc-qcard" type="button" aria-pressed="false" aria-label="' + t('بطاقة، اضغط لتقلبها', 'Card, press to flip it') + '"><span class="dc-qcard__inner"><span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-qcard__disc">' + t('؟', '?') + '</span></span><span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">' + t('دردشات', 'Dardachat') + '</span><span class="dc-qcard__q">' + t('مفتاح المعرفة هو السؤال', 'The key to knowing is the question') + '</span></span></span></button>' +
-        '<p>' + t('السلة فارغة. اقلب البطاقة، ثم اختر صندوقاً يفتح لكم الحديث.', 'Your cart is empty. Flip the card, then pick a box that gets the talk going.') + '</p></div>';
+        '<p>' + t('السلة فارغة. اقلب البطاقة، ثم اختر صندوقًا من صناديق الألعاب.', 'Your cart is empty. Flip the card, then pick one of the game boxes.') + '</p></div>';
     }
     function renderDrawer() {
       const L = lines(), T = totals(), body = $('#drawerBody'), foot = $('#drawerFoot');
       $('#drawerCount').innerHTML = t(count() + ' منتجات', count() + ' items');
       if (!L.length) {
         body.innerHTML = emptyCard();
-        foot.innerHTML = '<div class="dc-co-undo" role="status">' + undoHtml() + '</div>' + (S.view === 'done' ? '<a class="dc-btn" href="shop.html" data-k="d:shop" style="justify-content:center">' : '<button class="dc-btn" type="button" data-act="close-cart" data-k="d:shop" style="justify-content:center">') + t('تصفّح الصناديق', 'Browse the boxes') + (S.view === 'done' ? '</a>' : '</button>');
+        foot.innerHTML = '<div class="dc-co-undo" role="status">' + undoHtml() + '</div>' + (S.view === 'done' ? '<a class="dc-btn" href="shop.html" data-k="d:shop" style="justify-content:center">' : '<button class="dc-btn" type="button" data-act="close-cart" data-k="d:shop" style="justify-content:center">') + t('تصفّح صناديق الألعاب', 'Browse the game boxes') + (S.view === 'done' ? '</a>' : '</button>');
         return;
       }
       body.innerHTML = '<ul class="dc-co-drawer__list" id="drawerList">' + L.map(l =>
@@ -698,7 +698,7 @@
       const box = $('#promoBox'); if (!box) return;
       const open = box.dataset.open === '1', val = keepValue != null ? keepValue : '';
       if (S.promo) { box.innerHTML = '<div class="dc-co-promo-ok">' + I.check + '<span>' + t('تم تطبيق الرمز ' + PROMO.code + ': خصم 10%', 'Code ' + PROMO.code + ' applied: 10% off') + '</span><button class="dc-co-linkbtn" type="button" data-act="promo-remove" data-k="l:promo-rm">' + t('إزالة', 'Remove') + '</button></div>'; return; }
-      box.innerHTML = '<button class="dc-btn dc-btn--ghost dc-btn--sm" type="button" data-act="promo-toggle" data-k="l:promo-t" aria-expanded="' + open + '" aria-controls="promoRow">' + t('عندك رمز خصم؟', 'Have a discount code?') + '</button>' +
+      box.innerHTML = '<button class="dc-btn dc-btn--ghost dc-btn--sm" type="button" data-act="promo-toggle" data-k="l:promo-t" aria-expanded="' + open + '" aria-controls="promoRow">' + t('هل لديك رمز خصم؟', 'Have a discount code?') + '</button>' +
         '<div class="dc-co-promo-row" id="promoRow" ' + (open ? '' : 'hidden') + ' style="margin-block-start:12px"><div class="dc-field' + (err ? ' dc-field--error' : '') + '"><label for="promoIn">' + t('رمز الخصم', 'Discount code') + '</label><input id="promoIn" autocomplete="off" dir="ltr" value="' + val.replace(/"/g, '') + '" aria-describedby="promoHelp"' + (err ? ' aria-invalid="true"' : '') + '><span class="dc-field__help" id="promoHelp">' + (err ? t('الرمز غير صالح. تأكد من كتابته كما وصلك.', 'This code is not valid. Check it is typed as you received it.') : t('رمز تجريبي: SAMPLE10', 'Sample code: SAMPLE10')) + '</span></div><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-act="promo-apply" data-k="l:promo-a">' + t('تطبيق', 'Apply') + '</button></div>';
     }
 
@@ -714,7 +714,7 @@
         '<div ' + (T.zone ? '' : 'class="is-pending"') + '><dt>' + t('التوصيل', 'Delivery') + '</dt><dd>' + (T.zone ? money(T.del) : t('يُحسب حسب المنطقة', 'Set by your area')) + '</dd></div>' +
         '<div class="is-total"><dt>' + t('الإجمالي', 'Total') + '</dt><dd id="sumTotal">' + money(T.total) + '</dd></div>' +
         '<div class="is-of"><dt>' + t('منه ضريبة القيمة المضافة', 'of which VAT') + ' <span class="dc-ph">' + t('16% تجريبي', '16% sample') + '</span></dt><dd>' + money(T.vat) + '</dd></div></dl>' +
-        '<p class="dc-co-help">' + I.chat + '<span>' + t('محتاج مساعدة؟ ', 'Need help? ') + '<a href="https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحباً، عندي سؤال عن طلبي في دردشات', 'Hello, I have a question about my Dardachat order')) + '" target="_blank" rel="noopener">' + t('راسلنا على واتساب', 'Message us on WhatsApp') + '</a></span></p>';
+        '<p class="dc-co-help">' + I.chat + '<span>' + t('تحتاج إلى مساعدة؟ ', 'Need help? ') + '<a href="https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحبًا دردشات، لديّ سؤال عن طلبي', 'Hello, I have a question about my Dardachat order')) + '" target="_blank" rel="noopener">' + t('تواصل معنا على واتساب', 'Message us on WhatsApp') + '</a></span></p>';
       if (lastTotal !== null && lastTotal !== T.total && !DC.reducedMotion()) DC.restart($('#sumTotal'), 'dc-co-tick');
       lastTotal = T.total;
     }
@@ -832,7 +832,7 @@
       if (i < 0) { showView('shelf'); return; }
       const dir = S.view === 'checkout' ? (i >= S.step ? 1 : -1) : 0;
       showView('checkout'); renderLines(); renderSummary();
-      if (!count()) { if (h !== 'checkout') history.replaceState(null, '', location.pathname + location.search + '#checkout'); $$('form[data-step]').forEach(f => f.hidden = true); $('#steps').innerHTML = ''; const e = $('#coEmpty'); e.hidden = false; e.innerHTML = emptyCard().replace('<div class="dc-co-empty">', '').replace(/<\/div>$/, '') + '<a class="dc-btn" href="#">' + t('تصفّح الصناديق', 'Browse the boxes') + '</a>'; return; }
+      if (!count()) { if (h !== 'checkout') history.replaceState(null, '', location.pathname + location.search + '#checkout'); $$('form[data-step]').forEach(f => f.hidden = true); $('#steps').innerHTML = ''; const e = $('#coEmpty'); e.hidden = false; e.innerHTML = emptyCard().replace('<div class="dc-co-empty">', '').replace(/<\/div>$/, '') + '<a class="dc-btn" href="#">' + t('تصفّح صناديق الألعاب', 'Browse the game boxes') + '</a>'; return; }
       const ok = Math.min(i, maxAllowed());
       if (ok !== i) { if (ok === 1) checkAddress(true); location.replace('#' + HASH[ok]); }
       showStep(ok, dir);
@@ -871,7 +871,7 @@
     function renderDone() {
       const o = S.order; if (!o) return;
       const m = METHODS.find(m => m.id === o.method), cod = o.method === 'cod';
-      const wa = 'https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحباً، عندي سؤال عن طلبي رقم ' + o.ref, 'Hello, I have a question about order ' + o.ref));
+      const wa = 'https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحبًا دردشات، لديّ سؤال عن طلبي رقم ' + o.ref, 'Hello, I have a question about order ' + o.ref));
       $('#doneBody').innerHTML =
         '<div class="dc-co-rise" style="--d:0s"><span class="dc-chip dc-chip--pink">' + t('تم استلام الطلب', 'Order received') + '</span>' +
         '<h1 class="dc-co-title" id="doneTitle" tabindex="-1">' + t('شكراً لك، وصلنا طلبك', 'Thank you, we have your order') + '</h1>' +
@@ -882,9 +882,9 @@
         '<div><dt>' + t('التوصيل إلى', 'Delivering to') + '</dt><dd>' + o.name.replace(/</g, '') + '<br><span style="font-weight:400">' + o.address.replace(/</g, '') + '</span></dd></div>' +
         '<div><dt>' + t('الوصول المتوقع', 'Expected') + '</dt><dd>' + t(o.zone.win[0], o.zone.win[1]) + ' <span class="dc-ph">' + t('تجريبي', 'sample') + '</span></dd></div>' +
         '<div><dt>' + t('الدفع', 'Payment') + '</dt><dd>' + t(m.ar, m.en) + (cod ? ' · ' + t('جهّز ', 'have ') + money(o.T.total) + t(' نقداً', ' in cash') : ' · ' + money(o.T.total)) + '</dd></div></dl>' +
-        '<section class="dc-co-first dc-co-rise" style="--d:.16s" aria-labelledby="firstH"><h2 id="firstH">' + t('بطاقتك الأولى', 'Your first card') + '</h2><p>' + t('اقلب بطاقة لتقرأ سؤالاً، وابدأ الدردشة قبل أن يصل الصندوق. ', 'Flip a card to read a question, and start talking before the box arrives. ') + '<span class="dc-ph">' + t('أسئلة تجريبية', 'Sample questions') + '</span></p>' +
+        '<section class="dc-co-first dc-co-rise" style="--d:.16s" aria-labelledby="firstH"><h2 id="firstH">' + t('بطاقتك الأولى', 'Your first card') + '</h2><p>' + t('اقلب بطاقة لتقرأ سؤالًا، وابدأ الحوار قبل أن يصل الصندوق. ', 'Flip a card to read a question, and start talking before the box arrives. ') + '<span class="dc-ph">' + t('أسئلة تجريبية', 'Sample questions') + '</span></p>' +
         '<div class="dc-co-cards dc-deal">' + SAMPLE_CARDS.map((c, i) => '<button class="dc-qcard" type="button" aria-pressed="false" aria-label="' + t('بطاقة ' + (i + 1) + '، اضغط لتقلبها', 'Card ' + (i + 1) + ', press to flip it') + '"><span class="dc-qcard__inner"><span class="dc-qcard__face dc-qcard__front ' + (i % 2 ? '' : 'dc-qcard__front--pink') + '"><span class="dc-qcard__disc">' + t('؟', '?') + '</span></span><span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">' + t('دردشات', 'Dardachat') + '</span><span class="dc-qcard__q">' + t(c[0], c[1]) + '</span></span></span></button>').join('') + '</div></section>' +
-        '<div class="dc-row dc-co-rise" style="--d:.24s"><a class="dc-btn" href="shop.html"><span>' + t('تابع التسوق', 'Keep shopping') + '</span></a><a class="dc-btn dc-btn--outline" href="' + wa + '" target="_blank" rel="noopener"><span>' + t('راسلنا على واتساب', 'Message us on WhatsApp') + '</span></a></div>';
+        '<div class="dc-row dc-co-rise" style="--d:.24s"><a class="dc-btn" href="shop.html"><span>' + t('تابع التسوق', 'Keep shopping') + '</span></a><a class="dc-btn dc-btn--outline" href="' + wa + '" target="_blank" rel="noopener"><span>' + t('تواصل معنا على واتساب', 'Message us on WhatsApp') + '</span></a></div>';
       const st = $('#stage'); st.classList.remove('is-playing'); void st.offsetWidth; st.classList.add('is-playing');
       $('.dc-co-box', st).classList.add('is-playing');
       DC.draw($('#stageBrush'));
