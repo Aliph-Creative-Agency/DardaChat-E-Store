@@ -1,0 +1,1469 @@
+
+> web@0.1.0 dev
+> node scripts/next.mjs dev
+
+▲ Next.js 16.3.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.16:3000
+- Environments: .env.local
+✓ Ready in 79s
+✓ Running next.config.ts took 56s
+⚠ Slow filesystem detected. The benchmark took 1469ms. If \\?\D:\Personal\Projects\DardaChat-E-store\web\.next\dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+○ Compiling instrumentation Node.js ...
+○ Compiling instrumentation Edge ...
+○ Compiling proxy ...
+[jobs] scheduler started (1 jobs, tick 5000 ms, owner DESKTOP-PVK04JN:20584:80756d8a)
+- Experiments (use with caution):
+  ✓ globalNotFound
+
+○ Compiling /[locale] ...
+✓ Finished writing to filesystem cache in 19.7s
+ GET /ar 200 in 5.0min (next.js: 2.7min, proxy.ts: 7.5s, generate-params: 2.2min, application-code: 397ms)
+ GET /ar 200 in 253ms (next.js: 155ms, proxy.ts: 9ms, generate-params: 7ms, application-code: 82ms)
+ GET /ar 200 in 80ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 70ms)
+ GET /ar 200 in 102ms (next.js: 8ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 88ms)
+ GET /en 200 in 90ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 80ms)
+○ Compiling /[locale]/sign-in ...
+ GET /ar/sign-in 200 in 10.1s (next.js: 6.7s, proxy.ts: 6ms, generate-params: 3.3s, application-code: 104ms)
+ GET /ar/sign-up 200 in 1509ms (next.js: 508ms, proxy.ts: 4ms, generate-params: 901ms, application-code: 96ms)
+ GET /ar/account 307 in 1574ms (next.js: 934ms, proxy.ts: 4ms, generate-params: 540ms, application-code: 96ms)
+ GET /ar/forgot-password 200 in 1041ms (next.js: 403ms, proxy.ts: 3ms, generate-params: 541ms, application-code: 94ms)
+ GET /ar/reset-password 200 in 1524ms (next.js: 313ms, proxy.ts: 4ms, generate-params: 540ms, application-code: 667ms)
+ GET /ar/nope 404 in 1086ms (next.js: 736ms, proxy.ts: 3ms, application-code: 347ms)
+ GET /ar/staff/sign-in 200 in 2.0s (next.js: 1300ms, proxy.ts: 3ms, generate-params: 677ms, application-code: 70ms)
+○ Compiling /[locale]/staff/two-factor ...
+ GET /ar/staff/two-factor 307 in 13.3s (next.js: 12.1s, proxy.ts: 3ms, generate-params: 1098ms, application-code: 130ms)
+ GET /ar/staff/two-factor/setup 307 in 1165ms (next.js: 480ms, proxy.ts: 6ms, generate-params: 599ms, application-code: 80ms)
+ GET /ar/staff/change-password 307 in 2.5s (next.js: 1770ms, proxy.ts: 3ms, generate-params: 603ms, application-code: 81ms)
+ GET /ar/staff/forbidden 200 in 1161ms (next.js: 474ms, proxy.ts: 3ms, generate-params: 634ms, application-code: 49ms)
+ GET /ar/staff/forgot-password 200 in 2.5s (next.js: 2.0s, proxy.ts: 3ms, generate-params: 497ms, application-code: 45ms)
+ GET /ar/staff/reset-password 200 in 2.1s (next.js: 1144ms, proxy.ts: 3ms, generate-params: 528ms, application-code: 468ms)
+ GET /ar/admin 307 in 4.3s (next.js: 3.6s, proxy.ts: 3ms, generate-params: 569ms, application-code: 96ms)
+ GET /ar/admin/orders 307 in 2.0s (next.js: 1930ms, proxy.ts: 9ms, application-code: 75ms)
+ GET /en/admin/users 307 in 1846ms (next.js: 727ms, proxy.ts: 3ms, generate-params: 627ms, application-code: 488ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 2.3s (next.js: 2.2s, proxy.ts: 4ms, application-code: 76ms)
+○ Compiling /[locale]/dev/ui ...
+ GET /ar/dev/ui 200 in 10.9s (next.js: 9.2s, proxy.ts: 2ms, generate-params: 1194ms, application-code: 455ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 3.8s (next.js: 2.1s, proxy.ts: 3ms, generate-params: 420ms, application-code: 1219ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 72ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 56ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 78ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 71ms)
+ GET /ar/dev/outbox 200 in 3.0s (next.js: 2.3s, proxy.ts: 3ms, generate-params: 447ms, application-code: 220ms)
+○ Compiling /[locale]/dev/services ...
+ GET /ar/dev/services 200 in 10.3s (next.js: 8.7s, proxy.ts: 2ms, generate-params: 499ms, application-code: 1088ms)
+○ Compiling /api/auth/customer/otp/request ...
+ GET /api/auth/customer/otp/request 405 in 16.9s (next.js: 16.8s, application-code: 38ms)
+ GET /api/auth/customer/otp/verify 405 in 330ms (next.js: 324ms, application-code: 7ms)
+ GET /api/auth/customer/password/forgot 405 in 403ms (next.js: 397ms, application-code: 6ms)
+ GET /api/auth/customer/password/reset 405 in 439ms (next.js: 433ms, application-code: 6ms)
+ GET /api/auth/customer/register 405 in 1024ms (next.js: 1018ms, application-code: 6ms)
+ GET /api/auth/customer/sign-in 405 in 505ms (next.js: 499ms, application-code: 6ms)
+ GET /api/auth/customer/sign-out 405 in 224ms (next.js: 217ms, application-code: 7ms)
+ GET /api/auth/staff/password/change 405 in 264ms (next.js: 257ms, application-code: 7ms)
+ GET /api/auth/staff/password/forgot 405 in 225ms (next.js: 219ms, application-code: 6ms)
+ GET /api/auth/staff/password/reset 405 in 189ms (next.js: 183ms, application-code: 6ms)
+ GET /api/auth/staff/sign-in 405 in 284ms (next.js: 277ms, application-code: 6ms)
+ GET /api/auth/staff/sign-out 405 in 551ms (next.js: 546ms, application-code: 5ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 260ms (next.js: 256ms, application-code: 5ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 207ms (next.js: 201ms, application-code: 6ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 222ms (next.js: 217ms, application-code: 4ms)
+○ Compiling /api/admin/users ...
+ GET /api/admin/users 401 in 10.4s (next.js: 10.4s, application-code: 12ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 8.9s (next.js: 8.9s, application-code: 10ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 1639ms (next.js: 1628ms, application-code: 11ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 1000ms (next.js: 991ms, application-code: 9ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 873ms (next.js: 863ms, application-code: 9ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 4.4s (next.js: 4.3s, application-code: 10ms)
+ GET /api/dev/outbox?limit=1 200 in 1681ms (next.js: 1299ms, application-code: 382ms)
+ GET /api/storage/warm-up.txt 404 in 4.0s (next.js: 3.6s, application-code: 407ms)
+✓ Finished writing to filesystem cache in 37.0s
+ GET /ar/nope 404 in 972ms (next.js: 178ms, proxy.ts: 19ms, application-code: 775ms)
+ GET /ar 200 in 973ms (next.js: 603ms, proxy.ts: 18ms, generate-params: 0.0ms, application-code: 352ms)
+ GET /ar 200 in 951ms (next.js: 449ms, proxy.ts: 11ms, generate-params: 7ms, application-code: 484ms)
+ GET /ar/dev/ui 200 in 976ms (next.js: 41ms, proxy.ts: 15ms, generate-params: 9ms, application-code: 911ms)
+ GET /ar 200 in 4.5s (next.js: 3.8s, proxy.ts: 422ms, generate-params: 7ms, application-code: 281ms)
+ GET /ar/admin 200 in 7.1s (next.js: 3.3s, proxy.ts: 422ms, generate-params: 8ms, application-code: 3.4s)
+ GET /ar 200 in 618ms (next.js: 52ms, proxy.ts: 524ms, generate-params: 8ms, application-code: 35ms)
+ GET /ar 200 in 351ms (next.js: 251ms, proxy.ts: 8ms, generate-params: 0.0ms, application-code: 93ms)
+ GET /ar 200 in 1981ms (next.js: 1815ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 155ms)
+ GET /ar 200 in 970ms (next.js: 816ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 151ms)
+ GET /en 200 in 802ms (next.js: 378ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 421ms)
+ GET /ar 200 in 961ms (next.js: 520ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 432ms)
+ GET /en 200 in 556ms (next.js: 138ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 416ms)
+ GET /en/dev/ui 200 in 5.7s (next.js: 5.3s, proxy.ts: 3ms, generate-params: 6ms, application-code: 415ms)
+ GET /ar 200 in 999ms (next.js: 917ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 72ms)
+ GET /en 200 in 2.2s (next.js: 2.0s, proxy.ts: 3ms, generate-params: 7ms, application-code: 148ms)
+ GET /en 200 in 1091ms (next.js: 948ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 141ms)
+ GET /ar/admin 200 in 4.9s (next.js: 4.0s, proxy.ts: 2ms, generate-params: 7ms, application-code: 928ms)
+ GET /ar/fr 404 in 8.7s (next.js: 8.6s, proxy.ts: 3ms, application-code: 84ms)
+ GET /ar/xx/abc 404 in 3.4s (next.js: 3.3s, proxy.ts: 2ms, application-code: 86ms)
+ GET /ar/definitely-not-a-page 404 in 340ms (next.js: 225ms, proxy.ts: 7ms, application-code: 107ms)
+ GET /ar/admin 200 in 4.5s (next.js: 4.0s, proxy.ts: 3ms, generate-params: 8ms, application-code: 555ms)
+ GET /api/does-not-exist 404 in 67ms (next.js: 12ms, application-code: 55ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar 200 in 960ms (next.js: 67ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 882ms)
+ GET /ar/dev/ui/boom 500 in 18.3s (next.js: 17.7s, proxy.ts: 19ms, generate-params: 7ms, application-code: 572ms)
+ GET /ar 200 in 17.6s (next.js: 17.3s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 368ms)
+ GET /en/dev/ui 200 in 16.1s (next.js: 15.7s, proxy.ts: 4ms, generate-params: 9ms, application-code: 357ms)
+ GET /en/admin 200 in 1883ms (next.js: 48ms, proxy.ts: 108ms, generate-params: 9ms, application-code: 1717ms)
+ GET /ar/admin/orders 404 in 24.3s (next.js: 23.0s, proxy.ts: 3ms, application-code: 1233ms)
+ POST /ar 200 in 296ms (next.js: 38ms, proxy.ts: 22ms, generate-params: 8ms, application-code: 227ms)
+  └─ ƒ rememberLocale("en") in 3ms src/lib/i18n/actions.ts
+ GET /ar/dev/ui/boom 200 in 728ms (next.js: 69ms, proxy.ts: 26ms, generate-params: 10ms, application-code: 624ms)
+ GET /en 200 in 1022ms (next.js: 83ms, proxy.ts: 23ms, generate-params: 0.0ms, application-code: 916ms)
+ GET /ar 200 in 670ms (next.js: 38ms, proxy.ts: 73ms, generate-params: 0.0ms, application-code: 558ms)
+ GET /ar/dev/ui 200 in 698ms (next.js: 160ms, proxy.ts: 75ms, generate-params: 11ms, application-code: 452ms)
+ GET /en/nope 404 in 556ms (next.js: 293ms, proxy.ts: 23ms, application-code: 240ms)
+ GET /en 200 in 834ms (next.js: 205ms, proxy.ts: 28ms, generate-params: 12ms, application-code: 589ms)
+ GET /en 200 in 312ms (next.js: 33ms, proxy.ts: 14ms, generate-params: 12ms, application-code: 254ms)
+ GET /ar/admin 200 in 1780ms (next.js: 194ms, proxy.ts: 15ms, generate-params: 8ms, application-code: 1562ms)
+ GET /en/admin 200 in 747ms (next.js: 62ms, proxy.ts: 50ms, generate-params: 12ms, application-code: 624ms)
+ GET /en 200 in 121ms (next.js: 13ms, proxy.ts: 6ms, generate-params: 15ms, application-code: 87ms)
+ GET /ar 200 in 451ms (next.js: 13ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 430ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /en 200 in 547ms (next.js: 29ms, proxy.ts: 13ms, generate-params: 0.0ms, application-code: 505ms)
+ GET /en/dev/ui 200 in 557ms (next.js: 36ms, proxy.ts: 14ms, generate-params: 9ms, application-code: 498ms)
+ GET /en/dev/ui/boom 500 in 557ms (next.js: 53ms, proxy.ts: 14ms, generate-params: 10ms, application-code: 480ms)
+ GET /ar/admin 200 in 1172ms (next.js: 20ms, proxy.ts: 10ms, generate-params: 19ms, application-code: 1124ms)
+ GET /en/dev/ui/boom 200 in 500ms (next.js: 15ms, proxy.ts: 6ms, generate-params: 12ms, application-code: 466ms)
+ GET /en 200 in 414ms (next.js: 36ms, proxy.ts: 8ms, generate-params: 9ms, application-code: 361ms)
+ GET /ar/dev/ui 200 in 420ms (next.js: 17ms, proxy.ts: 8ms, generate-params: 9ms, application-code: 386ms)
+ GET /en 200 in 419ms (next.js: 196ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 214ms)
+ GET /en 200 in 769ms (next.js: 36ms, proxy.ts: 10ms, generate-params: 7ms, application-code: 716ms)
+ GET /ar/dev/ui 200 in 792ms (next.js: 21ms, proxy.ts: 9ms, generate-params: 7ms, application-code: 755ms)
+ GET /ar/dev/ui 200 in 798ms (next.js: 50ms, proxy.ts: 11ms, generate-params: 0.0ms, application-code: 737ms)
+ GET /ar/xx/nope 404 in 801ms (next.js: 426ms, proxy.ts: 6ms, application-code: 370ms)
+ GET /ar 200 in 802ms (next.js: 411ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 385ms)
+ GET /ar/admin 200 in 1202ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 1187ms)
+ GET /ar/admin/stock 200 in 70ms (next.js: 24ms, proxy.ts: 5ms, application-code: 40ms)
+ GET /en 200 in 116ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 95ms)
+ GET /en/dev/ui 200 in 146ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 132ms)
+ GET /en/dev/ui 200 in 202ms (next.js: 8ms, proxy.ts: 20ms, generate-params: 7ms, application-code: 168ms)
+ GET /ar/admin 200 in 386ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 368ms)
+ GET /ar/admin/orders 404 in 380ms (next.js: 12ms, proxy.ts: 3ms, application-code: 365ms)
+ GET /en 200 in 446ms (next.js: 15ms, proxy.ts: 6ms, generate-params: 8ms, application-code: 417ms)
+ GET /en/dev/ui 200 in 451ms (next.js: 30ms, proxy.ts: 7ms, generate-params: 7ms, application-code: 408ms)
+ GET /ar/dev/ui 200 in 469ms (next.js: 164ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 298ms)
+○ Compiling /_not-found/page ...
+ GET /en/admin 200 in 521ms (next.js: 10ms, proxy.ts: 5ms, generate-params: 10ms, application-code: 496ms)
+ GET /en/dev/ui 200 in 219ms (next.js: 14ms, proxy.ts: 7ms, generate-params: 9ms, application-code: 189ms)
+ GET /ar/nope 404 in 120ms (next.js: 13ms, proxy.ts: 4ms, application-code: 103ms)
+ GET /en/admin/orders 404 in 291ms (next.js: 12ms, proxy.ts: 3ms, application-code: 275ms)
+ GET /en/admin 200 in 110ms (next.js: 10ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 89ms)
+ GET /ar/nope 404 in 114ms (next.js: 12ms, proxy.ts: 3ms, application-code: 99ms)
+ GET /ar/dev/ui?x=1 200 in 207ms (next.js: 8ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 187ms)
+ GET /en/admin 200 in 483ms (next.js: 9ms, proxy.ts: 7ms, generate-params: 7ms, application-code: 460ms)
+ GET /en/nope 404 in 128ms (next.js: 19ms, proxy.ts: 3ms, application-code: 105ms)
+ POST /ar/dev/ui?x=1 200 in 146ms (next.js: 19ms, proxy.ts: 20ms, generate-params: 8ms, application-code: 99ms)
+  └─ ƒ rememberLocale("en") in 5ms src/lib/i18n/actions.ts
+ GET /en/dev/ui?x=1 200 in 151ms (next.js: 38ms, proxy.ts: 14ms, generate-params: 0.0ms, application-code: 99ms)
+ GET /en/admin 200 in 666ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 652ms)
+ GET /en/nope 404 in 304ms (next.js: 21ms, proxy.ts: 8ms, application-code: 275ms)
+ GET /ar/dev/ui 200 in 315ms (next.js: 67ms, proxy.ts: 9ms, generate-params: 7ms, application-code: 232ms)
+ GET /en/admin/stock 200 in 375ms (next.js: 14ms, proxy.ts: 2ms, application-code: 358ms)
+ GET /en/dev/ui 200 in 251ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 234ms)
+ GET /en/dev/ui 200 in 476ms (next.js: 15ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 451ms)
+ GET /en/admin 200 in 952ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 936ms)
+ GET /ar/admin/orders 404 in 2.1s (next.js: 18ms, proxy.ts: 7ms, application-code: 2.1s)
+ GET /en/admin/orders 404 in 293ms (next.js: 14ms, proxy.ts: 3ms, application-code: 276ms)
+ GET /en/dev/ui 200 in 603ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 585ms)
+ GET /ar/admin/orders 404 in 384ms (next.js: 13ms, proxy.ts: 3ms, application-code: 368ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 71ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 57ms)
+ GET /ar 200 in 91ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 77ms)
+ GET /en 200 in 103ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 87ms)
+ GET /ar/admin 200 in 373ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 359ms)
+ GET /en/admin 200 in 369ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 355ms)
+ GET /ar/dev/ui 200 in 140ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 126ms)
+ GET /en/dev/ui 200 in 131ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 117ms)
+ GET /ar/nope 404 in 118ms (next.js: 12ms, proxy.ts: 3ms, application-code: 104ms)
+ GET /en/nope 404 in 99ms (next.js: 11ms, proxy.ts: 2ms, application-code: 85ms)
+ GET /ar/admin/orders 404 in 291ms (next.js: 11ms, proxy.ts: 3ms, application-code: 278ms)
+ GET /ar 200 in 93ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 80ms)
+ GET /en/admin 200 in 377ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 363ms)
+ GET /ar/dev/ui 200 in 138ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 124ms)
+ GET /nope.txt 404 in 65s (next.js: 6ms, generate-params: 7ms, application-code: 65s)
+ GET /nope.txt 404 in 65s (next.js: 6ms, generate-params: 7ms, application-code: 65s)
+✓ Finished writing to filesystem cache in 12.4s
+ GET /ar 200 in 1706ms (next.js: 1618ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 77ms)
+ GET /ar 200 in 873ms (next.js: 787ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 77ms)
+ GET /ar 200 in 4.0s (next.js: 4.0s, proxy.ts: 3ms, generate-params: 7ms, application-code: 81ms)
+ GET /en 200 in 85ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 74ms)
+ GET /ar/sign-in 200 in 19.4s (next.js: 19.1s, proxy.ts: 3ms, generate-params: 12ms, application-code: 259ms)
+ GET /ar/sign-up 200 in 15.5s (next.js: 15.3s, proxy.ts: 2ms, generate-params: 7ms, application-code: 219ms)
+ GET /ar/account 307 in 18.2s (next.js: 17.6s, proxy.ts: 2ms, generate-params: 9ms, application-code: 580ms)
+ GET /ar/forgot-password 200 in 11.4s (next.js: 10.4s, proxy.ts: 3ms, generate-params: 10ms, application-code: 1019ms)
+ GET /ar/reset-password 200 in 12.8s (next.js: 12.6s, proxy.ts: 3ms, generate-params: 7ms, application-code: 245ms)
+ GET /ar/nope 404 in 106ms (next.js: 13ms, proxy.ts: 2ms, application-code: 91ms)
+ GET /ar/staff/sign-in 200 in 14.0s (next.js: 13.6s, proxy.ts: 3ms, generate-params: 11ms, application-code: 452ms)
+ GET /ar/staff/two-factor 307 in 9.2s (next.js: 8.9s, proxy.ts: 4ms, generate-params: 8ms, application-code: 294ms)
+ GET /ar/staff/two-factor/setup 307 in 12.0s (next.js: 10.8s, proxy.ts: 3ms, generate-params: 7ms, application-code: 1185ms)
+ GET /ar/staff/change-password 307 in 9.2s (next.js: 9.0s, proxy.ts: 2ms, generate-params: 7ms, application-code: 190ms)
+ GET /ar/staff/forbidden 200 in 7.0s (next.js: 5.8s, proxy.ts: 3ms, generate-params: 6ms, application-code: 1157ms)
+ GET /ar/staff/forgot-password 200 in 30.4s (next.js: 29.6s, proxy.ts: 2ms, generate-params: 8ms, application-code: 803ms)
+ GET /ar/staff/reset-password 200 in 1664ms (next.js: 1480ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 175ms)
+ GET /ar/admin 307 in 96ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 79ms)
+ GET /ar/admin/orders 307 in 168ms (next.js: 90ms, proxy.ts: 2ms, application-code: 76ms)
+ GET /en/admin/users 307 in 583ms (next.js: 62ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 511ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 1276ms (next.js: 333ms, proxy.ts: 3ms, application-code: 940ms)
+ GET /ar/dev/ui 200 in 150ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 135ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 71ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 55ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 66ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 58ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 68ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 59ms)
+ GET /ar/dev/outbox 200 in 973ms (next.js: 130ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 833ms)
+ GET /ar/dev/services 200 in 817ms (next.js: 543ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 261ms)
+ GET /api/auth/customer/otp/request 405 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/customer/otp/verify 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/password/forgot 405 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/auth/customer/password/reset 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/register 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/sign-in 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/sign-out 405 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/staff/password/change 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/password/forgot 405 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/staff/password/reset 405 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/auth/staff/sign-in 405 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/auth/staff/sign-out 405 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/admin/users 401 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 15ms (next.js: 9ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 16ms (next.js: 9ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 18ms (next.js: 12ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 18ms (next.js: 12ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 19ms (next.js: 13ms, application-code: 7ms)
+ GET /api/dev/outbox?limit=1 200 in 12ms (next.js: 3ms, application-code: 9ms)
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unpipe listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 finish listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unpipe listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 finish listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+ GET /api/storage/warm-up.txt 404 in 25ms (next.js: 14ms, application-code: 11ms)
+ GET /ar/nope 404 in 95ms (next.js: 12ms, proxy.ts: 3ms, application-code: 80ms)
+ GET /ar 200 in 51ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 30ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 108ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 93ms)
+ GET /ar/dev/ui/boom 200 in 49ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 30ms)
+ GET /en/nope 404 in 102ms (next.js: 12ms, proxy.ts: 3ms, application-code: 87ms)
+ GET /en 200 in 51ms (next.js: 8ms, proxy.ts: 11ms, generate-params: 8ms, application-code: 24ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /en/dev/ui/boom 500 in 68ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 54ms)
+ GET /en/dev/ui/boom 200 in 42ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 31ms)
+ GET /ar/xx/nope 404 in 112ms (next.js: 12ms, proxy.ts: 2ms, application-code: 98ms)
+ GET /nope.txt 404 in 50ms (next.js: 21ms, generate-params: 8ms, application-code: 21ms)
+ GET /nope.txt 404 in 50ms (next.js: 21ms, generate-params: 8ms, application-code: 21ms)
+ GET /ar/dev/ui 200 in 132ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 117ms)
+ GET /en/dev/ui 200 in 155ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 140ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="ui/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter url="/en/dev/ui" tree={[...]} params={{locale:"en"}} cacheNode={{rsc:{...}, ...}} ...>
+                <SegmentViewNode type="page" pagePath="[locale]/d...">
+                  <SegmentTrieNode>
+                  <DesignSystemPage>
+                    <main className="mx-auto w-...">
+                      <header>
+                      <section>
+                      <div>
+                      <section>
+                      <div>
+                      <PrimitivesGallery>
+                        <section>
+                        <div>
+                        <section>
+                        <div>
+                        <GallerySection>
+                          <section aria-labelledby="fields-title" className="flex flex-...">
+                            <div>
+                            <form className="grid gap-6...">
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <p>
+                                  <Input>
+                                    <input
+                                      type="text"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_1_"
+                                      aria-describedby="field_S_1_-hint"
+                                      required={true}
+                                      name="name"
+                                      autoComplete="name"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <Input>
+                                    <input
+                                      type="email"
+                                      dir="ltr"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_2_"
+                                      aria-describedby="field_S_2_-error"
+                                      aria-invalid={true}
+                                      required={true}
+                                      name="email"
+                                      autoComplete="email"
+                                      defaultValue="salma.example.com"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                                  ...
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <p>
+                                  <Input>
+                                    <input
+                                      type="tel"
+                                      dir="ltr"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_3_"
+                                      aria-describedby="field_S_3_-hint"
+                                      name="phone"
+                                      autoComplete="tel"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <div>
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <Textarea>
+                                    <textarea
+                                      rows={4}
+                                      dir="auto"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_5_"
+                                      name="message"
+                                      placeholder="Write a few words to go with the box"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <div className="flex flex-...">
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_6_"
+                                        aria-describedby="checkbox_S_6_-hint"
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="terms"
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                                    ...
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_7_"
+                                        aria-describedby="checkbox_S_7_-error"
+                                        aria-invalid={true}
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="news"
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                                    ...
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_8_"
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="wrap"
+                                        disabled={true}
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                        ...
+                ...
+              ...
+    ...
+ 
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+      <LoadingBoundary name="ui/" loading={null}>
+        <HTTPAccessFallbackBoundary notFound={undefined} forbidden={undefined} unauthorized={undefined}>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter url="/ar/dev/ui" tree={[...]} params={{locale:"ar"}} cacheNode={{rsc:{...}, ...}} ...>
+                <SegmentViewNode type="page" pagePath="[locale]/d...">
+                  <SegmentTrieNode>
+                  <DesignSystemPage>
+                    <main className="mx-auto w-...">
+                      <header>
+                      <section>
+                      <div>
+                      <section>
+                      <div>
+                      <PrimitivesGallery>
+                        <section>
+                        <div>
+                        <section>
+                        <div>
+                        <GallerySection>
+                          <section aria-labelledby="fields-title" className="flex flex-...">
+                            <div>
+                            <form className="grid gap-6...">
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <p>
+                                  <Input>
+                                    <input
+                                      type="text"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_1_"
+                                      aria-describedby="field_S_1_-hint"
+                                      required={true}
+                                      name="name"
+                                      autoComplete="name"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <Input>
+                                    <input
+                                      type="email"
+                                      dir="ltr"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_2_"
+                                      aria-describedby="field_S_2_-error"
+                                      aria-invalid={true}
+                                      required={true}
+                                      name="email"
+                                      autoComplete="email"
+                                      defaultValue="salma.example.com"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                                  ...
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <p>
+                                  <Input>
+                                    <input
+                                      type="tel"
+                                      dir="ltr"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_3_"
+                                      aria-describedby="field_S_3_-hint"
+                                      name="phone"
+                                      autoComplete="tel"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <div>
+                              <Field>
+                                <div className="flex flex-...">
+                                  <label>
+                                  <Textarea>
+                                    <textarea
+                                      rows={4}
+                                      dir="auto"
+                                      className="w-full rounded-control border border-line-strong bg-surface px-3 text..."
+                                      id="field_S_5_"
+                                      name="message"
+                                      placeholder="اكتب كلمات قليلة ترافق العلبة"
+-                                     style={{caret-color:"transparent"}}
+                                    >
+                              <div className="flex flex-...">
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_6_"
+                                        aria-describedby="checkbox_S_6_-hint"
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="terms"
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                                    ...
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_7_"
+                                        aria-describedby="checkbox_S_7_-error"
+                                        aria-invalid={true}
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="news"
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                                    ...
+                                <Checkbox>
+                                  <div className="flex flex-...">
+                                    <div className="flex items...">
+                                      <input
+                                        type="checkbox"
+                                        id="checkbox_S_8_"
+                                        className="mt-1 size-5 shrink-0 cursor-pointer accent-brand disabled:cursor-no..."
+                                        name="wrap"
+                                        disabled={true}
+-                                       style={{caret-color:"transparent"}}
+                                      >
+                                      ...
+                        ...
+                ...
+              ...
+    ...
+ 
+ GET /ar/dev/ui 200 in 156ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 142ms)
+ GET /en/dev/ui 200 in 128ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 115ms)
+ GET /ar/nope 404 in 102ms (next.js: 12ms, proxy.ts: 3ms, application-code: 87ms)
+ GET /en/nope 404 in 83ms (next.js: 5ms, proxy.ts: 3ms, application-code: 75ms)
+ GET /ar/nope 404 in 102ms (next.js: 12ms, proxy.ts: 3ms, application-code: 88ms)
+ GET /en/nope 404 in 85ms (next.js: 5ms, proxy.ts: 2ms, application-code: 77ms)
+ GET /ar/nope 404 in 20.3s (next.js: 20.2s, proxy.ts: 2ms, application-code: 88ms)
+ GET /en/nope 404 in 86ms (next.js: 5ms, proxy.ts: 3ms, application-code: 78ms)
+ GET /ar/nope 404 in 95ms (next.js: 11ms, proxy.ts: 2ms, application-code: 81ms)
+ GET /en/nope 404 in 86ms (next.js: 6ms, proxy.ts: 3ms, application-code: 78ms)
+✓ Finished filesystem cache database compaction in 4.3min
+ GET /ar 200 in 145ms (next.js: 66ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 70ms)
+ GET /ar 200 in 79ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 71ms)
+ GET /ar 200 in 86ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 79ms)
+ GET /en 200 in 111ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 99ms)
+ GET /ar/sign-in 200 in 108ms (next.js: 14ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 85ms)
+ GET /ar/sign-up 200 in 117ms (next.js: 13ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 91ms)
+ GET /ar/account 307 in 138ms (next.js: 15ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 113ms)
+ GET /ar/forgot-password 200 in 121ms (next.js: 13ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 98ms)
+ GET /ar/reset-password 200 in 132ms (next.js: 13ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 107ms)
+ GET /ar/nope 404 in 179ms (next.js: 25ms, proxy.ts: 4ms, application-code: 150ms)
+ GET /ar/staff/sign-in 200 in 105ms (next.js: 20ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 74ms)
+ GET /ar/staff/two-factor 307 in 124ms (next.js: 16ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 96ms)
+ GET /ar/staff/two-factor/setup 307 in 131ms (next.js: 16ms, proxy.ts: 3ms, generate-params: 11ms, application-code: 101ms)
+ GET /ar/staff/change-password 307 in 109ms (next.js: 14ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 85ms)
+ GET /ar/staff/forbidden 200 in 79ms (next.js: 13ms, proxy.ts: 2ms, generate-params: 8ms, application-code: 56ms)
+ GET /ar/staff/forgot-password 200 in 105ms (next.js: 16ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 76ms)
+ GET /ar/staff/reset-password 200 in 104ms (next.js: 16ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 76ms)
+ GET /ar/admin 307 in 146ms (next.js: 18ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 117ms)
+ GET /ar/admin/orders 307 in 125ms (next.js: 22ms, proxy.ts: 4ms, application-code: 99ms)
+ GET /en/admin/users 307 in 140ms (next.js: 16ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 111ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 148ms (next.js: 26ms, proxy.ts: 5ms, application-code: 117ms)
+ GET /ar/dev/ui 200 in 184ms (next.js: 12ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 162ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 103ms (next.js: 12ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 78ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 93ms (next.js: 18ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 72ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 75ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 66ms)
+ GET /ar/dev/outbox 200 in 252ms (next.js: 13ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 228ms)
+ GET /ar/dev/services 200 in 647ms (next.js: 10ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 628ms)
+ GET /api/auth/customer/otp/request 405 in 8ms (next.js: 4ms, application-code: 4ms)
+ GET /api/auth/customer/otp/verify 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/password/forgot 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/password/reset 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/register 405 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/auth/customer/sign-in 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/sign-out 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/password/change 405 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/auth/staff/password/forgot 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/password/reset 405 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/auth/staff/sign-in 405 in 8ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/sign-out 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/users 401 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 14ms (next.js: 9ms, application-code: 5ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 15ms (next.js: 9ms, application-code: 5ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 17ms (next.js: 10ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 19ms (next.js: 12ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 20ms (next.js: 15ms, application-code: 5ms)
+ GET /api/dev/outbox?limit=1 200 in 12ms (next.js: 4ms, application-code: 7ms)
+ GET /api/storage/warm-up.txt 404 in 18ms (next.js: 11ms, application-code: 8ms)
+ GET /ar 200 in 331ms (next.js: 15ms, proxy.ts: 16ms, generate-params: 11ms, application-code: 290ms)
+ GET /ar 200 in 331ms (next.js: 202ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 123ms)
+ GET /ar 200 in 97ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 83ms)
+ GET /ar 200 in 115ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 96ms)
+ GET /en 200 in 102ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 89ms)
+ GET /ar 200 in 173ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 165ms)
+ GET /ar 200 in 118ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 101ms)
+ GET /ar 200 in 88ms (next.js: 8ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 74ms)
+ GET /en 200 in 269ms (next.js: 170ms, proxy.ts: 3ms, generate-params: 15ms, application-code: 80ms)
+ GET /ar 200 in 126ms (next.js: 8ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 113ms)
+ GET /ar/fr 404 in 199ms (next.js: 29ms, proxy.ts: 3ms, application-code: 166ms)
+ GET /ar 200 in 200ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 183ms)
+ GET /ar 200 in 922ms (next.js: 9ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 907ms)
+ GET /ar/xx/abc 404 in 165ms (next.js: 31ms, proxy.ts: 10ms, application-code: 124ms)
+ GET /ar/definitely-not-a-page 404 in 308ms (next.js: 7ms, proxy.ts: 3ms, application-code: 298ms)
+ GET /en 200 in 95ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 80ms)
+ GET /en 200 in 97ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 89ms)
+ GET /en 200 in 113ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 92ms)
+ GET /en 200 in 142ms (next.js: 10ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 126ms)
+ GET /en 200 in 133ms (next.js: 11ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 117ms)
+ GET /api/does-not-exist 404 in 114ms (next.js: 18ms, application-code: 96ms)
+ GET /ar 200 in 140ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 117ms)
+ GET /en 200 in 186ms (next.js: 18ms, proxy.ts: 11ms, generate-params: 0.0ms, application-code: 158ms)
+ POST /ar 200 in 213ms (next.js: 39ms, proxy.ts: 32ms, generate-params: 0.0ms, application-code: 142ms)
+  └─ ƒ rememberLocale("en") in 15ms src/lib/i18n/actions.ts
+ GET /en 200 in 908ms (next.js: 76ms, proxy.ts: 19ms, generate-params: 0.0ms, application-code: 813ms)
+ GET /en 200 in 347ms (next.js: 22ms, proxy.ts: 10ms, generate-params: 9ms, application-code: 307ms)
+ GET /ar/admin 200 in 1044ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 1022ms)
+ GET /en 200 in 476ms (next.js: 19ms, proxy.ts: 5ms, generate-params: 0.1ms, application-code: 452ms)
+ GET /en 200 in 131ms (next.js: 11ms, proxy.ts: 3ms, generate-params: 13ms, application-code: 104ms)
+ GET /ar/admin 200 in 407ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 390ms)
+ GET /en/admin 200 in 398ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 383ms)
+ GET /en/admin 200 in 387ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 373ms)
+ GET /ar/dev/ui 200 in 141ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 127ms)
+ GET /ar/dev/ui 200 in 157ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 140ms)
+ GET /en/dev/ui 200 in 153ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 138ms)
+ GET /en/dev/ui 200 in 153ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 138ms)
+ GET /ar/nope 404 in 101ms (next.js: 12ms, proxy.ts: 3ms, application-code: 86ms)
+ GET /ar/nope 404 in 99ms (next.js: 11ms, proxy.ts: 4ms, application-code: 84ms)
+ GET /en/nope 404 in 111ms (next.js: 11ms, proxy.ts: 3ms, application-code: 98ms)
+ GET /en/nope 404 in 114ms (next.js: 12ms, proxy.ts: 3ms, application-code: 100ms)
+ GET /ar/admin/orders 404 in 312ms (next.js: 12ms, proxy.ts: 3ms, application-code: 297ms)
+ GET /ar/admin/orders 404 in 283ms (next.js: 12ms, proxy.ts: 3ms, application-code: 268ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 71ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 58ms)
+ GET /ar 200 in 92ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 78ms)
+ GET /en 200 in 100ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 86ms)
+ GET /ar/admin 200 in 381ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 366ms)
+ GET /en/admin 200 in 386ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 372ms)
+ GET /ar/dev/ui 200 in 145ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 132ms)
+ GET /en/dev/ui 200 in 136ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 122ms)
+ GET /ar/nope 404 in 125ms (next.js: 13ms, proxy.ts: 3ms, application-code: 110ms)
+ GET /en/nope 404 in 195ms (next.js: 22ms, proxy.ts: 5ms, application-code: 168ms)
+ GET /ar/admin/orders 404 in 378ms (next.js: 14ms, proxy.ts: 3ms, application-code: 361ms)
+ GET /ar 200 in 166ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 11ms, application-code: 143ms)
+ GET /en/admin 200 in 390ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 377ms)
+ GET /ar/dev/ui 200 in 154ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 140ms)
+ GET /ar 200 in 2.7s (next.js: 1295ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 1432ms)
+ GET /ar 200 in 71ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 63ms)
+ GET /ar 200 in 72ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 64ms)
+ GET /en 200 in 72ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 64ms)
+ GET /ar/sign-in 200 in 837ms (next.js: 509ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 316ms)
+ GET /ar/sign-up 200 in 836ms (next.js: 417ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 408ms)
+ GET /ar/account 307 in 887ms (next.js: 524ms, proxy.ts: 2ms, generate-params: 9ms, application-code: 352ms)
+ GET /ar/forgot-password 200 in 610ms (next.js: 427ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 170ms)
+ GET /ar/reset-password 200 in 708ms (next.js: 475ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 221ms)
+ GET /ar/nope 404 in 772ms (next.js: 425ms, proxy.ts: 2ms, application-code: 345ms)
+ GET /ar/staff/sign-in 200 in 711ms (next.js: 465ms, proxy.ts: 3ms, generate-params: 11ms, application-code: 234ms)
+ GET /ar/staff/two-factor 307 in 601ms (next.js: 377ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 215ms)
+ GET /ar/staff/two-factor/setup 307 in 689ms (next.js: 492ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 185ms)
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unpipe listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 finish listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unpipe listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 error listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 close listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+(node:20584) MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 finish listeners added to [SyncWriteStream]. MaxListeners is 10. Use emitter.setMaxListeners() to increase limit
+ GET /ar/staff/change-password 307 in 785ms (next.js: 488ms, proxy.ts: 2ms, generate-params: 13ms, application-code: 282ms)
+ GET /ar/staff/forbidden 200 in 846ms (next.js: 456ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 379ms)
+ GET /ar/staff/forgot-password 200 in 788ms (next.js: 519ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 260ms)
+ GET /ar/staff/reset-password 200 in 848ms (next.js: 618ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 219ms)
+ GET /ar/admin 307 in 823ms (next.js: 403ms, proxy.ts: 2ms, generate-params: 9ms, application-code: 409ms)
+ GET /ar/admin/orders 307 in 1025ms (next.js: 704ms, proxy.ts: 3ms, application-code: 319ms)
+ GET /en/admin/users 307 in 1241ms (next.js: 851ms, proxy.ts: 5ms, generate-params: 9ms, application-code: 377ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 636ms (next.js: 423ms, proxy.ts: 2ms, application-code: 211ms)
+ GET /ar/dev/ui 200 in 741ms (next.js: 415ms, proxy.ts: 2ms, generate-params: 9ms, application-code: 315ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 613ms (next.js: 441ms, proxy.ts: 3ms, generate-params: 11ms, application-code: 159ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 60ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 52ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 57ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 49ms)
+ GET /ar/dev/outbox 200 in 1355ms (next.js: 553ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 791ms)
+ GET /ar/dev/services 200 in 1310ms (next.js: 963ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 335ms)
+ GET /api/auth/customer/otp/request 405 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/customer/otp/verify 405 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/auth/customer/password/forgot 405 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/auth/customer/password/reset 405 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/customer/register 405 in 13ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/customer/sign-in 405 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/auth/customer/sign-out 405 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/staff/password/change 405 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/staff/password/forgot 405 in 19ms (next.js: 4ms, application-code: 15ms)
+ GET /api/auth/staff/password/reset 405 in 17ms (next.js: 3ms, application-code: 14ms)
+ GET /api/auth/staff/sign-in 405 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/auth/staff/sign-out 405 in 13ms (next.js: 3ms, application-code: 11ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 14ms (next.js: 2ms, application-code: 12ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 19ms (next.js: 4ms, application-code: 14ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/admin/users 401 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 22ms (next.js: 10ms, application-code: 13ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 26ms (next.js: 10ms, application-code: 16ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 29ms (next.js: 13ms, application-code: 16ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 27ms (next.js: 12ms, application-code: 16ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 29ms (next.js: 14ms, application-code: 16ms)
+ GET /api/dev/outbox?limit=1 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /api/storage/warm-up.txt 404 in 28ms (next.js: 12ms, application-code: 16ms)
+ GET /ar/dev/outbox 200 in 254ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 240ms)
+ GET /ar/sign-in 200 in 1437ms (next.js: 434ms, proxy.ts: 258ms, generate-params: 0.0ms, application-code: 745ms)
+ GET /ar/admin 200 in 2.8s (next.js: 387ms, proxy.ts: 119ms, generate-params: 0.0ms, application-code: 2.3s)
+ GET /ar 200 in 2.8s (next.js: 364ms, proxy.ts: 215ms, generate-params: 0.0ms, application-code: 2.2s)
+ GET /ar/staff/sign-in 200 in 3.0s (next.js: 1284ms, proxy.ts: 433ms, generate-params: 0.0ms, application-code: 1299ms)
+ GET /en/sign-in 200 in 3.3s (next.js: 2.5s, proxy.ts: 28ms, generate-params: 0.0ms, application-code: 843ms)
+ GET /en/dev/outbox 200 in 4.2s (next.js: 681ms, proxy.ts: 18ms, generate-params: 0.0ms, application-code: 3.5s)
+ GET /ar/dev/services 200 in 2.2s (next.js: 938ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 1286ms)
+ GET /en/dev/services 200 in 136ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 127ms)
+ POST /api/auth/staff/sign-in 200 in 19.0s (next.js: 8ms, application-code: 19.0s)
+ GET /en/admin/users 307 in 3.4s (next.js: 1076ms, proxy.ts: 3ms, generate-params: 0.1ms, application-code: 2.4s)
+ POST /api/auth/staff/two-factor/enrol 200 in 4.1s (next.js: 534ms, application-code: 3.6s)
+ GET /en/staff/sign-in?next=%2Fen%2Fadmin%2Fusers 200 in 16.5s (next.js: 15.9s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 539ms)
+ POST /api/auth/staff/two-factor/confirm 200 in 16.9s (next.js: 15.0s, application-code: 1927ms)
+ GET /en/admin/users 200 in 8.5s (next.js: 5.2s, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 3.2s)
+ POST /api/admin/users 201 in 1576ms (next.js: 254ms, application-code: 1321ms)
+ GET /en/account 307 in 8.7s (next.js: 7.9s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 863ms)
+ GET /en/staff/sign-in 200 in 12.5s (next.js: 11.0s, proxy.ts: 13ms, generate-params: 0.0ms, application-code: 1510ms)
+ GET /ar/admin/orders 404 in 39.1s (next.js: 36.0s, proxy.ts: 34ms, application-code: 3.1s)
+ GET /en/admin/users 200 in 11.3s (next.js: 9.9s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 1371ms)
+ GET /en/sign-in?next=%2Fen%2Faccount 200 in 1771ms (next.js: 1673ms, proxy.ts: 10ms, generate-params: 0.0ms, application-code: 89ms)
+ POST /api/auth/staff/sign-in 200 in 1383ms (next.js: 457ms, application-code: 926ms)
+ GET /ar/admin 200 in 2.9s (next.js: 1716ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 1205ms)
+ POST /api/dev/outbox 201 in 3.8s (next.js: 7ms, application-code: 3.8s)
+ GET /api/dev/outbox?to=%2B970599000111 200 in 35ms (next.js: 28ms, application-code: 6ms)
+ GET /ar/dev/outbox 200 in 3.9s (next.js: 3.7s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 220ms)
+ GET /en/sign-up 200 in 5.1s (next.js: 4.0s, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 1142ms)
+ GET /en/staff/two-factor/setup?next=%2Fen%2Fadmin 200 in 11.2s (next.js: 10.3s, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 876ms)
+ GET /en/admin/users 307 in 103ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 93ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 488ms (next.js: 3ms, application-code: 486ms)
+ GET /en/dev/outbox?channel=whatsapp&status=sent 200 in 4.2s (next.js: 3.9s, proxy.ts: 29ms, generate-params: 0.0ms, application-code: 185ms)
+ GET /en/staff/two-factor?next=%2Fen%2Fadmin%2Fusers 307 in 1398ms (next.js: 459ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 935ms)
+ GET /en/staff/two-factor/setup?next=%2Fen%2Fadmin%2Fusers 200 in 87ms (next.js: 9ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 73ms)
+ GET /en/staff/two-factor/setup 200 in 71ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 63ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 17.8s (next.js: 17.7s, application-code: 112ms)
+ POST /api/auth/customer/register 201 in 32.6s (next.js: 933ms, application-code: 31.7s)
+ POST /api/auth/staff/two-factor/enrol 200 in 1670ms (next.js: 3ms, application-code: 1667ms)
+ GET /en/account 200 in 45ms (next.js: 9ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 34ms)
+ GET /en/account 200 in 66ms (next.js: 6ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 55ms)
+ POST /api/auth/staff/two-factor/confirm 200 in 532ms (next.js: 4ms, application-code: 528ms)
+ GET /en/admin 200 in 333ms (next.js: 12ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 316ms)
+ GET /en/admin 200 in 292ms (next.js: 15ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 272ms)
+ GET /en/admin/users 200 in 422ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 413ms)
+ POST /api/auth/staff/sign-out 200 in 192ms (next.js: 3ms, application-code: 189ms)
+ GET /en/staff/sign-in 200 in 38ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 28ms)
+ GET /en/staff/sign-in 200 in 42ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 31ms)
+ GET /ar/dev/services 200 in 141ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 134ms)
+ POST /ar/dev/services 200 in 618ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 606ms)
+  └─ ƒ setFaultAction({}) in 391ms src/app/[locale]/dev/services/actions.ts
+ GET /ar/dev/services 200 in 159ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 149ms)
+ POST /api/auth/staff/sign-in 200 in 1694ms (next.js: 3ms, application-code: 1691ms)
+ GET /en/staff/two-factor?next=%2Fen%2Fadmin 200 in 63ms (next.js: 12ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 49ms)
+ POST /api/auth/staff/two-factor/challenge 401 in 1047ms (next.js: 11ms, application-code: 1036ms)
+ POST /api/auth/staff/two-factor/challenge 200 in 4.5s (next.js: 3.2s, application-code: 1242ms)
+ GET /en/admin 200 in 254ms (next.js: 6ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 243ms)
+ GET /en/admin 200 in 223ms (next.js: 44ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 174ms)
+ POST /api/dev/outbox 502 in 7.5s (next.js: 4ms, application-code: 7.5s)
+ GET /ar/dev/services 200 in 143ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 135ms)
+ GET /ar/dev/services 200 in 315ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 307ms)
+ POST /ar/dev/services 200 in 608ms (next.js: 9ms, proxy.ts: 8ms, generate-params: 0.0ms, application-code: 591ms)
+  └─ ƒ setFaultAction({}) in 354ms src/app/[locale]/dev/services/actions.ts
+ GET /ar/dev/services 200 in 189ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 179ms)
+ POST /api/dev/outbox 201 in 1413ms (next.js: 3ms, application-code: 1410ms)
+ GET /en/dev/services 200 in 126ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 118ms)
+✓ Finished writing to filesystem cache in 25.0s
+ GET /ar/nope 404 in 785ms (next.js: 699ms, proxy.ts: 3ms, application-code: 83ms)
+ GET /ar 200 in 832ms (next.js: 776ms, proxy.ts: 17ms, generate-params: 0.0ms, application-code: 39ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 583ms (next.js: 508ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 65ms)
+ GET /ar/dev/ui/boom 200 in 43ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 33ms)
+ GET /ar/dev/ui 200 in 733ms (next.js: 583ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 140ms)
+ GET /en/nope 404 in 103ms (next.js: 12ms, proxy.ts: 2ms, application-code: 88ms)
+ GET /en/dev/ui 200 in 254ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 246ms)
+ GET /en 200 in 109ms (next.js: 14ms, proxy.ts: 6ms, generate-params: 9ms, application-code: 81ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /en/dev/ui/boom 500 in 83ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 74ms)
+ GET /en/dev/ui 200 in 349ms (next.js: 8ms, proxy.ts: 19ms, generate-params: 0.0ms, application-code: 323ms)
+ GET /en/dev/ui/boom 200 in 53ms (next.js: 6ms, proxy.ts: 13ms, generate-params: 0.0ms, application-code: 35ms)
+ GET /ar/dev/ui 200 in 224ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 212ms)
+ GET /ar/xx/nope 404 in 215ms (next.js: 9ms, proxy.ts: 104ms, application-code: 102ms)
+[jobs] core.outbox.dispatch: picked 1: sent 1, failed 0, dead 0, superseded 0
+ GET /nope.txt 404 in 2.6s (next.js: 2.1s, generate-params: 0.0ms, application-code: 435ms)
+ GET /nope.txt 404 in 2.6s (next.js: 2.1s, generate-params: 0.0ms, application-code: 435ms)
+ GET /en/dev/ui 200 in 568ms (next.js: 9ms, proxy.ts: 426ms, generate-params: 0.0ms, application-code: 133ms)
+ GET /ar 200 in 206ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 197ms)
+ GET /ar/dev/ui 200 in 166ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 153ms)
+ GET /en/dev/ui 200 in 121ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 113ms)
+ GET /ar/dev/ui 200 in 133ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 126ms)
+ GET /en/dev/ui 200 in 131ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 122ms)
+ GET /en 200 in 99ms (next.js: 10ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 86ms)
+ GET /ar/sign-in 200 in 103ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 85ms)
+ GET /api/admin/users 401 in 294ms (next.js: 289ms, application-code: 5ms)
+ GET /ar 200 in 138ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 128ms)
+ GET /ar/admin 200 in 511ms (next.js: 16ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 485ms)
+ POST /api/auth/staff/sign-in 200 in 1732ms (next.js: 3ms, application-code: 1730ms)
+ GET /ar 200 in 85ms (next.js: 7ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 75ms)
+ GET /en 200 in 115ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 106ms)
+ GET /ar/dev/ui?x=1 200 in 135ms (next.js: 8ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 126ms)
+ POST /api/auth/customer/otp/request 200 in 3.6s (next.js: 3ms, application-code: 3.6s)
+ POST /ar/dev/ui?x=1 200 in 116ms (next.js: 10ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 99ms)
+  └─ ƒ rememberLocale("en") in 4ms src/lib/i18n/actions.ts
+ GET /en/dev/ui?x=1 200 in 122ms (next.js: 20ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 95ms)
+ GET /ar/fr 404 in 96ms (next.js: 7ms, proxy.ts: 2ms, application-code: 88ms)
+ GET /ar/xx/abc 404 in 184ms (next.js: 7ms, proxy.ts: 3ms, application-code: 174ms)
+ GET /ar 200 in 105ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 92ms)
+ GET /ar/definitely-not-a-page 404 in 122ms (next.js: 7ms, proxy.ts: 4ms, application-code: 111ms)
+ POST /api/auth/customer/otp/verify 200 in 4.6s (next.js: 4ms, application-code: 4.6s)
+ GET /ar/admin 200 in 408ms (next.js: 10ms, proxy.ts: 6ms, generate-params: 0.1ms, application-code: 392ms)
+ GET /ar/account 200 in 76ms (next.js: 13ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 52ms)
+ GET /ar/account 200 in 131ms (next.js: 23ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 101ms)
+ GET /ar/admin/stock 200 in 48ms (next.js: 16ms, proxy.ts: 3ms, application-code: 29ms)
+ GET /ar/admin 200 in 364ms (next.js: 7ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 355ms)
+ GET /ar/admin/orders 404 in 259ms (next.js: 7ms, proxy.ts: 3ms, application-code: 249ms)
+ GET /en 200 in 89ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 80ms)
+ GET /api/does-not-exist 404 in 46ms (next.js: 6ms, application-code: 40ms)
+ GET /ar 200 in 88ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 81ms)
+ POST /ar 200 in 78ms (next.js: 8ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 64ms)
+  └─ ƒ rememberLocale("en") in 5ms src/lib/i18n/actions.ts
+ GET /en 200 in 162ms (next.js: 19ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 137ms)
+ GET /ar 200 in 88ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 78ms)
+ GET /en 200 in 109ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 99ms)
+ GET /en 200 in 162ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 154ms)
+ GET /ar/dev/ui 200 in 224ms (next.js: 15ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 205ms)
+ GET /en/admin 200 in 532ms (next.js: 6ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 521ms)
+ GET /ar 200 in 256ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 245ms)
+ GET /ar/admin 200 in 503ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 493ms)
+ GET /en/admin/orders 404 in 255ms (next.js: 5ms, proxy.ts: 2ms, application-code: 247ms)
+ GET /ar 200 in 96ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 87ms)
+ GET /en/admin 200 in 115ms (next.js: 9ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 102ms)
+ GET /en/dev/ui 200 in 204ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 196ms)
+ GET /ar/admin 200 in 417ms (next.js: 10ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 402ms)
+ GET /ar 200 in 84ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.1ms, application-code: 74ms)
+ GET /en/admin 200 in 387ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 371ms)
+ GET /en/dev/ui 200 in 158ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 140ms)
+ GET /ar 200 in 93ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 79ms)
+ POST /api/auth/customer/register 201 in 618ms (next.js: 3ms, application-code: 615ms)
+ GET /en/forgot-password 200 in 512ms (next.js: 381ms, proxy.ts: 8ms, generate-params: 8ms, application-code: 115ms)
+ GET /ar 200 in 277ms (next.js: 15ms, proxy.ts: 22ms, generate-params: 7ms, application-code: 233ms)
+ GET /en/admin 200 in 741ms (next.js: 15ms, proxy.ts: 13ms, generate-params: 7ms, application-code: 705ms)
+ GET /en/dev/ui 200 in 243ms (next.js: 9ms, proxy.ts: 6ms, generate-params: 10ms, application-code: 219ms)
+ GET /en/admin 200 in 426ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 409ms)
+ GET /en 200 in 96ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 79ms)
+ POST /api/auth/customer/password/forgot 200 in 2.5s (next.js: 7ms, application-code: 2.5s)
+ GET /en/reset-password?token=18V-uW7u-FulzBJo75hMsY-_2AhXJjUeCDOA7zFWYy4 200 in 400ms (next.js: 289ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 101ms)
+ GET /en 200 in 189ms (next.js: 15ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 160ms)
+ GET /en/admin 200 in 767ms (next.js: 108ms, proxy.ts: 6ms, generate-params: 8ms, application-code: 645ms)
+ POST /api/auth/customer/password/reset 200 in 689ms (next.js: 23ms, application-code: 667ms)
+ GET /ar 200 in 310ms (next.js: 137ms, proxy.ts: 7ms, generate-params: 8ms, application-code: 158ms)
+ GET /en/admin/stock 200 in 55ms (next.js: 17ms, proxy.ts: 4ms, application-code: 35ms)
+ POST /api/auth/customer/sign-in 200 in 1078ms (next.js: 6ms, application-code: 1072ms)
+ GET /en 200 in 88ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 73ms)
+ GET /en/admin 200 in 727ms (next.js: 345ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 373ms)
+ GET /ar/dev/ui 200 in 1994ms (next.js: 1852ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 133ms)
+ GET /en/admin/orders 404 in 4.4s (next.js: 4.2s, proxy.ts: 2ms, application-code: 270ms)
+ POST /api/auth/customer/sign-in 401 in 1476ms (next.js: 729ms, application-code: 747ms)
+ POST /api/auth/customer/sign-in 401 in 564ms (next.js: 5ms, application-code: 559ms)
+ POST /api/auth/customer/sign-in 401 in 1184ms (next.js: 648ms, application-code: 536ms)
+ POST /api/auth/customer/sign-in 401 in 699ms (next.js: 112ms, application-code: 587ms)
+ POST /api/auth/customer/sign-in 401 in 489ms (next.js: 26ms, application-code: 463ms)
+ POST /api/auth/customer/sign-in 401 in 1146ms (next.js: 581ms, application-code: 564ms)
+ POST /api/auth/customer/sign-in 401 in 703ms (next.js: 69ms, application-code: 634ms)
+ POST /api/auth/customer/sign-in 401 in 698ms (next.js: 277ms, application-code: 422ms)
+ POST /api/auth/customer/sign-in 401 in 492ms (next.js: 18ms, application-code: 474ms)
+ POST /api/auth/customer/sign-in 401 in 868ms (next.js: 37ms, application-code: 830ms)
+ POST /api/auth/customer/sign-in 429 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /en 200 in 16.4s (next.js: 16.2s, proxy.ts: 2ms, generate-params: 7ms, application-code: 228ms)
+ GET /ar/dev/ui 200 in 14.5s (next.js: 14.2s, proxy.ts: 2ms, generate-params: 6ms, application-code: 249ms)
+ GET /en 200 in 101ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 85ms)
+ GET /en/dev/ui 200 in 181ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 165ms)
+ GET /en 200 in 106ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 97ms)
+ GET /en 200 in 96ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 80ms)
+ GET /en/dev/ui 200 in 171ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 155ms)
+ GET /ar/nope 404 in 123ms (next.js: 12ms, proxy.ts: 3ms, application-code: 108ms)
+ GET /ar/nope 404 in 96ms (next.js: 12ms, proxy.ts: 3ms, application-code: 82ms)
+ GET /en/nope 404 in 94ms (next.js: 12ms, proxy.ts: 3ms, application-code: 80ms)
+ GET /en/nope 404 in 102ms (next.js: 11ms, proxy.ts: 2ms, application-code: 88ms)
+ GET /ar/admin/orders 404 in 715ms (next.js: 11ms, proxy.ts: 3ms, application-code: 701ms)
+ GET /ar/admin/orders 404 in 271ms (next.js: 18ms, proxy.ts: 3ms, application-code: 250ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 72ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 8ms, application-code: 56ms)
+ GET /ar 200 in 91ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 76ms)
+ GET /en 200 in 90ms (next.js: 5ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 74ms)
+ GET /ar/admin 200 in 368ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 353ms)
+ GET /en/admin 200 in 384ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 370ms)
+ GET /ar/dev/ui 200 in 147ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 133ms)
+ GET /en/dev/ui 200 in 137ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 124ms)
+ GET /ar/nope 404 in 106ms (next.js: 11ms, proxy.ts: 2ms, application-code: 93ms)
+ GET /en/nope 404 in 100ms (next.js: 12ms, proxy.ts: 2ms, application-code: 86ms)
+ GET /ar/admin/orders 404 in 270ms (next.js: 12ms, proxy.ts: 3ms, application-code: 256ms)
+ GET /ar 200 in 95ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 82ms)
+ GET /en/admin 200 in 395ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 381ms)
+ GET /ar/dev/ui 200 in 140ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 126ms)
+ GET /ar 200 in 184ms (next.js: 109ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 67ms)
+ GET /ar 200 in 77ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 69ms)
+ GET /ar 200 in 89ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 77ms)
+ GET /en 200 in 86ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 78ms)
+ GET /ar/sign-in 200 in 146ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 125ms)
+ GET /ar/sign-up 200 in 123ms (next.js: 8ms, proxy.ts: 2ms, generate-params: 9ms, application-code: 103ms)
+ GET /ar/account 307 in 119ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 102ms)
+ GET /ar/forgot-password 200 in 116ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 99ms)
+ GET /ar/reset-password 200 in 136ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 119ms)
+ GET /ar/nope 404 in 123ms (next.js: 13ms, proxy.ts: 3ms, application-code: 107ms)
+ GET /ar/staff/sign-in 200 in 93ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 75ms)
+ GET /ar/staff/two-factor 307 in 119ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 95ms)
+ GET /ar/staff/two-factor/setup 307 in 120ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 100ms)
+ GET /ar/staff/change-password 307 in 406ms (next.js: 306ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 88ms)
+ GET /ar/staff/forbidden 200 in 280ms (next.js: 223ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 48ms)
+ GET /ar/staff/forgot-password 200 in 335ms (next.js: 274ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 52ms)
+ GET /ar/staff/reset-password 200 in 313ms (next.js: 244ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 59ms)
+ GET /ar/admin 307 in 92ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 77ms)
+ GET /ar/admin/orders 307 in 109ms (next.js: 17ms, proxy.ts: 3ms, application-code: 90ms)
+ GET /en/admin/users 307 in 102ms (next.js: 10ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 80ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 337ms (next.js: 232ms, proxy.ts: 4ms, application-code: 102ms)
+ GET /ar/dev/ui 200 in 166ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 150ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 80ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 63ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 78ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 69ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 76ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 68ms)
+ GET /ar/dev/outbox 200 in 504ms (next.js: 238ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 257ms)
+ GET /ar/dev/services 200 in 206ms (next.js: 8ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 188ms)
+ GET /api/auth/customer/otp/request 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/otp/verify 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/password/forgot 405 in 7ms (next.js: 2ms, application-code: 4ms)
+ GET /api/auth/customer/password/reset 405 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/auth/customer/register 405 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/auth/customer/sign-in 405 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/auth/customer/sign-out 405 in 9ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/staff/password/change 405 in 9ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/staff/password/forgot 405 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/staff/password/reset 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/sign-in 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/sign-out 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/admin/users 401 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 15ms (next.js: 10ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 18ms (next.js: 12ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 19ms (next.js: 12ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 18ms (next.js: 10ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 20ms (next.js: 13ms, application-code: 6ms)
+ GET /api/dev/outbox?limit=1 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/storage/warm-up.txt 404 in 24ms (next.js: 14ms, application-code: 11ms)
+ GET /ar/sign-in 200 in 98ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 84ms)
+ GET /en/sign-in 200 in 119ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 110ms)
+ GET /en/account 307 in 105ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 91ms)
+ GET /en/sign-in?next=%2Fen%2Faccount 200 in 97ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 81ms)
+ GET /en/sign-up 200 in 123ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 108ms)
+ POST /api/auth/staff/sign-in 200 in 1059ms (next.js: 3ms, application-code: 1056ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 205ms (next.js: 3ms, application-code: 202ms)
+ POST /api/auth/staff/two-factor/confirm 200 in 623ms (next.js: 4ms, application-code: 619ms)
+ GET /en/admin/users 200 in 414ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 400ms)
+ POST /api/auth/customer/register 201 in 1755ms (next.js: 3ms, application-code: 1752ms)
+ POST /api/admin/users 201 in 273ms (next.js: 3ms, application-code: 270ms)
+ GET /en/account 200 in 116ms (next.js: 11ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 92ms)
+ GET /en/account 200 in 187ms (next.js: 17ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 164ms)
+ GET /en/admin/users 200 in 295ms (next.js: 48ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 236ms)
+ POST /api/auth/customer/sign-out 200 in 143ms (next.js: 4ms, application-code: 140ms)
+ POST /api/auth/staff/sign-in 200 in 424ms (next.js: 3ms, application-code: 421ms)
+ GET /en/sign-in 200 in 60ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 43ms)
+ GET /en/sign-in 200 in 93ms (next.js: 20ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 64ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 117ms (next.js: 5ms, application-code: 113ms)
+ GET /en/account 307 in 137ms (next.js: 16ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 111ms)
+ GET /en/sign-in?next=%2Fen%2Faccount 200 in 125ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 114ms)
+ POST /api/auth/staff/two-factor/confirm 200 in 556ms (next.js: 3ms, application-code: 553ms)
+ GET /api/admin/users 403 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /en/admin/users 307 in 345ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 326ms)
+ GET /en/staff/change-password?next=%2Fen%2Fadmin%2Fusers 200 in 75ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 58ms)
+ POST /api/auth/customer/sign-in 401 in 423ms (next.js: 4ms, application-code: 419ms)
+ POST /api/auth/staff/password/change 200 in 379ms (next.js: 3ms, application-code: 376ms)
+ GET /en/admin/users 200 in 242ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 224ms)
+ GET /en/admin/users 200 in 187ms (next.js: 26ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 154ms)
+ GET /en/staff/forbidden 200 in 62ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 41ms)
+ GET /en/staff/forbidden 200 in 52ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 0.1ms, application-code: 39ms)
+ POST /api/auth/customer/sign-in 200 in 806ms (next.js: 4ms, application-code: 802ms)
+ GET /en/account 200 in 61ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 11ms, application-code: 39ms)
+ GET /en/account 200 in 91ms (next.js: 12ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 75ms)
+ GET /api/admin/users 403 in 10ms (next.js: 2ms, application-code: 8ms)
+ POST /api/admin/users 403 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /en/admin/users 307 in 334ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 314ms)
+ GET /en/staff/forbidden 200 in 78ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 58ms)
+ GET /ar/sign-in 200 in 216ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 193ms)
+ GET /en/admin/users 200 in 602ms (next.js: 13ms, proxy.ts: 10ms, generate-params: 10ms, application-code: 569ms)
+ POST /api/admin/users/8eb056cf-89ab-479d-86ba-2d36a5ebb6c7/suspend 200 in 143ms (next.js: 15ms, application-code: 129ms)
+ GET /en/admin/users 200 in 145ms (next.js: 10ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 123ms)
+ GET /api/admin/users 401 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /en/admin/users 307 in 107ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 96ms)
+ GET /en/staff/sign-in?next=%2Fen%2Fadmin%2Fusers 200 in 92ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 74ms)
+ POST /api/admin/users/8eb056cf-89ab-479d-86ba-2d36a5ebb6c7/reinstate 200 in 150ms (next.js: 11ms, application-code: 139ms)
+ POST /api/auth/customer/otp/request 200 in 990ms (next.js: 3ms, application-code: 987ms)
+ GET /en/admin/users 200 in 173ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 151ms)
+ POST /api/auth/customer/otp/verify 200 in 511ms (next.js: 4ms, application-code: 507ms)
+ GET /ar/account 200 in 51ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 33ms)
+ GET /ar/account 200 in 99ms (next.js: 22ms, proxy.ts: 16ms, generate-params: 0.0ms, application-code: 61ms)
+ POST /api/admin/users/8eb056cf-89ab-479d-86ba-2d36a5ebb6c7/revoke 200 in 299ms (next.js: 10ms, application-code: 290ms)
+ GET /en/admin/users 200 in 159ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 141ms)
+ GET /api/admin/users 401 in 9ms (next.js: 3ms, application-code: 6ms)
+ POST /api/auth/customer/register 201 in 1176ms (next.js: 5ms, application-code: 1171ms)
+ GET /en/forgot-password 200 in 101ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 87ms)
+ POST /api/auth/staff/sign-in 401 in 805ms (next.js: 2ms, application-code: 803ms)
+ GET /api/admin/users 200 in 524ms (next.js: 506ms, application-code: 18ms)
+ POST /api/auth/customer/password/forgot 200 in 1628ms (next.js: 110ms, application-code: 1518ms)
+ POST /api/admin/users/121d58d7-5e67-4d1e-a6d1-1f7e0c9ceb79/suspend 409 in 8.5s (next.js: 8.5s, application-code: 11ms)
+ GET /en/admin/users/8eb056cf-89ab-479d-86ba-2d36a5ebb6c7 200 in 1888ms (next.js: 1135ms, proxy.ts: 5ms, application-code: 749ms)
+ GET /ar/admin/users 200 in 1264ms (next.js: 869ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 386ms)
+ GET /en/reset-password?token=J_HXdg0YY1pgEGE1jcb7h2gVVHSo5MG6q9fWGT8lkik 200 in 12.3s (next.js: 12.2s, proxy.ts: 2ms, generate-params: 7ms, application-code: 82ms)
+ POST /api/auth/customer/password/reset 200 in 141ms (next.js: 3ms, application-code: 138ms)
+ POST /api/auth/customer/sign-in 200 in 654ms (next.js: 3ms, application-code: 651ms)
+ POST /api/auth/customer/sign-in 401 in 628ms (next.js: 3ms, application-code: 625ms)
+ GET /ar 200 in 89ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 73ms)
+ POST /api/auth/customer/sign-in 401 in 867ms (next.js: 4ms, application-code: 863ms)
+ POST /api/auth/customer/sign-in 401 in 241ms (next.js: 2ms, application-code: 239ms)
+ GET /ar 200 in 113ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 96ms)
+ POST /api/auth/customer/sign-in 401 in 332ms (next.js: 3ms, application-code: 329ms)
+ POST /api/auth/customer/sign-in 401 in 229ms (next.js: 2ms, application-code: 227ms)
+ POST /api/auth/customer/sign-in 401 in 410ms (next.js: 3ms, application-code: 407ms)
+ POST /api/auth/customer/sign-in 401 in 178ms (next.js: 3ms, application-code: 175ms)
+ GET /en 200 in 96ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 82ms)
+ POST /api/auth/customer/sign-in 401 in 408ms (next.js: 2ms, application-code: 406ms)
+ POST /api/auth/customer/sign-in 401 in 306ms (next.js: 4ms, application-code: 302ms)
+ GET /en 200 in 92ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 77ms)
+ POST /api/auth/customer/sign-in 401 in 384ms (next.js: 3ms, application-code: 381ms)
+ POST /api/auth/customer/sign-in 429 in 28ms (next.js: 6ms, application-code: 22ms)
+ GET /ar/admin 200 in 455ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 442ms)
+ GET /ar/admin 200 in 418ms (next.js: 9ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 402ms)
+ GET /ar/admin/orders 404 in 296ms (next.js: 12ms, proxy.ts: 2ms, application-code: 282ms)
+ GET /ar/admin 200 in 544ms (next.js: 15ms, proxy.ts: 6ms, generate-params: 9ms, application-code: 514ms)
+ GET /ar/admin 200 in 410ms (next.js: 17ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 388ms)
+ GET /en/admin 200 in 726ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 710ms)
+ GET /ar/admin 200 in 727ms (next.js: 21ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 703ms)
+ GET /ar/admin 200 in 470ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 451ms)
+ GET /ar/admin/stock 200 in 273ms (next.js: 19ms, proxy.ts: 5ms, application-code: 249ms)
+ GET /en/admin 200 in 465ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 451ms)
+ GET /ar/admin 200 in 386ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 377ms)
+ GET /ar/admin/orders 404 in 271ms (next.js: 13ms, proxy.ts: 3ms, application-code: 255ms)
+ GET /ar/dev/ui 200 in 347ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 325ms)
+ GET /en/admin 200 in 541ms (next.js: 9ms, proxy.ts: 6ms, generate-params: 7ms, application-code: 519ms)
+ GET /en/admin/orders 404 in 324ms (next.js: 12ms, proxy.ts: 2ms, application-code: 309ms)
+ GET /ar/dev/ui 200 in 206ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 184ms)
+ GET /en/admin 200 in 111ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 94ms)
+ GET /en/dev/ui 200 in 135ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 122ms)
+ GET /en/admin 200 in 414ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 400ms)
+ GET /en/dev/ui 200 in 159ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 140ms)
+ GET /en/admin 200 in 416ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 400ms)
+ GET /ar/nope 404 in 123ms (next.js: 13ms, proxy.ts: 3ms, application-code: 107ms)
+ GET /en/admin/stock 200 in 76ms (next.js: 19ms, proxy.ts: 6ms, application-code: 51ms)
+ GET /en/admin 200 in 480ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 464ms)
+ GET /en/admin/orders 404 in 291ms (next.js: 14ms, proxy.ts: 3ms, application-code: 274ms)
+ GET /ar/nope 404 in 110ms (next.js: 13ms, proxy.ts: 3ms, application-code: 95ms)
+ GET /en/nope 404 in 102ms (next.js: 11ms, proxy.ts: 3ms, application-code: 88ms)
+ GET /en/nope 404 in 112ms (next.js: 11ms, proxy.ts: 3ms, application-code: 98ms)
+ GET /ar/admin/orders 404 in 280ms (next.js: 11ms, proxy.ts: 2ms, application-code: 266ms)
+ GET /ar/admin/orders 404 in 285ms (next.js: 11ms, proxy.ts: 2ms, application-code: 272ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 72ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 59ms)
+ GET /ar 200 in 91ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 77ms)
+ GET /en 200 in 100ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 85ms)
+ GET /ar/admin 200 in 484ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 470ms)
+ GET /en/admin 200 in 421ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 407ms)
+ GET /ar/dev/ui 200 in 144ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 130ms)
+ GET /en/dev/ui 200 in 139ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 125ms)
+ GET /ar/nope 404 in 120ms (next.js: 11ms, proxy.ts: 2ms, application-code: 107ms)
+ GET /en/nope 404 in 112ms (next.js: 12ms, proxy.ts: 2ms, application-code: 98ms)
+ GET /ar/admin/orders 404 in 436ms (next.js: 17ms, proxy.ts: 4ms, application-code: 415ms)
+ GET /ar 200 in 97ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 82ms)
+ GET /en/admin 200 in 411ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 8ms, application-code: 396ms)
+ GET /ar/dev/ui 200 in 152ms (next.js: 9ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 134ms)
+ GET /ar 200 in 186ms (next.js: 69ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 107ms)
+ GET /ar 200 in 76ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 68ms)
+ GET /ar 200 in 78ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 70ms)
+ GET /en 200 in 78ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 71ms)
+ GET /ar/sign-in 200 in 102ms (next.js: 7ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 85ms)
+ GET /ar/sign-up 200 in 98ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 83ms)
+ GET /ar/account 307 in 118ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 101ms)
+ GET /ar/forgot-password 200 in 119ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 101ms)
+ GET /ar/reset-password 200 in 178ms (next.js: 11ms, proxy.ts: 4ms, generate-params: 12ms, application-code: 151ms)
+ GET /ar/nope 404 in 147ms (next.js: 16ms, proxy.ts: 3ms, application-code: 128ms)
+ GET /ar/staff/sign-in 200 in 86ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 66ms)
+ GET /ar/staff/two-factor 307 in 115ms (next.js: 19ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 83ms)
+ GET /ar/staff/two-factor/setup 307 in 129ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 108ms)
+ GET /ar/staff/change-password 307 in 106ms (next.js: 9ms, proxy.ts: 4ms, generate-params: 8ms, application-code: 85ms)
+ GET /ar/staff/forbidden 200 in 89ms (next.js: 11ms, proxy.ts: 3ms, generate-params: 10ms, application-code: 65ms)
+ GET /ar/staff/forgot-password 200 in 88ms (next.js: 11ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 65ms)
+ GET /ar/staff/reset-password 200 in 85ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 67ms)
+ GET /ar/admin 307 in 117ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 97ms)
+ GET /ar/admin/orders 307 in 138ms (next.js: 25ms, proxy.ts: 4ms, application-code: 109ms)
+ GET /en/admin/users 307 in 121ms (next.js: 10ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 100ms)
+ GET /ar/admin/users/00000000-0000-4000-8000-000000000000 307 in 123ms (next.js: 17ms, proxy.ts: 3ms, application-code: 103ms)
+ GET /ar/dev/ui 200 in 218ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 196ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 98ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 79ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 74ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 65ms)
+⨯ Error: Deliberate dev error (dev/ui/boom)
+    at BoomPage (src\app\[locale]\dev\ui\boom\page.tsx:12:50)
+  10 |   if (process.env.NODE_ENV === "production") notFound();
+  11 |   const jar = await cookies();
+> 12 |   if (jar.get("dc_boom")?.value !== "off") throw new Error("Deliberate dev error (dev/ui/boom)");
+     |                                                  ^
+  13 |   const t = await getTranslations("common.devUi.boom");
+  14 |   return (
+  15 |     <main id="main" className="mx-auto max-w-page px-4 py-16"> {
+  digest: '183151201'
+}
+ GET /ar/dev/ui/boom 500 in 79ms (next.js: 7ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 68ms)
+ GET /ar/dev/outbox 200 in 335ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 317ms)
+ GET /ar/dev/services 200 in 203ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 183ms)
+ GET /api/auth/customer/otp/request 405 in 9ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/customer/otp/verify 405 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/auth/customer/password/forgot 405 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/customer/password/reset 405 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/customer/register 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/sign-in 405 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/customer/sign-out 405 in 7ms (next.js: 2ms, application-code: 4ms)
+ GET /api/auth/staff/password/change 405 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/auth/staff/password/forgot 405 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/auth/staff/password/reset 405 in 11ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/staff/sign-in 405 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/auth/staff/sign-out 405 in 12ms (next.js: 4ms, application-code: 8ms)
+ GET /api/auth/staff/two-factor/challenge 405 in 9ms (next.js: 4ms, application-code: 5ms)
+ GET /api/auth/staff/two-factor/confirm 405 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/auth/staff/two-factor/enrol 405 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/admin/users 401 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reinstate 405 in 17ms (next.js: 11ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/reset-2fa 405 in 17ms (next.js: 11ms, application-code: 6ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/revoke 405 in 21ms (next.js: 14ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/role 405 in 20ms (next.js: 14ms, application-code: 7ms)
+ GET /api/admin/users/00000000-0000-4000-8000-000000000000/suspend 405 in 33ms (next.js: 17ms, application-code: 17ms)
+ GET /api/dev/outbox?limit=1 200 in 13ms (next.js: 4ms, application-code: 9ms)
+ GET /api/storage/warm-up.txt 404 in 34ms (next.js: 16ms, application-code: 19ms)
+ GET /ar/staff/sign-in 200 in 76ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 62ms)
+ GET /en/admin/users 307 in 89ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 74ms)
+ GET /en/staff/sign-in?next=%2Fen%2Fadmin%2Fusers 200 in 62ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 53ms)
+ GET /en/staff/sign-in 200 in 63ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 9ms, application-code: 46ms)
+ POST /api/auth/staff/sign-in 200 in 298ms (next.js: 4ms, application-code: 294ms)
+ GET /en/staff/two-factor/setup?next=%2Fen%2Fadmin 200 in 61ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 44ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 221ms (next.js: 3ms, application-code: 219ms)
+ GET /en/admin/users 307 in 100ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 85ms)
+ GET /en/staff/two-factor?next=%2Fen%2Fadmin%2Fusers 307 in 96ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 80ms)
+ GET /en/staff/two-factor/setup?next=%2Fen%2Fadmin%2Fusers 200 in 77ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 62ms)
+ GET /en/staff/two-factor/setup 200 in 68ms (next.js: 5ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 60ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 84ms (next.js: 4ms, application-code: 81ms)
+ POST /api/auth/staff/two-factor/enrol 200 in 65ms (next.js: 3ms, application-code: 62ms)
+ POST /api/auth/staff/two-factor/confirm 200 in 288ms (next.js: 4ms, application-code: 285ms)
+ GET /en/admin 200 in 312ms (next.js: 25ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 275ms)
+ GET /en/admin 200 in 250ms (next.js: 31ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 212ms)
+ GET /en/admin/users 200 in 515ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 499ms)
+ POST /api/auth/staff/sign-out 200 in 28ms (next.js: 3ms, application-code: 25ms)
+ GET /en/staff/sign-in 200 in 45ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 29ms)
+ GET /en/staff/sign-in 200 in 40ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 31ms)
+ POST /api/auth/staff/sign-in 200 in 935ms (next.js: 3ms, application-code: 933ms)
+ GET /en/staff/two-factor?next=%2Fen%2Fadmin 200 in 51ms (next.js: 8ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 32ms)
+ POST /api/auth/staff/two-factor/challenge 401 in 57ms (next.js: 3ms, application-code: 55ms)
+ POST /api/auth/staff/two-factor/challenge 200 in 214ms (next.js: 3ms, application-code: 212ms)
+ GET /en/admin 200 in 271ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 256ms)
+ GET /en/admin 200 in 229ms (next.js: 28ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 196ms)
+ GET /api/admin/users 401 in 7ms (next.js: 2ms, application-code: 5ms)
+ POST /api/auth/staff/sign-in 200 in 539ms (next.js: 2ms, application-code: 537ms)
+ GET /api/admin/users 401 in 9ms (next.js: 3ms, application-code: 6ms)
+[?25h

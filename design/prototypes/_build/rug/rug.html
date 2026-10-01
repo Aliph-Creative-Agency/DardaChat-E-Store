@@ -1,0 +1,15 @@
+<body style="margin:0;background:#ede8df"><canvas id=c width=600 height=600></canvas><script>
+var RUG={m:[
+ ['M24 24C38 18 58 30 78 22',22],
+ ['M13 40C32 34 60 46 87 38',22],
+ ['M11 56C34 50 62 62 89 54',22],
+ ['M15 72C36 66 60 78 85 70',22],
+ ['M26 86C42 82 60 90 76 84',18]],
+ a:[['M9 90C30 99 58 99 82 91',3.4]]};
+var c=document.getElementById('c').getContext('2d');c.scale(6,6);c.lineCap='round';c.lineJoin='round';
+RUG.m.forEach(s=>{c.strokeStyle='#bbd3eb';c.lineWidth=s[1];c.stroke(new Path2D(s[0]))});
+c.setLineDash([9,2.5,16,3.5,6,2]);
+RUG.m.forEach(s=>{c.save();c.translate(0,-4);c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=1.1;c.stroke(new Path2D(s[0]));c.translate(0,8);c.strokeStyle='rgba(26,73,153,.14)';c.stroke(new Path2D(s[0]));c.restore()});
+c.setLineDash([]);
+RUG.a.forEach(s=>{c.strokeStyle='#eeb3e7';c.lineWidth=s[1];c.stroke(new Path2D(s[0]))});
+</script>

@@ -1,0 +1,2 @@
+const { chromium } = require(require.resolve('@playwright/test', { paths: ['D:/Personal/Projects/DardaChat-E-store/web'] }));
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:600,height:600}});await p.goto('file:///D:/Personal/Projects/DardaChat-E-store/design/prototypes/_build/rug/rug.html');await p.screenshot({path:'D:/Personal/Projects/DardaChat-E-store/design/prototypes/_build/rug/rug.png'});await b.close();})();

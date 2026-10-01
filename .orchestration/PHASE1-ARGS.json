@@ -1,0 +1,88 @@
+{
+ "mode": "teams",
+ "maxCycles": 18,
+ "units": [
+  {
+   "id": "inventory",
+   "team": "inventory",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/inventory",
+   "dir": "D:/Personal/Projects/DardaChat-wt/inventory",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54324, web 3004. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/inventory -b team/inventory foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54324 and WEB_PORT=3004 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "orders",
+   "team": "orders",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/orders",
+   "dir": "D:/Personal/Projects/DardaChat-wt/orders",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54323, web 3003. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/orders -b team/orders foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54323 and WEB_PORT=3003 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "payments",
+   "team": "payments",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/payments",
+   "dir": "D:/Personal/Projects/DardaChat-wt/payments",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54325, web 3005. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/payments -b team/payments foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54325 and WEB_PORT=3005 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "catalog",
+   "team": "catalog",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/catalog",
+   "dir": "D:/Personal/Projects/DardaChat-wt/catalog",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54321, web 3001. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/catalog -b team/catalog foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54321 and WEB_PORT=3001 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "storefront",
+   "team": "storefront",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/storefront",
+   "dir": "D:/Personal/Projects/DardaChat-wt/storefront",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54322, web 3002. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/storefront -b team/storefront foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54322 and WEB_PORT=3002 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "engagement",
+   "team": "engagement",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/engagement",
+   "dir": "D:/Personal/Projects/DardaChat-wt/engagement",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54326, web 3006. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/engagement -b team/engagement foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54326 and WEB_PORT=3006 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "insights",
+   "team": "insights",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/insights",
+   "dir": "D:/Personal/Projects/DardaChat-wt/insights",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54327, web 3007. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/insights -b team/insights foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54327 and WEB_PORT=3007 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "assistant",
+   "team": "assistant",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/assistant",
+   "dir": "D:/Personal/Projects/DardaChat-wt/assistant",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54328, web 3008. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/assistant -b team/assistant foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54328 and WEB_PORT=3008 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  },
+  {
+   "id": "journey",
+   "team": "journey",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/journey",
+   "dir": "D:/Personal/Projects/DardaChat-wt/journey",
+   "extra": "Phase 1 feature team. Foundation is done and tagged foundation-v1 on main. Before anything else read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md. Eight other teams build in parallel in their own worktrees; only touch your owned paths (BRIEF.md). Your ports: DB 54329, web 3009. Replace your module stubs with real implementations but keep the contract signatures (or record a contract change in CHANGE-REQUESTS.md + DECISIONS.md). Other modules stay stubs in your branch until integration, so test your module with its dependencies stubbed or seeded directly.",
+   "setup": "if the worktree does not exist: `git -C D:/Personal/Projects/DardaChat-E-store worktree add D:/Personal/Projects/DardaChat-wt/journey -b team/journey foundation-v1`; in its web/: `npm ci`, create .env.local from .env.example with PG_PORT=54329 and WEB_PORT=3009 (plus anything FOUNDATION-NOTES.md says), db:start, db:setup, db:seed, and confirm typecheck + tests pass before planning tasks. Do this setup yourself during planning.",
+   "skipPlan": true
+  }
+ ],
+ "concurrency": 3
+}

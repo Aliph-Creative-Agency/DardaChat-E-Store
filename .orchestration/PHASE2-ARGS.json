@@ -1,0 +1,14 @@
+{
+ "mode": "teams",
+ "maxCycles": 24,
+ "units": [
+  {
+   "id": "integration",
+   "team": "integration",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/integration",
+   "dir": "D:/Personal/Projects/DardaChat-E-store",
+   "extra": "Phase 2 Integration. All nine Phase 1 teams have finished on their team/* branches. Read D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md, D:/Personal/Projects/DardaChat-E-store/.orchestration/CONTRACTS.md, D:/Personal/Projects/DardaChat-E-store/.orchestration/CHANGE-REQUESTS.md, D:/Personal/Projects/DardaChat-E-store/.orchestration/DECISIONS.md. You work in the main repo directory on branch integration. DB 54320, web 3000. Stop any Phase 1 team DB still running on other ports only if it blocks you.",
+   "setup": "create branch integration from main in D:/Personal/Projects/DardaChat-E-store if missing (git -C D:/Personal/Projects/DardaChat-E-store switch -c integration main); make sure web/ runs (npm ci, db:start, db:setup, db:seed)."
+  }
+ ]
+}

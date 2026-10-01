@@ -1,0 +1,275 @@
+
+Running 97 tests using 6 workers
+
+  ok  3 [chromium] › tests\e2e\auth\staff.spec.ts:17:5 › /ar/staff/sign-in renders rtl Arabic (22.2s)
+  ok  2 [chromium] › tests\e2e\platform\shell-admin.spec.ts:15:9 › ar admin shell › sidebar sits on the start side with every section and the dashboard marked current (30.5s)
+  ok  7 [chromium] › tests\e2e\auth\staff.spec.ts:23:5 › an admin page without a session goes to staff sign-in (27.6s)
+  ok  6 [chromium] › tests\e2e\auth\customer.spec.ts:8:5 › /ar sign-in renders rtl Arabic; /en renders ltr English (1.0m)
+  ok  1 [chromium] › tests\e2e\core\dev-tools.spec.ts:3:5 › dev pages render in both locales without console errors (1.2m)
+  ok 10 [chromium] › tests\e2e\auth\customer.spec.ts:17:5 › account requires a session (14.4s)
+  x   5 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar at 1440px has no violations (1.3m)
+  ok 11 [chromium] › tests\e2e\core\dev-tools.spec.ts:32:5 › a test message posted to /api/dev/outbox shows on /ar/dev/outbox (47.7s)
+  x   4 [chromium] › tests\e2e\auth\admin-users.spec.ts:53:5 › owner creates a staff user; that staff session gets 403 from the admin API and page (57.2s)
+  -  14 [chromium] › tests\e2e\auth\admin-users.spec.ts:89:5 › suspend → the staff user's next request is rejected; reinstate; revoke → rejected, history kept
+  x   8 [chromium] › tests\e2e\platform\shell-admin.spec.ts:33:9 › ar admin shell › an unbuilt section shows the admin not-found inside the shell with its item current (1.7m)
+  x  12 [chromium] › tests\e2e\auth\customer.spec.ts:22:5 › register → account → sign out → sign in (54.8s)
+  ok 13 [chromium] › tests\e2e\core\dev-tools.spec.ts:49:5 › toggling sms down on /ar/dev/services degrades it after a failed send, and back up (26.5s)
+  ok 15 [chromium] › tests\e2e\platform\shell-errors.spec.ts:11:7 › /ar/nope → 404 with ar copy inside the store chrome and a link home (4.4s)
+  x   9 [chromium] › tests\e2e\auth\staff.spec.ts:28:5 › owner: sign in → forced enrolment → recovery codes → admin; sign out; sign in → challenge (1.6m)
+  ok 16 [chromium] › tests\e2e\platform\shell-errors.spec.ts:21:7 › /ar/dev/ui/boom shows the localized error page and "try again" recovers (5.4s)
+  ok 17 [chromium] › tests\e2e\platform\shell-components.spec.ts:12:9 › Dialog › ar: opens as a labelled modal, Esc closes it, focus returns to the trigger (4.1s)
+  ok 18 [chromium] › tests\e2e\platform\shell-errors.spec.ts:11:7 › /en/nope → 404 with en copy inside the store chrome and a link home (1.5s)
+  ok 19 [chromium] › tests\e2e\platform\shell-components.spec.ts:12:9 › Dialog › en: opens as a labelled modal, Esc closes it, focus returns to the trigger (1.6s)
+  ok 21 [chromium] › tests\e2e\platform\shell-components.spec.ts:34:7 › Dialog › close button closes and returns focus (1.2s)
+  ok 20 [chromium] › tests\e2e\platform\shell-errors.spec.ts:21:7 › /en/dev/ui/boom shows the localized error page and "try again" recovers (1.7s)
+  ok 23 [chromium] › tests\e2e\platform\shell-errors.spec.ts:35:5 › /xx/nope (unknown locale) → 404 in the default locale (688ms)
+  ok 22 [chromium] › tests\e2e\platform\shell-components.spec.ts:54:9 › Tabs follow the visual direction › ar: ArrowLeft moves to the next tab, ArrowRight to the previous, Home/End jump (1.4s)
+  ok 24 [chromium] › tests\e2e\platform\shell-errors.spec.ts:41:5 › a URL no route matches gets the bilingual global 404 (3.2s)
+  ok 25 [chromium] › tests\e2e\platform\shell-components.spec.ts:54:9 › Tabs follow the visual direction › en: ArrowRight moves to the next tab, ArrowLeft to the previous, Home/End jump (2.9s)
+  ok 27 [chromium] › tests\e2e\platform\shell-components.spec.ts:82:7 › Tabs follow the visual direction › ar: the next tab sits to the LEFT of the first (tabs run right-to-left) (3.2s)
+  ok 28 [chromium] › tests\e2e\platform\shell-components.spec.ts:97:7 › Toast › polite toasts appear in a status live region, errors in an alert region (3.1s)
+  ok 29 [chromium] › tests\e2e\platform\shell-components.spec.ts:116:7 › Toast › ar: toasts sit at the logical end (left side) and auto-dismiss (1.6s)
+  ok 26 [chromium] › tests\e2e\platform\shell-locale.spec.ts:4:7 › locale routing (UI-001, UI-003) › / goes to /ar even when the browser prefers English (8.6s)
+  ok 31 [chromium] › tests\e2e\platform\shell-locale.spec.ts:16:7 › locale routing (UI-001, UI-003) › / follows the NEXT_LOCALE cookie (4.9s)
+  ok 30 [chromium] › tests\e2e\platform\shell-components.spec.ts:131:7 › Toast › hover pauses auto-dismiss (5.9s)
+  x  33 [chromium] › tests\e2e\auth\staff.spec.ts:70:5 › a password-only session cookie gets 401 from an admin API (3.8s)
+  ok 36 [chromium] › tests\e2e\platform\shell-locale.spec.ts:25:7 › locale routing (UI-001, UI-003) › /ar is Arabic right-to-left, /en English left-to-right (4.2s)
+  ok 32 [chromium] › tests\e2e\platform\shell-admin.spec.ts:45:9 › ar admin shell › first Tab is the skip link to main (8.9s)
+  ok 40 [chromium] › tests\e2e\platform\shell-admin.spec.ts:51:9 › ar admin shell › at 375px the sidebar is a drawer that opens and closes (4.5s)
+  ok 35 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar at 375px has no violations (14.3s)
+  ok 38 [chromium] › tests\e2e\platform\shell-locale.spec.ts:34:7 › locale routing (UI-001, UI-003) › unknown locales and paths are 404 (7.3s)
+  ok 43 [chromium] › tests\e2e\platform\shell-locale.spec.ts:41:7 › locale routing (UI-001, UI-003) › /api/* is not locale-redirected (844ms)
+  ok 39 [chromium] › tests\e2e\platform\shell-store.spec.ts:14:9 › ar storefront shell › has header, nav, main and footer landmarks; first Tab is the skip link (8.4s)
+  ok 42 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en at 1440px has no violations (2.1s)
+  ok 41 [chromium] › tests\e2e\platform\shell-admin.spec.ts:86:9 › ar admin shell › no horizontal scroll from 320 to 1440 (5.4s)
+  ok 37 [chromium] › tests\e2e\platform\shell-components.spec.ts:147:7 › LocaleSwitcher › ar → en keeps the path and query and remembers the choice (14.8s)
+  ok 45 [chromium] › tests\e2e\platform\shell-store.spec.ts:31:9 › ar storefront shell › the logo is the home link and the header nav lists the seven brand destinations (3.2s)
+  ok 46 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en at 375px has no violations (3.4s)
+  ok 47 [chromium] › tests\e2e\platform\shell-admin.spec.ts:15:9 › en admin shell › sidebar sits on the start side with every section and the dashboard marked current (2.9s)
+  ok 49 [chromium] › tests\e2e\platform\shell-store.spec.ts:38:9 › ar storefront shell › footer carries the contact block (2.5s)
+  ok 48 [chromium] › tests\e2e\platform\shell-components.spec.ts:164:9 › Table + data display › ar: a wide table at 320px scrolls inside its wrapper, not the page (3.8s)
+  ok 50 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/admin at 1440px has no violations (3.2s)
+  ok 52 [chromium] › tests\e2e\platform\shell-store.spec.ts:47:9 › ar storefront shell › nav sits on the start side (2.1s)
+  ok 54 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/admin at 375px has no violations (17.5s)
+  ok 53 [chromium] › tests\e2e\platform\shell-components.spec.ts:164:9 › Table + data display › en: a wide table at 320px scrolls inside its wrapper, not the page (18.3s)
+  ok 34 [chromium] › tests\e2e\auth\customer.spec.ts:49:5 › phone + OTP sign-in (code read from the outbox) (42.2s)
+  ok 44 [chromium] › tests\e2e\platform\shell-locale.spec.ts:48:5 › switching to English with the locale switcher makes / land on /en afterwards (UI-003) (26.9s)
+  ok 56 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/admin at 1440px has no violations (2.6s)
+  ok 55 [chromium] › tests\e2e\platform\shell-store.spec.ts:56:9 › ar storefront shell › at 375px the menu button opens and closes the mobile menu (19.3s)
+  ok 57 [chromium] › tests\e2e\platform\shell-components.spec.ts:178:7 › Table + data display › pagination marks the current page and links keep the query (3.3s)
+  ok 51 [chromium] › tests\e2e\platform\shell-admin.spec.ts:33:9 › en admin shell › an unbuilt section shows the admin not-found inside the shell with its item current (23.6s)
+  ok 59 [chromium] › tests\e2e\platform\smoke.spec.ts:3:5 › /ar renders right-to-left Arabic (3.4s)
+  ok 61 [chromium] › tests\e2e\platform\shell-store.spec.ts:89:9 › ar storefront shell › no horizontal scroll from 320 to 1440 (4.4s)
+  ok 63 [chromium] › tests\e2e\platform\shell-admin.spec.ts:45:9 › en admin shell › first Tab is the skip link to main (2.6s)
+  ok 62 [chromium] › tests\e2e\platform\shell-components.spec.ts:186:7 › Table + data display › sale price exposes now/was to assistive tech (4.1s)
+  ok 64 [chromium] › tests\e2e\platform\smoke.spec.ts:9:5 › /en renders left-to-right English (2.6s)
+  ok 65 [chromium] › tests\e2e\platform\shell-store.spec.ts:14:9 › en storefront shell › has header, nav, main and footer landmarks; first Tab is the skip link (2.8s)
+  ok 67 [chromium] › tests\e2e\platform\smoke.spec.ts:15:5 › / redirects to the default locale (1.9s)
+  ok 66 [chromium] › tests\e2e\platform\shell-admin.spec.ts:51:9 › en admin shell › at 375px the sidebar is a drawer that opens and closes (3.6s)
+  ok 60 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/admin at 375px has no violations (9.4s)
+  ok 68 [chromium] › tests\e2e\platform\shell-store.spec.ts:31:9 › en storefront shell › the logo is the home link and the header nav lists the seven brand destinations (3.4s)
+  ok 58 [chromium] › tests\e2e\auth\customer.spec.ts:65:5 › forgot → reset via the emailed link → sign in with the new password (14.0s)
+  ok 70 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/dev/ui at 1440px has no violations (3.6s)
+  ok 69 [chromium] › tests\e2e\platform\shell-admin.spec.ts:86:9 › en admin shell › no horizontal scroll from 320 to 1440 (7.3s)
+  ok 72 [chromium] › tests\e2e\auth\customer.spec.ts:90:5 › API: 429 with Retry-After once the identity limit is hit (8.4s)
+  ok 71 [chromium] › tests\e2e\platform\shell-store.spec.ts:38:9 › en storefront shell › footer carries the contact block (17.2s)
+  ok 73 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/dev/ui at 375px has no violations (15.8s)
+  ok 74 [chromium] › tests\e2e\platform\shell-store.spec.ts:47:9 › en storefront shell › nav sits on the start side (869ms)
+  ok 76 [chromium] › tests\e2e\platform\shell-store.spec.ts:56:9 › en storefront shell › at 375px the menu button opens and closes the mobile menu (938ms)
+  ok 75 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/dev/ui at 1440px has no violations (1.6s)
+  ok 77 [chromium] › tests\e2e\platform\shell-store.spec.ts:89:9 › en storefront shell › no horizontal scroll from 320 to 1440 (621ms)
+  ok 78 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/dev/ui at 375px has no violations (1.4s)
+  ok 79 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/nope at 1440px has no violations (1.4s)
+  ok 80 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/nope at 375px has no violations (1.6s)
+  ok 81 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/nope at 1440px has no violations (1.2s)
+  ok 82 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /en/nope at 375px has no violations (1.5s)
+  ok 83 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/admin/orders at 1440px has no violations (2.5s)
+  ok 84 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar/admin/orders at 375px has no violations (1.4s)
+  ok 85 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:58:7 › axe (WCAG 2.2 A/AA) › the error boundary page has no violations (4.0s)
+  ok 86 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /ar never scrolls sideways at 320..1440 (2.4s)
+  ok 87 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /en never scrolls sideways at 320..1440 (1.7s)
+  ok 88 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /ar/admin never scrolls sideways at 320..1440 (17.7s)
+  ok 89 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /en/admin never scrolls sideways at 320..1440 (1.7s)
+  ok 90 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /ar/dev/ui never scrolls sideways at 320..1440 (1.5s)
+  ok 91 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /en/dev/ui never scrolls sideways at 320..1440 (1.2s)
+  ok 92 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /ar/nope never scrolls sideways at 320..1440 (1.1s)
+  ok 93 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /en/nope never scrolls sideways at 320..1440 (1.5s)
+  ok 94 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:70:9 › viewport sweep › /ar/admin/orders never scrolls sideways at 320..1440 (1.3s)
+  ok 95 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:87:9 › keyboard focus ring › /ar: every Tab stop shows a visible focus ring (1.7s)
+  ok 96 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:87:9 › keyboard focus ring › /en/admin: every Tab stop shows a visible focus ring (2.1s)
+  ok 97 [chromium] › tests\e2e\platform\shell-a11y.spec.ts:87:9 › keyboard focus ring › /ar/dev/ui: every Tab stop shows a visible focus ring (2.2s)
+
+
+  1) [chromium] › tests\e2e\auth\admin-users.spec.ts:53:5 › owner creates a staff user; that staff session gets 403 from the admin API and page 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('[data-testid="staff-user-row"][data-email="e2e-staff-4rxgny@dardachat.test"]').getByTestId('staff-user-status')
+    Expected: "Active"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" locator('[data-testid="staff-user-row"][data-email="e2e-staff-4rxgny@dardachat.test"]').getByTestId('staff-user-status') with timeout 5000ms
+      - waiting for locator('[data-testid="staff-user-row"][data-email="e2e-staff-4rxgny@dardachat.test"]').getByTestId('staff-user-status')
+
+
+      64 |   const tempPassword = (await temp.textContent())!.trim();
+      65 |   expect(tempPassword.length).toBeGreaterThanOrEqual(16);
+    > 66 |   await expect(row().getByTestId("staff-user-status")).toHaveText("Active");
+         |                                                        ^
+      67 |
+      68 |   await signInAndEnrol(staffCtx.request, STAFF_EMAIL, tempPassword);
+      69 |   // NFR-SEC-003: until the Owner-issued temp password is changed, the server refuses admin pages and APIs
+        at D:\Personal\Projects\DardaChat-E-store\web\tests\e2e\auth\admin-users.spec.ts:66:56
+
+    Fixture "trace recording" timeout of 60000ms exceeded during teardown.
+
+    Error: browserContext._wrapApiCall: Tracing is already stopping
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-admin-users-owner-cre-6124a-from-the-admin-API-and-page-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-admin-users-owner-cre-6124a-from-the-admin-API-and-page-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\e2e\auth\customer.spec.ts:22:5 › register → account → sign out → sign in ───
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/en\/account$/
+    Received string:  "http://localhost:3000/en/sign-up"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        14 × locator resolved to <html lang="en" dir="ltr" class="ibm_plex_sans_arabic_e28e9ae9-module__xbDrMa__variable ibm_plex_sans_ec9d2aa5-module__Jnt7EW__variable baloo_bhaijaan_2_22cd7f44-module__tXw76a__variable">…</html>
+           - unexpected value "http://localhost:3000/en/sign-up"
+
+
+      29 |   await page.getByLabel("Password", { exact: true }).fill(password);
+      30 |   await page.getByRole("button", { name: "Create account" }).click();
+    > 31 |   await expect(page).toHaveURL(/\/en\/account$/);
+         |                      ^
+      32 |   await expect(page.getByTestId("account-identity")).toContainText(email);
+      33 |
+      34 |   await page.getByRole("button", { name: "Sign out" }).click();
+        at D:\Personal\Projects\DardaChat-E-store\web\tests\e2e\auth\customer.spec.ts:31:22
+
+    Error Context: test-results\auth-customer-register-→-account-→-sign-out-→-sign-in-chromium\error-context.md
+
+    Error Context: test-results\auth-customer-register-→-account-→-sign-out-→-sign-in-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-customer-register-→-account-→-sign-out-→-sign-in-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-customer-register-→-account-→-sign-out-→-sign-in-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › tests\e2e\auth\staff.spec.ts:28:5 › owner: sign in → forced enrolment → recovery codes → admin; sign out; sign in → challenge 
+
+    Test timeout of 60000ms exceeded.
+
+    Error Context: test-results\auth-staff-owner-sign-in-→-d0280-ign-out-sign-in-→-challenge-chromium\error-context.md
+
+    Error Context: test-results\auth-staff-owner-sign-in-→-d0280-ign-out-sign-in-→-challenge-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-staff-owner-sign-in-→-d0280-ign-out-sign-in-→-challenge-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-staff-owner-sign-in-→-d0280-ign-out-sign-in-→-challenge-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [chromium] › tests\e2e\auth\staff.spec.ts:70:5 › a password-only session cookie gets 401 from an admin API 
+
+    Error: expect(received).toMatchObject(expected)
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "next": "challenge",
+    +   "next": "enrol",
+        "ok": true,
+      }
+
+      72 |   const r = await request.post("/api/auth/staff/sign-in", { data: { email: OWNER_EMAIL, password: OWNER_PASSWORD } });
+      73 |   expect(r.status()).toBe(200);
+    > 74 |   expect(await r.json()).toMatchObject({ ok: true, next: "challenge" });
+         |                          ^
+      75 |   const api = await request.get("/api/admin/users");
+      76 |   expect(api.status()).toBe(401);
+      77 |   expect(await api.json()).toEqual({ error: "two_factor_required" });
+        at D:\Personal\Projects\DardaChat-E-store\web\tests\e2e\auth\staff.spec.ts:74:26
+
+    Error Context: test-results\auth-staff-a-password-only-173d9--gets-401-from-an-admin-API-chromium\error-context.md
+
+    Error Context: test-results\auth-staff-a-password-only-173d9--gets-401-from-an-admin-API-chromium\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\auth-staff-a-password-only-173d9--gets-401-from-an-admin-API-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\auth-staff-a-password-only-173d9--gets-401-from-an-admin-API-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar at 1440px has no violations 
+
+    Tearing down "context" exceeded the test timeout of 60000ms.
+
+    Error Context: test-results\platform-shell-a11y-axe-WC-54aa9-at-1440px-has-no-violations-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\platform-shell-a11y-axe-WC-54aa9-at-1440px-has-no-violations-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\platform-shell-a11y-axe-WC-54aa9-at-1440px-has-no-violations-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [chromium] › tests\e2e\platform\shell-admin.spec.ts:33:9 › ar admin shell › an unbuilt section shows the admin not-found inside the shell with its item current 
+
+    Tearing down "context" exceeded the test timeout of 60000ms.
+
+    Error: browserContext.close: Test ended.
+    Browser logs:
+
+    <launching> C:\Users\Obaida\AppData\Local\ms-playwright\chromium_headless_shell-1243\chrome-headless-shell-win64\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\Users\Obaida\AppData\Local\Temp\playwright_chromiumdev_profile-jRl5xK --remote-debugging-pipe --no-startup-window
+    <launched> pid=13712
+    [pid=13712][err] [0930/232428.800:INFO:CONSOLE:777] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232428.868:INFO:CONSOLE:777] "[HMR] connected", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232429.893:INFO:CONSOLE:777] "[Fast Refresh] rebuilding", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232434.933:INFO:CONSOLE:0] "The resource http://localhost:3000/_next/static/chunks/src_app_globals_162hn9o.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: http://localhost:3000/ar/admin (0)
+    [pid=13712][err] [0930/232530.700:INFO:CONSOLE:777] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232530.781:INFO:CONSOLE:777] "[HMR] connected", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232536.989:INFO:CONSOLE:0] "The resource http://localhost:3000/_next/static/chunks/src_app_globals_162hn9o.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: http://localhost:3000/ar/admin (0)
+    [pid=13712][err] [0930/232611.806:INFO:CONSOLE:777] "[Fast Refresh] rebuilding", source: http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js (777)
+    [pid=13712][err] [0930/232614.926:INFO:CONSOLE:0] "The resource http://localhost:3000/_next/static/chunks/src_app_globals_162hn9o.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: http://localhost:3000/ar/admin (0)
+    [pid=13712] <gracefully close start>
+
+    Error Context: test-results\platform-shell-admin-ar-ad-c4ba9-shell-with-its-item-current-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\platform-shell-admin-ar-ad-c4ba9-shell-with-its-item-current-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\platform-shell-admin-ar-ad-c4ba9-shell-with-its-item-current-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [chromium] › tests\e2e\auth\admin-users.spec.ts:53:5 › owner creates a staff user; that staff session gets 403 from the admin API and page 
+    [chromium] › tests\e2e\auth\customer.spec.ts:22:5 › register → account → sign out → sign in ────
+    [chromium] › tests\e2e\auth\staff.spec.ts:28:5 › owner: sign in → forced enrolment → recovery codes → admin; sign out; sign in → challenge 
+    [chromium] › tests\e2e\auth\staff.spec.ts:70:5 › a password-only session cookie gets 401 from an admin API 
+    [chromium] › tests\e2e\platform\shell-a11y.spec.ts:49:11 › axe (WCAG 2.2 A/AA) › /ar at 1440px has no violations 
+    [chromium] › tests\e2e\platform\shell-admin.spec.ts:33:9 › ar admin shell › an unbuilt section shows the admin not-found inside the shell with its item current 
+  1 did not run
+  90 passed (6.1m)

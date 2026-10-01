@@ -1,0 +1,24 @@
+const { chromium } = require(require.resolve('@playwright/test', { paths: [process.cwd()] }));
+const http = require('http'), fs = require('fs'), path = require('path');
+const ROOT = path.resolve(__dirname, '..'), OUT = path.join(__dirname, 'shots');
+const MT = { '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png' };
+const srv = http.createServer((q, r) => { const f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': MT[path.extname(f)] || 'application/octet-stream' }); r.end(d); }); });
+(async () => {
+  await new Promise(ok => srv.listen(0, '127.0.0.1', ok)); const U = `http://127.0.0.1:${srv.address().port}/assistant.html`;
+  const b = await chromium.launch(); const errs = [];
+  let ctx = await b.newContext({ viewport: { width: 1280, height: 800 } }); let p = await ctx.newPage(); p.on('pageerror', e => errs.push(String(e)));
+  await p.goto(U + '?lang=ar&open=1&ask=what%20is%20inside%3F'); await p.waitForTimeout(6000);
+  console.log('bubble', await p.evaluate(() => { const m = document.querySelector('.dc-msg--me'); return [m.innerText, m.dir, getComputedStyle(m).direction]; }));
+  await p.screenshot({ path: OUT + '/rev3-ar-en-q.png' });
+  await p.fill('#asst-in', 'ktbt hek?'); console.log('input dir', await p.evaluate(() => getComputedStyle(document.getElementById('asst-in')).direction));
+  await p.goto(U + '?lang=en&open=1'); console.log('disc', await p.textContent('#asst-disc'));
+  await ctx.close();
+  ctx = await b.newContext({ viewport: { width: 390, height: 844 } }); p = await ctx.newPage(); p.on('pageerror', e => errs.push(String(e)));
+  await p.goto(U + '?lang=en'); await p.waitForTimeout(400); await p.click('#asst-launch'); await p.waitForTimeout(400);
+  await p.click('.dc-asst-chip[data-i="0"]'); await p.waitForTimeout(8000);
+  await p.click('a.dc-msg__src'); await p.waitForTimeout(250);
+  console.log('cited', await p.evaluate(() => document.getElementById('contents').classList.contains('is-cited')), await p.evaluate(() => getComputedStyle(document.getElementById('contents')).boxShadow));
+  await p.screenshot({ path: OUT + '/rev3-cite.png' });
+  await p.waitForTimeout(900); console.log('cited after', await p.evaluate(() => document.getElementById('contents').classList.contains('is-cited')));
+  console.log('errs', errs); await b.close(); srv.close();
+})();

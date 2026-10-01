@@ -1,0 +1,14 @@
+{
+ "mode": "teams",
+ "maxCycles": 24,
+ "units": [
+  {
+   "id": "qa",
+   "team": "qa",
+   "folder": "D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/qa",
+   "dir": "D:/Personal/Projects/DardaChat-E-store",
+   "extra": "Phase 3 QA and acceptance. Integration is done and tagged prototype-integrated. Read D:/Personal/Projects/DardaChat-E-store/.orchestration/teams/integration/HANDOVER.md and D:/Personal/Projects/DardaChat-E-store/.orchestration/FOUNDATION-NOTES.md first. You work in the main repo directory on branch qa. DB 54320, web 3000.",
+   "setup": "create branch qa from prototype-integrated in D:/Personal/Projects/DardaChat-E-store if missing; web/ running from clean (npm ci, db:reset, db:setup, db:seed)."
+  }
+ ]
+}

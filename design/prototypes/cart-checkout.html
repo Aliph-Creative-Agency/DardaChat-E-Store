@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-ar="السلة والدفع · دردشات" data-en="Cart &amp; checkout · Dardachat">السلة والدفع · دردشات</title>
+  <link rel="stylesheet" href="ds.css">
+  <script src="_shared.js" defer></script>
+  <style>
+    /* cart-checkout (co) — screen-only styles. Tokens from ds.css only. */
+    [hidden] { display: none !important; }
+    body { padding-block-end: 72px; } /* room for the prototype toolbar */
+
+    /* ---------- Header (checkout keeps the nav quiet) ---------- */
+    .dc-co-bar { background: var(--band); color: var(--on-band); position: sticky; inset-block-start: 0; z-index: 50; }
+    .dc-co-bar__in { display: flex; align-items: center; gap: var(--space-5); padding-block: var(--space-2); }
+    .dc-co-bar__logo { display: block; line-height: 0; border-radius: var(--radius-sm); }
+    .dc-co-bar__logo img { height: 56px; width: auto; display: block; }
+    .dc-co-nav { display: none; flex: 1; gap: var(--space-4); }
+    .dc-co-nav a, .dc-co-back { color: var(--on-band); text-decoration: none; font: 600 15px/1 var(--font-sans); padding-block: 8px; position: relative; }
+    .dc-co-nav a::after { content: ""; position: absolute; inset-inline: 0; inset-block-end: 0; height: 3px; border-radius: 3px; background: var(--brush);
+      transform: scaleX(0); transform-origin: right; transition: transform var(--dur-base) var(--ease-out); }
+    [dir="ltr"] .dc-co-nav a::after { transform-origin: left; }
+    .dc-co-nav a:hover::after { transform: scaleX(1); }
+    .dc-co-bar :focus-visible { outline-color: var(--on-band); }
+    .dc-co-bar .dc-cart { color: var(--on-band); margin-inline-start: auto; }
+    .dc-co-bar .dc-cart:hover { background: rgba(255,255,255,.14); }
+    .dc-co-back { display: none; }
+    @media (min-width: 980px) { .dc-co-nav { display: flex; } .dc-co-bar .dc-cart { margin-inline-start: 0; } .dc-co-bar__logo img { height: 60px; } }
+
+    .dc-co-main { padding-block: var(--space-6) var(--space-8); }
+    @media (min-width: 768px) { .dc-co-main { padding-block: var(--space-7) var(--space-9); } }
+    .dc-co-eyebrow { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; margin-block-end: var(--space-3); }
+    .dc-btn[aria-disabled="true"] { cursor: progress; }
+    .dc-co-dots { display: inline-flex; gap: 3px; align-items: center; margin-inline-start: 2px; }
+    .dc-co-dots[hidden] { display: none; }
+    .dc-co-dots i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; animation: dcDot 1s ease-in-out infinite; }
+    .dc-co-dots i:nth-child(2) { animation-delay: .15s; } .dc-co-dots i:nth-child(3) { animation-delay: .3s; }
+    @keyframes dcDot { 0%, 60%, 100% { opacity: .35; } 30% { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .dc-co-dots i { animation: none; opacity: .8; } }
+    .dc-co-title { font: var(--type-display-2); margin: 0; color: var(--ink); text-wrap: balance; }
+    @media (min-width: 768px) { .dc-co-title { font: var(--type-display-1); } }
+    .dc-co-lede { font: var(--type-body-lg); color: var(--ink-soft); margin: var(--space-3) 0 0; max-width: 46ch; }
+    .dc-co-h2 { font: var(--type-display-3); margin: 0; color: var(--ink); }
+    .dc-co-h2:focus { outline: none; }
+    .dc-co-h2:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: var(--radius-sm); }
+
+    /* ---------- Box art thumbnails ---------- */
+    .dc-co-thumb { flex: none; width: var(--s, 72px); height: var(--s, 72px); border-radius: var(--radius-md); display: grid; place-items: center; overflow: hidden; }
+    .dc-co-thumb[data-tone="sky"] { background: var(--pink); --box: var(--sky); }
+    .dc-co-thumb[data-tone="pink"] { background: var(--sky); --box: var(--pink); }
+    .dc-co-thumb svg { width: 88%; height: auto; }
+
+    /* ---------- Shelf (entry view: the way into the cart) ---------- */
+    .dc-co-shelf { display: grid; gap: var(--space-6); }
+    @media (min-width: 900px) { .dc-co-shelf { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-8); align-items: start; } .dc-co-shelf__intro { position: sticky; inset-block-start: 110px; } }
+    .dc-co-shelf__cta { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-block-start: var(--space-5); }
+    .dc-co-rows { list-style: none; margin: 0; padding: 0; }
+    .dc-co-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2) var(--space-4); padding-block: var(--space-4); border-block-end: 1.5px solid var(--line); align-items: start; }
+    .dc-co-row:first-child { border-block-start: 1.5px solid var(--line); }
+    .dc-co-row__body { display: grid; gap: 6px; }
+    .dc-co-row__name { font: 700 20px/1.3 var(--font-display); margin: 0; color: var(--ink); }
+    .dc-co-row__meta { font: var(--type-small); color: var(--ink-soft); margin: 0; }
+    .dc-co-row__foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .dc-co-row__price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .dc-co-row .dc-product__note { color: var(--ink-soft); } /* not an error: the season chip already carries the signal, red stays for form errors */
+    .dc-co-summary[hidden] { display: none; }
+    @media (min-width: 920px) { .dc-co-layout.is-empty { grid-template-columns: minmax(0, 1fr); } }
+    .dc-co-row__price .dc-price__now { font: var(--type-price); }
+    .dc-co-incart { font: 600 13px/1.4 var(--font-sans); color: var(--blue); }
+    .dc-co-row.is-off .dc-co-row__name, .dc-co-row.is-off .dc-co-thumb { opacity: .72; }
+    @media (min-width: 560px) { .dc-co-row { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; } .dc-co-row__foot { grid-column: auto; flex-direction: column; align-items: end; } .dc-co-thumb { --s: 88px; } }
+
+    /* ---------- Drawer (cart) ---------- */
+    .dc-co-scrim { position: fixed; inset: 0; background: rgba(19,40,79,.5); z-index: 920; opacity: 0; visibility: hidden; transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
+    .dc-co-scrim.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+    .dc-co-drawer { position: fixed; inset-block: 0; inset-inline-end: 0; width: min(430px, 100vw); z-index: 930; background: var(--cream); display: grid; grid-template-rows: auto 1fr auto;
+      box-shadow: var(--shadow-lift); visibility: hidden; transform: translateX(100%);
+      transition: transform var(--dur-slow) var(--ease-out), visibility 0s linear var(--dur-slow); }
+    [dir="rtl"] .dc-co-drawer { transform: translateX(-100%); }
+    .dc-co-drawer.is-open { transform: none; visibility: visible; transition-delay: 0s; }
+    .dc-co-drawer__head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-3); }
+    .dc-co-drawer__head h2 { font: var(--type-display-3); margin: 0; color: var(--ink); flex: 1; }
+    .dc-co-x { width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; transition: background-color var(--dur-base) var(--ease-out); }
+    .dc-co-x:hover { background: var(--surface-sunk); }
+    .dc-co-x svg { width: 22px; height: 22px; }
+    .dc-co-drawer__body { overflow-y: auto; padding: var(--space-2) var(--space-4) var(--space-4); overscroll-behavior: contain; }
+    .dc-co-drawer__foot { padding: var(--space-4); background: var(--surface); box-shadow: 0 -12px 24px -20px rgba(19,40,79,.4); display: grid; gap: var(--space-3); }
+    .dc-co-drawer__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+    /* the lines are little cards: dealt in, one after another, when the drawer opens */
+    .dc-co-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-1) var(--space-3); padding: var(--space-3); background: var(--surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); position: relative; }
+    .dc-co-card__body { display: grid; gap: 4px; align-content: start; min-width: 0; }
+    .dc-co-card__name { font: 700 17px/1.35 var(--font-display); margin: 0; color: var(--ink); }
+    .dc-co-card__meta { font: 500 13px/1.4 var(--font-sans); color: var(--ink-soft); margin: 0; }
+    .dc-co-card__foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+    .dc-co-card .dc-co-thumb { --s: 68px; }
+    .dc-co-total-line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+    .dc-co-total-line b { font: var(--type-body-strong); }
+    .dc-co-total-line .dc-num { font: var(--type-price); }
+    .dc-co-fine { font: 500 13px/1.6 var(--font-sans); color: var(--ink-soft); margin: 0; }
+    .dc-co-undo { min-height: 0; }
+    .dc-co-undo:not(:empty) { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); background: var(--sky); color: var(--on-soft); border-radius: var(--radius-md); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+      padding-inline: var(--space-3) var(--space-2); font: 500 14px/1.5 var(--font-sans); animation: dc-msg-in var(--dur-base) var(--ease-out) both; }
+    .dc-co-linkbtn { font: 600 14px/1 var(--font-sans); color: var(--blue); background: transparent; border: 0; padding: 10px 12px; border-radius: var(--radius-pill); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .dc-co-linkbtn:hover { background: var(--surface-sunk); }
+    .dc-co-empty { display: grid; justify-items: center; gap: var(--space-3); text-align: center; padding-block: var(--space-6); }
+    .dc-co-empty .dc-qcard { width: 150px; }
+    .dc-co-empty .dc-qcard__disc { width: 64px; height: 64px; font-size: 16px; }
+    .dc-co-empty .dc-qcard__q { font-size: 15px; }
+    .dc-co-empty p { margin: 0; font: var(--type-body); color: var(--ink-soft); max-width: 30ch; }
+
+    /* quantity stepper + line remove */
+    .dc-co-qty { display: inline-flex; align-items: center; gap: 2px; background: var(--surface-sunk); border-radius: var(--radius-pill); padding: 3px; }
+    .dc-co-qty button { width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; transition: background-color var(--dur-quick), transform var(--dur-quick) var(--ease-spring); }
+    .dc-co-qty button:hover:not([disabled]) { background: var(--surface); }
+    .dc-co-qty button:active:not([disabled]) { transform: scale(.88); }
+    .dc-co-qty button[disabled] { opacity: .4; cursor: not-allowed; }
+    .dc-co-qty svg { width: 16px; height: 16px; }
+    .dc-co-qty output { min-width: 28px; text-align: center; font: 700 15px/1 var(--font-sans); }
+    .dc-co-rm { border: 0; background: transparent; color: var(--ink-soft); cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; transition: background-color var(--dur-quick), color var(--dur-quick); }
+    .dc-co-rm:hover { background: var(--surface-sunk); color: var(--red-text); }
+    .dc-co-rm svg { width: 20px; height: 20px; }
+    .dc-co-line-price { font: var(--type-body-strong); }
+
+    /* ---------- Checkout layout ---------- */
+    .dc-co-steps { margin-block: var(--space-5) var(--space-6); max-width: none; }
+    .dc-co-steps li { min-width: 0; }
+    .dc-co-steps button { font: inherit; color: inherit; background: transparent; border: 0; padding: 0; margin: 0; text-align: start; cursor: default; display: flex; align-items: center; gap: 6px; border-radius: var(--radius-sm); }
+    .dc-co-steps li.is-done button { cursor: pointer; color: var(--blue); }
+    .dc-co-steps li.is-done button:hover span { text-decoration: underline; text-underline-offset: 3px; }
+    .dc-co-steps li::before { transition: background-color var(--dur-base) var(--ease-out); }
+    .dc-co-steps svg { width: 14px; height: 14px; flex: none; }
+    .dc-co-steps li:not(.is-done) svg { display: none; }
+    .dc-co-steps li.is-now button { color: var(--ink); }
+    .dc-co-steps .dc-co-steps__of { display: none; }
+    .dc-co-layout { display: grid; gap: var(--space-5); }
+    .dc-co-layout > .dc-co-summary { order: -1; }
+    @media (min-width: 920px) {
+      .dc-co-layout { grid-template-columns: minmax(0, 1fr) 390px; gap: var(--space-8); align-items: start; }
+      .dc-co-layout > .dc-co-summary { order: 0; position: sticky; inset-block-start: 100px; }
+    }
+    .dc-co-panel { display: grid; gap: var(--space-5); align-content: start; min-width: 0; }
+    .dc-co-panel__intro { display: grid; gap: 6px; }
+    .dc-co-panel__intro p { margin: 0; font: var(--type-body); color: var(--ink-soft); }
+    .dc-co-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding-block-start: var(--space-3); }
+    .dc-co-actions .dc-btn--cta { min-width: 220px; justify-content: center; }
+    .dc-co-actions .dc-btn:only-child { margin-inline-start: auto; }
+    .dc-co-arrow { transition: transform var(--dur-base) var(--ease-out); }
+    [dir="rtl"] .dc-co-arrow { transform: scaleX(-1); }
+    .dc-btn:hover .dc-co-arrow { transform: translateX(3px); }
+    [dir="rtl"] .dc-btn:hover .dc-co-arrow { transform: scaleX(-1) translateX(3px); }
+    .dc-co-back-arrow { transform: scaleX(-1); }
+    [dir="rtl"] .dc-co-back-arrow { transform: none; }
+
+    /* order lines in step 1 */
+    .dc-co-lines { list-style: none; margin: 0; padding: 0; }
+    .dc-co-line { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2) var(--space-4); padding-block: var(--space-4); border-block-end: 1.5px solid var(--line); align-items: start; }
+    .dc-co-line:first-child { border-block-start: 1.5px solid var(--line); }
+    .dc-co-line .dc-co-thumb { --s: 76px; }
+    .dc-co-line__foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .dc-co-line__tools { display: flex; align-items: center; gap: var(--space-1); }
+    @media (min-width: 600px) { .dc-co-line { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; } .dc-co-line__foot { grid-column: auto; justify-content: end; gap: var(--space-5); } .dc-co-line .dc-co-thumb { --s: 88px; } }
+    .dc-co-promo-row { display: flex; gap: var(--space-2); align-items: end; flex-wrap: wrap; }
+    .dc-co-promo-row .dc-field { flex: 1 1 200px; width: auto; }
+    .dc-co-promo-ok { display: flex; align-items: center; gap: var(--space-2); font: 600 14px/1.4 var(--font-sans); color: var(--success); }
+    .dc-co-promo-ok svg { width: 18px; height: 18px; }
+
+    /* forms */
+    .dc-co-form { display: grid; gap: var(--space-4); }
+    @media (min-width: 640px) { .dc-co-form { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-4); } .dc-co-form .is-wide { grid-column: 1 / -1; } }
+    .dc-co-form .dc-field, .dc-co-promo-row .dc-field { width: 100%; }
+    .dc-field textarea { font: 400 16px/1.5 var(--font-sans); color: var(--ink); background: var(--surface); border: 1.5px solid var(--line-strong); border-radius: var(--radius-sm); padding: 12px 14px; resize: vertical; min-height: 88px;
+      transition: border-color var(--dur-quick), box-shadow var(--dur-quick); }
+    .dc-field textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--sky); }
+    .dc-field input:focus-visible, .dc-field textarea:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .dc-field input::placeholder, .dc-field textarea::placeholder { color: var(--ink-soft); opacity: .8; }
+    .dc-field--error textarea { border-color: var(--red-text); animation: dc-shake 360ms var(--ease-out); }
+    html[dir="rtl"] .dc-field input[dir="ltr"] { text-align: end; }
+    .dc-field__opt { font-weight: 500; color: var(--ink-soft); }
+    .dc-co-suggest { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; font: 500 14px/1.6 var(--font-sans); color: var(--ink-soft); margin: 0; }
+
+    /* option cards: delivery zones and payment methods */
+    .dc-co-opts { display: grid; gap: var(--space-3); border: 0; padding: 0; margin: 0; min-width: 0; }
+    .dc-co-opts legend { font: var(--type-body-strong); padding: 0; margin-block-end: var(--space-3); }
+    .dc-co-opt { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--space-1) var(--space-4); align-items: center; padding: var(--space-4); background: var(--surface);
+      border-radius: var(--radius-md); box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer;
+      transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+    .dc-co-opt:hover { box-shadow: inset 0 0 0 2px var(--line-strong); }
+    .dc-co-opt:has(input:checked) { box-shadow: inset 0 0 0 2.5px var(--blue), var(--shadow-card); }
+    .dc-co-opt:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .dc-co-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+    .dc-co-dot { width: 24px; height: 24px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--line-strong); display: grid; place-items: center; background: var(--surface); transition: background-color var(--dur-base), box-shadow var(--dur-base); }
+    .dc-co-dot svg { width: 14px; height: 14px; color: var(--on-blue); transform: scale(0); transition: transform var(--dur-base) var(--ease-spring); }
+    .dc-co-opt:has(input:checked) .dc-co-dot { background: var(--blue); box-shadow: none; }
+    .dc-co-opt:has(input:checked) .dc-co-dot svg { transform: scale(1); }
+    .dc-co-opt__body { display: grid; gap: 3px; min-width: 0; }
+    .dc-co-opt__title { font: 700 16px/1.4 var(--font-sans); color: var(--ink); }
+    .dc-co-opt__sub { font: 400 14px/1.6 var(--font-sans); color: var(--ink-soft); }
+    .dc-co-opt__aside { font: 700 17px/1.2 var(--font-sans); color: var(--ink); text-align: end; display: grid; gap: 4px; justify-items: end; }
+    .dc-co-opt__aside .dc-chip { font-weight: 600; }
+    .dc-co-opt.is-off { cursor: not-allowed; background: var(--surface-sunk); }
+    .dc-co-opt.is-off input { cursor: not-allowed; }
+    .dc-co-opt.is-off .dc-co-opt__title { color: var(--ink-soft); }
+    .dc-co-nowrap { white-space: nowrap; }
+    @media (max-width: 519.98px) {
+      #zoneOpts .dc-co-opt { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "dot body price" ". chip chip"; row-gap: var(--space-2); }
+      #zoneOpts .dc-co-dot { grid-area: dot; align-self: start; margin-block-start: 2px; }
+      #zoneOpts .dc-co-opt__body { grid-area: body; }
+      #zoneOpts .dc-co-opt__aside { display: contents; }
+      #zoneOpts .dc-co-opt__price { grid-area: price; align-self: start; }
+      #zoneOpts .dc-co-opt__aside .dc-chip { grid-area: chip; justify-self: start; }
+    }
+    .dc-co-opt__why { font: 600 13.5px/1.5 var(--font-sans); color: var(--ink); }
+    .dc-co-paynote { background: var(--sky); color: var(--on-soft); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); font: 500 15px/1.7 var(--font-sans); margin: 0; display: flex; gap: var(--space-3); align-items: start; }
+    .dc-co-paynote svg { width: 20px; height: 20px; flex: none; margin-block-start: 3px; }
+    .dc-co-paynote:empty { display: none; }
+    .dc-co-check { display: flex; align-items: start; gap: var(--space-3); cursor: pointer; font: var(--type-body); position: relative; }
+    .dc-co-check input { position: absolute; opacity: 0; width: 24px; height: 24px; margin: 0; cursor: pointer; }
+    .dc-co-check__box { flex: none; width: 24px; height: 24px; border-radius: 7px; box-shadow: inset 0 0 0 2px var(--line-strong); background: var(--surface); display: grid; place-items: center; margin-block-start: 1px; transition: background-color var(--dur-base), box-shadow var(--dur-base); }
+    .dc-co-check__box svg { width: 15px; height: 15px; color: var(--on-blue); transform: scale(0); transition: transform var(--dur-base) var(--ease-spring); }
+    .dc-co-check input:checked + .dc-co-check__box { background: var(--blue); box-shadow: none; }
+    .dc-co-check input:checked + .dc-co-check__box svg { transform: scale(1); }
+    .dc-co-check input:focus-visible + .dc-co-check__box { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .dc-co-check a { color: var(--blue); }
+    .dc-co-check.is-error .dc-co-check__box { box-shadow: inset 0 0 0 2.5px var(--red-text); }
+    .dc-co-errtext { font: 600 13px/1.5 var(--font-sans); color: var(--red-text); margin: 0; }
+
+    /* ---------- Order summary ---------- */
+    .dc-co-summary { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); min-width: 0; }
+    .dc-co-summary > summary { list-style: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4); cursor: pointer; font: 700 17px/1.3 var(--font-display); border-radius: var(--radius-lg); }
+    .dc-co-summary > summary::-webkit-details-marker { display: none; }
+    .dc-co-summary__sum { margin-inline-start: auto; font: var(--type-price); }
+    .dc-co-summary__chev { width: 20px; height: 20px; flex: none; transition: transform var(--dur-base) var(--ease-out); }
+    .dc-co-summary[open] .dc-co-summary__chev { transform: rotate(180deg); }
+    .dc-co-summary__body { padding: 0 var(--space-4) var(--space-4); display: grid; gap: var(--space-4); }
+    @media (min-width: 920px) {
+      .dc-co-summary > summary { pointer-events: none; cursor: default; padding-block-end: var(--space-2); font-size: 20px; }
+      .dc-co-summary__chev, .dc-co-summary__sum { display: none; }
+      .dc-co-summary__body { padding-inline: var(--space-5); padding-block-end: var(--space-5); }
+      .dc-co-summary > summary { padding-inline: var(--space-5); padding-block-start: var(--space-5); }
+    }
+    .dc-co-mini { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+    .dc-co-mini li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--space-3); align-items: center; }
+    .dc-co-mini .dc-co-thumb { --s: 48px; border-radius: var(--radius-sm); }
+    .dc-co-mini__name { font: 600 15px/1.4 var(--font-sans); }
+    .dc-co-mini__qty { display: block; font: 500 13px/1.4 var(--font-sans); color: var(--ink-soft); }
+    .dc-co-totals { margin: 0; display: grid; gap: var(--space-2); border-block-start: 1.5px solid var(--line); padding-block-start: var(--space-4); }
+    .dc-co-totals > div { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); font: var(--type-body); }
+    .dc-co-totals dt { color: var(--ink-soft); } .dc-co-totals dd { margin: 0; text-align: end; }
+    .dc-co-totals .is-pending { color: var(--ink-soft); font-size: 14px; }
+    .dc-co-totals .is-total { border-block-start: 1.5px solid var(--line); padding-block-start: var(--space-3); margin-block-start: var(--space-1); }
+    .dc-co-totals .is-total dt { color: var(--ink); font: var(--type-body-strong); }
+    .dc-co-totals .is-total dd { font: var(--type-price); }
+    .dc-co-totals .is-of { font-size: 13.5px; } .dc-co-totals .is-of dt, .dc-co-totals .is-of dd { color: var(--ink-soft); }
+    .dc-co-totals .is-disc dd { color: var(--success); font-weight: 600; }
+    .dc-co-tick { animation: dc-co-tick var(--dur-base) var(--ease-out); }
+    @keyframes dc-co-tick { from { opacity: .35; transform: translateY(-5px); } }
+    .dc-co-help { display: flex; align-items: center; gap: var(--space-2); font: 500 14px/1.5 var(--font-sans); color: var(--ink-soft); margin: 0; }
+    .dc-co-help a { color: var(--blue); font-weight: 600; }
+    .dc-co-help svg { width: 20px; height: 20px; flex: none; color: var(--blue); }
+
+    /* ---------- Confirmation ---------- */
+    .dc-co-done { display: grid; gap: var(--space-6); }
+    @media (min-width: 900px) { .dc-co-done { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-8); align-items: start; } .dc-co-stage { position: sticky; inset-block-start: 100px; } }
+    .dc-co-stage { background: var(--sky); border-radius: var(--radius-lg); position: relative; overflow: hidden; aspect-ratio: 16 / 13; max-height: 460px; display: grid; place-items: center; }
+    @media (min-width: 900px) { .dc-co-stage { aspect-ratio: 1 / 1; } }
+    .dc-co-stage > svg { width: 100%; height: 100%; display: block; }
+    .dc-co-stage .dc-brush { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .dc-co-stage .dc-brush path { stroke-width: 10; }
+    .dc-co-box { position: absolute; inset: 0; }
+    .dc-co-box text { font: 600 13px var(--font-sans); }
+    .dc-co-card-in, .dc-co-lid, .dc-co-h { transform-box: fill-box; transform-origin: center; }
+    .is-playing .dc-co-card-in { animation: dc-co-slot var(--dur-slow) var(--ease-spring) both; animation-delay: var(--d, 0s); }
+    @keyframes dc-co-slot { from { opacity: 0; transform: translateY(-150px) rotate(-12deg); } }
+    .is-playing .dc-co-lid { transform-origin: 20% 100%; animation: dc-co-lid 560ms var(--ease-spring) 950ms both; }
+    @keyframes dc-co-lid { from { transform: translateY(-58px) rotate(-14deg); } }
+    .is-playing .dc-co-h { animation: dc-co-heart 1500ms var(--ease-out) both; animation-delay: var(--d, 1.2s); opacity: 0; } /* transform lives on the inner path only; the wrapping <g> keeps the placement */
+    @keyframes dc-co-heart { 0% { opacity: 0; transform: translate(0, 0) scale(calc(var(--s, 1) * .3)); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(calc(var(--s, 1) * 1.05)) rotate(var(--r, 0deg)); } }
+    .is-playing ~ .dc-co-rise, .dc-co-rise { animation: dc-msg-in var(--dur-base) var(--ease-out) both; animation-delay: var(--d, 0s); }
+    .dc-co-details { display: grid; gap: var(--space-5); min-width: 0; }
+    .dc-co-details .dc-co-title { margin-block-start: var(--space-2); }
+    .dc-co-facts { display: grid; gap: 0; margin: 0; background: var(--surface); border-radius: var(--radius-md); box-shadow: inset 0 0 0 1.5px var(--line); overflow: hidden; }
+    .dc-co-facts > div { display: grid; grid-template-columns: minmax(96px, 30%) 1fr; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-block-end: 1.5px solid var(--line); }
+    .dc-co-facts > div:last-child { border-block-end: 0; }
+    .dc-co-facts dt { font: 500 14px/1.6 var(--font-sans); color: var(--ink-soft); } .dc-co-facts dd { margin: 0; font: var(--type-body-strong); min-width: 0; overflow-wrap: anywhere; }
+    .dc-co-ref { font: 700 22px/1.2 var(--font-sans); letter-spacing: .02em; }
+    .dc-co-first h2 { font: var(--type-display-3); margin: 0 0 var(--space-1); }
+    .dc-co-first p { margin: 0 0 var(--space-4); color: var(--ink-soft); }
+    .dc-co-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+    .dc-co-cards .dc-qcard { width: 100%; aspect-ratio: 5 / 6; }
+    .dc-co-cards .dc-qcard__face { padding: var(--space-2); }
+    .dc-co-cards .dc-qcard__disc { width: 52px; height: 52px; font-size: 20px; }
+    .dc-co-cards .dc-qcard__q { font-size: 14px; line-height: 1.55; }
+    .dc-co-cards .dc-qcard__kicker { font-size: 12px; }
+    @media (min-width: 560px) { .dc-co-cards { gap: var(--space-3); } .dc-co-cards .dc-qcard__q { font-size: 16px; } .dc-co-cards .dc-qcard__face { padding: var(--space-3); } .dc-co-cards .dc-qcard__disc { width: 64px; height: 64px; } }
+    .dc-co-cards .dc-qcard__front { box-shadow: var(--shadow-card), inset 0 0 0 2px var(--blue); }
+    .dc-co-live { position: absolute; }
+
+    @media (prefers-reduced-motion: reduce) { .dc-co-rise, .is-playing .dc-co-card-in, .is-playing .dc-co-lid, .is-playing .dc-co-h { animation-delay: 0s !important; } }
+    html[data-motion="reduce"] .dc-co-rise, html[data-motion="reduce"] .is-playing .dc-co-card-in, html[data-motion="reduce"] .is-playing .dc-co-lid, html[data-motion="reduce"] .is-playing .dc-co-h { animation-delay: 0s !important; }
+  </style>
+</head>
+<body>
+  <a class="dc-skip" href="#main" data-ar="تخطَّ إلى المحتوى" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+  <!-- shared box art, tinted per product with --box -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="dc-box" viewBox="0 0 200 180">
+      <rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/>
+      <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--box, var(--sky))"/>
+      <rect x="30" y="78" width="140" height="92" rx="10" fill="none" stroke="var(--blue)" stroke-width="3"/>
+      <circle cx="100" cy="124" r="22" fill="var(--red)"/><path transform="translate(85 108.1) scale(1.25)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="var(--on-red)"/>
+      <rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/>
+    </symbol>
+  </svg>
+
+  <header class="dc-co-bar">
+    <div class="dc-page dc-co-bar__in">
+      <a class="dc-co-bar__logo" href="home.html" data-ar-label="دردشات، الصفحة الرئيسية" data-en-label="Dardachat, home" aria-label="دردشات، الصفحة الرئيسية"><img src="assets/dardachat-lockup-knockout.png" alt="" width="620" height="340"></a>
+      <nav class="dc-co-nav" aria-label="القائمة" data-ar-label="القائمة" data-en-label="Main menu">
+        <a href="shop.html" data-ar="الصناديق" data-en="Boxes">الصناديق</a>
+        <a href="services.html#workshops" data-ar="الورشات" data-en="Workshops">الورشات</a>
+        <a href="services.html#sessions" data-ar="الجلسات" data-en="Sessions">الجلسات</a>
+        <a href="services.html#game-nights" data-ar="ليالي الألعاب" data-en="Game nights">ليالي الألعاب</a>
+        <a href="journey.html" data-ar="الرحلة" data-en="Journey">الرحلة</a>
+      </nav>
+      <button class="dc-cart" id="cartBtn" type="button" data-act="open-cart" aria-haspopup="dialog" aria-expanded="false" aria-label="السلة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="dc-cart__count dc-num" id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="dc-page dc-co-main">
+
+    <!-- ================= VIEW 0: shelf (entry point) ================= -->
+    <section id="viewShelf" class="dc-co-shelf" aria-labelledby="shelfTitle">
+      <div class="dc-co-shelf__intro">
+        <div class="dc-co-eyebrow"><span class="dc-ph" data-ar="عرض مختصر لتجربة السلة" data-en="Short shelf to try the cart">عرض مختصر لتجربة السلة</span></div>
+        <h1 class="dc-co-title" id="shelfTitle" data-ar="صناديق دردشات" data-en="Dardachat boxes">صناديق دردشات</h1>
+        <p class="dc-co-lede" data-ar="أضف صندوقاً إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات." data-en="Add a box to your cart, then open it and finish your order in four steps.">أضف صندوقاً إلى السلة، ثم افتحها وأكمل الطلب في أربع خطوات.</p>
+        <div class="dc-co-shelf__cta">
+          <button class="dc-btn" type="button" data-act="open-cart"><span data-ar="افتح السلة" data-en="Open cart">افتح السلة</span></button>
+          <a class="dc-btn dc-btn--outline" href="#checkout"><span data-ar="اذهب إلى الدفع" data-en="Go to checkout">اذهب إلى الدفع</span></a>
+        </div>
+      </div>
+      <ul class="dc-co-rows" id="shelfRows"></ul>
+    </section>
+
+    <!-- ================= VIEW 1: checkout ================= -->
+    <section id="viewCheckout" hidden aria-labelledby="coTitle">
+      <div class="dc-co-eyebrow"><a class="dc-btn dc-btn--ghost dc-btn--sm" href="#" data-act="to-shelf"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="متابعة التسوق" data-en="Keep shopping">متابعة التسوق</span></a></div>
+      <h1 class="dc-co-title" id="coTitle" data-ar="إتمام الطلب" data-en="Checkout">إتمام الطلب</h1>
+
+      <ol class="dc-steps dc-co-steps" id="steps" data-ar-label="خطوات الدفع" data-en-label="Checkout steps" aria-label="خطوات الدفع"></ol>
+      <p class="dc-sr" id="stepLive" aria-live="polite"></p>
+
+      <div class="dc-co-layout">
+        <div>
+          <!-- Step 1 · cart -->
+          <form class="dc-co-panel" id="p0" data-step="0" novalidate>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="راجع طلبك" data-en="Review your order">راجع طلبك</h2>
+              <p data-ar="غيّر الكمية أو أزل صندوقاً قبل أن ننتقل إلى العنوان." data-en="Change a quantity or remove a box before we move on to your address.">غيّر الكمية أو أزل صندوقاً قبل أن ننتقل إلى العنوان.</p></div>
+            <div id="lines"></div>
+            <div id="promoBox"></div>
+            <div class="dc-co-actions">
+              <button class="dc-btn" type="submit" id="next0"><span data-ar="التالي: العنوان" data-en="Next: address">التالي: العنوان</span><svg class="dc-co-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </form>
+
+          <!-- Step 2 · address (6 fields) -->
+          <form class="dc-co-panel" id="p1" data-step="1" hidden novalidate autocomplete="on">
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="أين نوصّل الصندوق؟" data-en="Where should we deliver?">أين نوصّل الصندوق؟</h2>
+              <p data-ar="اكتب العنوان كما يعرفه المندوب. لا نحتاج رمزاً بريدياً." data-en="Write the address the way the courier will know it. No postcode needed.">اكتب العنوان كما يعرفه المندوب. لا نحتاج رمزاً بريدياً.</p></div>
+            <div class="dc-co-form">
+              <div class="dc-field" data-f="name"><label for="f-name" data-ar="الاسم الكامل" data-en="Full name">الاسم الكامل</label>
+                <input id="f-name" name="name" autocomplete="name" aria-describedby="h-name"><span class="dc-field__help" id="h-name" data-ar="لنعرف لمن نسلّم الطلب" data-en="So we know who to hand the order to">لنعرف لمن نسلّم الطلب</span></div>
+              <div class="dc-field" data-f="phone"><label for="f-phone" data-ar="رقم الهاتف" data-en="Phone number">رقم الهاتف</label>
+                <input id="f-phone" name="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" aria-describedby="h-phone"><span class="dc-field__help" id="h-phone" data-ar="يتصل بك المندوب على هذا الرقم عند التسليم. الصيغة: ⁦05X XXX XXXX⁩" data-en="The courier calls this number on delivery. Format: ⁦05X XXX XXXX⁩">يتصل بك المندوب على هذا الرقم عند التسليم. الصيغة: ⁦05X XXX XXXX⁩</span></div>
+              <div class="dc-field" data-f="city"><label for="f-city" data-ar="المدينة أو البلدة" data-en="City or town">المدينة أو البلدة</label>
+                <input id="f-city" name="city" list="cities" autocomplete="address-level2" aria-describedby="h-city"><span class="dc-field__help" id="h-city" data-ar="مثال: القدس، رام الله، بيت لحم" data-en="For example: Jerusalem, Ramallah, Bethlehem">مثال: القدس، رام الله، بيت لحم</span></div>
+              <datalist id="cities"><option value="القدس"><option value="بيت حنينا"><option value="شعفاط"><option value="رام الله"><option value="بيت لحم"><option value="الخليل"><option value="نابلس"><option value="جنين"><option value="حيفا"><option value="الناصرة"></datalist>
+              <div class="dc-field" data-f="area"><label for="f-area" data-ar="الحي أو المنطقة" data-en="Neighbourhood">الحي أو المنطقة</label>
+                <input id="f-area" name="area" autocomplete="address-level3" aria-describedby="h-area"><span class="dc-field__help" id="h-area" data-ar="اسم الحي كما تعرفه" data-en="The name of your neighbourhood">اسم الحي كما تعرفه</span></div>
+              <div class="dc-field is-wide" data-f="street"><label for="f-street" data-ar="الشارع ورقم البناية" data-en="Street and building">الشارع ورقم البناية</label>
+                <input id="f-street" name="street" autocomplete="street-address" aria-describedby="h-street"><span class="dc-field__help" id="h-street" data-ar="اسم الشارع، رقم البناية، الطابق أو أقرب معلم" data-en="Street, building number, floor or nearest landmark">اسم الشارع، رقم البناية، الطابق أو أقرب معلم</span></div>
+              <div class="dc-field is-wide" data-f="note"><label for="f-note"><span data-ar="ملاحظات للمندوب" data-en="Note for the courier">ملاحظات للمندوب</span> <span class="dc-field__opt" data-ar="(اختياري)" data-en="(optional)">(اختياري)</span></label>
+                <textarea id="f-note" name="note" rows="3" aria-describedby="h-note"></textarea><span class="dc-field__help" id="h-note" data-ar="مثلاً: اتصل قبل الوصول" data-en="For example: call before you arrive">مثلاً: اتصل قبل الوصول</span></div>
+            </div>
+            <div class="dc-co-actions">
+              <button class="dc-btn dc-btn--ghost" type="button" data-act="back"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="رجوع" data-en="Back">رجوع</span></button>
+              <button class="dc-btn" type="submit"><span data-ar="التالي: التوصيل" data-en="Next: delivery">التالي: التوصيل</span><svg class="dc-co-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </form>
+
+          <!-- Step 3 · delivery zone -->
+          <form class="dc-co-panel" id="p2" data-step="2" hidden novalidate>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="كيف يوصلك الصندوق؟" data-en="How does your box get to you?">كيف يوصلك الصندوق؟</h2>
+              <p data-ar="نوصّل عبر شركة شحن. السعر والموعد يعتمدان على منطقتك." data-en="We deliver through a courier. Price and timing depend on your area.">نوصّل عبر شركة شحن. السعر والموعد يعتمدان على منطقتك.</p>
+              <p><span class="dc-ph" data-ar="أسعار ومواعيد تجريبية" data-en="Sample prices and timings">أسعار ومواعيد تجريبية</span></p></div>
+            <p class="dc-co-suggest" id="zoneSuggest" hidden></p>
+            <fieldset class="dc-co-opts" id="zoneOpts"><legend data-ar="منطقة التوصيل" data-en="Delivery area">منطقة التوصيل</legend></fieldset>
+            <p class="dc-co-errtext" id="zoneErr" role="alert" hidden></p>
+            <div class="dc-co-actions">
+              <button class="dc-btn dc-btn--ghost" type="button" data-act="back"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="رجوع" data-en="Back">رجوع</span></button>
+              <button class="dc-btn" type="submit"><span data-ar="التالي: الدفع" data-en="Next: payment">التالي: الدفع</span><svg class="dc-co-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            </div>
+          </form>
+
+          <!-- Step 4 · payment -->
+          <form class="dc-co-panel" id="p3" data-step="3" hidden novalidate>
+            <div class="dc-co-panel__intro"><h2 class="dc-co-h2" tabindex="-1" data-ar="كيف تدفع؟" data-en="How would you like to pay?">كيف تدفع؟</h2>
+              <p data-ar="لا نطلب بيانات بطاقتك هنا. الدفع الإلكتروني يتم في صفحة مزوّد الدفع." data-en="We never ask for your card details here. Online payment happens on the payment provider's page.">لا نطلب بيانات بطاقتك هنا. الدفع الإلكتروني يتم في صفحة مزوّد الدفع.</p></div>
+            <fieldset class="dc-co-opts" id="payOpts"><legend data-ar="طريقة الدفع" data-en="Payment method">طريقة الدفع</legend></fieldset>
+            <p class="dc-co-paynote" id="payNote" aria-live="polite"></p>
+            <p class="dc-co-errtext" id="payErr" role="alert" hidden></p>
+            <div>
+              <label class="dc-co-check" id="termsWrap"><input type="checkbox" id="terms"><span class="dc-co-check__box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+                <span><span data-ar="أوافق على " data-en="I agree to the ">أوافق على </span><a href="#" data-noop data-ar="شروط الشراء وسياسة الاسترجاع" data-en="terms of sale and returns policy">شروط الشراء وسياسة الاسترجاع</a></span></label>
+              <p class="dc-co-errtext" id="termsErr" role="alert" hidden></p>
+            </div>
+            <div class="dc-co-actions">
+              <button class="dc-btn dc-btn--ghost" type="button" data-act="back"><svg class="dc-co-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span data-ar="رجوع" data-en="Back">رجوع</span></button>
+              <button class="dc-btn dc-btn--cta" type="submit" id="confirmBtn"><span id="confirmLbl" data-ar="تأكيد الطلب" data-en="Place order">تأكيد الطلب</span><span class="dc-co-dots" id="confirmDots" aria-hidden="true" hidden><i></i><i></i><i></i></span>
+                <svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></button>
+            </div>
+          </form>
+
+          <!-- empty cart at checkout -->
+          <div class="dc-co-empty" id="coEmpty" hidden></div>
+        </div>
+
+        <details class="dc-co-summary" id="summary" open>
+          <summary><span data-ar="ملخص الطلب" data-en="Order summary">ملخص الطلب</span><span class="dc-co-summary__sum dc-num" id="sumTop"></span>
+            <svg class="dc-co-summary__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+          <div class="dc-co-summary__body" id="sumBody"></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: confirmation ================= -->
+    <section id="viewDone" hidden aria-labelledby="doneTitle">
+      <div class="dc-co-done">
+        <div class="dc-co-stage" id="stage" aria-hidden="true">
+          <svg class="dc-brush" id="stageBrush" viewBox="0 0 400 325" preserveAspectRatio="xMidYMid slice"><path d="M-10 70C70 30 120 100 210 62S340 20 415 58" stroke-width="10"/><path d="M-10 268C80 238 150 292 240 262S350 232 415 258" stroke-width="10"/></svg>
+          <svg class="dc-co-box" viewBox="0 0 320 300" preserveAspectRatio="xMidYMid meet">
+            <ellipse cx="160" cy="268" rx="104" ry="11" fill="var(--ink)" opacity=".14"/>
+            <rect x="60" y="120" width="200" height="142" rx="14" fill="var(--blue)"/>
+            <g class="dc-co-card-in" style="--d:.1s"><g transform="translate(96 122) rotate(-5 40 50)"><rect width="80" height="98" rx="10" fill="var(--surface)" stroke="var(--blue)" stroke-width="3"/><circle cx="40" cy="48" r="15" fill="var(--red)"/></g></g>
+            <g class="dc-co-card-in" style="--d:.26s"><g transform="translate(136 120) rotate(4 40 50)"><rect width="80" height="98" rx="10" fill="var(--surface)" stroke="var(--blue)" stroke-width="3"/><circle cx="40" cy="48" r="15" fill="var(--red)"/></g></g>
+            <g class="dc-co-card-in" style="--d:.42s"><g transform="translate(116 118)"><rect width="80" height="98" rx="10" fill="var(--surface)" stroke="var(--blue)" stroke-width="3"/><circle cx="40" cy="48" r="15" fill="var(--red)"/></g></g>
+            <rect x="60" y="144" width="200" height="118" rx="12" fill="var(--pink)" stroke="var(--blue)" stroke-width="4"/>
+            <circle cx="160" cy="204" r="30" fill="var(--red)"/><path transform="translate(140.8 183.6) scale(1.6)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="var(--on-red)"/>
+            <g class="dc-co-lid"><rect x="50" y="108" width="220" height="40" rx="12" fill="var(--blue)"/><rect x="66" y="120" width="60" height="6" rx="3" fill="var(--on-blue)" opacity=".35"/></g>
+            <g id="hearts">
+              <g transform="translate(148 96)"><path class="dc-co-h" style="--dx:-82px;--dy:-104px;--r:-14deg;--d:1.05s;--s:1.1" fill="var(--red)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></g>
+              <g transform="translate(148 96)"><path class="dc-co-h" style="--dx:16px;--dy:-122px;--r:8deg;--d:1.15s;--s:1.5" fill="var(--red)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></g>
+              <g transform="translate(148 96)"><path class="dc-co-h" style="--dx:86px;--dy:-92px;--r:16deg;--d:1.25s;--s:1" fill="var(--red)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></g>
+              <g transform="translate(148 96)"><path class="dc-co-h" style="--dx:-44px;--dy:-132px;--r:-6deg;--d:1.35s;--s:0.8" fill="var(--brush)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></g>
+              <g transform="translate(148 96)"><path class="dc-co-h" style="--dx:52px;--dy:-140px;--r:10deg;--d:1.42s;--s:0.9" fill="var(--brush)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></g>
+            </g>
+          </svg>
+        </div>
+
+        <div class="dc-co-details" id="doneBody"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- cart drawer -->
+  <div class="dc-co-scrim" id="scrim" data-act="close-cart"></div>
+  <aside class="dc-co-drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" inert>
+    <div class="dc-co-drawer__head">
+      <h2 id="drawerTitle" data-ar="سلتك" data-en="Your cart">سلتك</h2>
+      <span class="dc-chip dc-num" id="drawerCount"></span>
+      <button class="dc-co-x" type="button" data-act="close-cart" data-ar-label="إغلاق السلة" data-en-label="Close cart" aria-label="إغلاق السلة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="dc-co-drawer__body" id="drawerBody"></div>
+    <div class="dc-co-drawer__foot" id="drawerFoot"></div>
+  </aside>
+  <p class="dc-sr" id="cartLive" aria-live="polite"></p>
+
+  <script>
+  document.addEventListener('dc:ready', () => {
+    'use strict';
+    const $ = (s, r) => (r || document).querySelector(s), $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+    const t = (a, e) => DC.t(a, e);
+    const money = (v, sign) => '<span class="dc-num">' + (sign || '') + '₪ ' + DC.num(v) + '</span>';
+    const num = v => '<span class="dc-num">' + v + '</span>';
+    const MAX_QTY = 5, VAT = 0.16, COD_MAX = 600, PROMO = { code: 'SAMPLE10', rate: 0.10 };
+    const I = {
+      x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+      plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+      minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>',
+      trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>',
+      arrow: '<svg class="dc-co-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+      check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+      chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>',
+      info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>',
+      chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+      heart: '<svg class="dc-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3.1 1.7-1.9 3.2-3.1 5.3-3.1 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>'
+    };
+
+    /* ---------- data (prices are placeholders, DESIGN.md §6) ---------- */
+    const PRODUCTS = [
+      { id: 'chat', ar: 'صندوق دردشات', en: 'Dardachat Box', price: 149, tone: 'sky', age: ['+12', '12+'], aud: ['للجمعات العائلية والأصدقاء', 'Family and friends'], meta: ['50 بطاقة أسئلة · 25 بطاقة تحديات · 10 قطع', '50 question cards · 25 challenge cards · 10 props'] },
+      { id: 'who', ar: 'صندوق مين فينا', en: 'Who Among Us Box', price: 119, tone: 'pink', age: ['+12', '12+'], aud: ['للعائلة والأصدقاء', 'Family and friends'], meta: ['45 بطاقة في 3 مراحل · بروشور · 5 لافتات تصويت', '45 cards in 3 stages · booklet · 5 voting signs'] },
+      { id: 'ramadan', ar: 'صندوق رمضان للعائلة', en: 'Ramadan Family Box', price: 129, tone: 'sky', age: ['لكل الأعمار', 'All ages'], season: true, off: true, aud: ['موسمي · رمضان', 'Seasonal · Ramadan'], meta: ['45 بطاقة: أسئلة دينية وألغاز وذكريات رمضان', '45 cards: religious questions, riddles and Ramadan memories'] },
+      { id: 'love', ar: 'صندوق دردشات مع الحب', en: 'Dardachat with Love Box', price: 169, tone: 'pink', age: ['+18', '18+'], aud: ['للأزواج', 'For couples'], meta: ['63 سؤالاً · 16 تحدياً · 20 قلباً كريستالياً', '63 questions · 16 duo challenges · 20 crystal hearts'] }
+    ];
+    const P = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+    const ZONES = [
+      { id: 'jer', ar: 'القدس وضواحيها', en: 'Jerusalem and surroundings', places: ['القدس، بيت حنينا، شعفاط، الرام، أبو ديس', 'Jerusalem, Beit Hanina, Shufat, al-Ram, Abu Dis'], win: ['1–2 أيام عمل', '1–2 business days'], fee: 20, cod: true, re: /القدس|حنينا|شعفاط|الرام|ابو ديس|أبو ديس|jerusalem|beit hanina|shufat|shu'?afat/i },
+      { id: 'wb', ar: 'الضفة الغربية', en: 'West Bank', places: ['رام الله، بيت لحم، الخليل، نابلس، جنين وغيرها', 'Ramallah, Bethlehem, Hebron, Nablus, Jenin and more'], win: ['2–4 أيام عمل', '2–4 business days'], fee: 30, cod: true, re: /رام الله|بيت لحم|الخليل|نابلس|جنين|طولكرم|قلقيلية|أريحا|اريحا|سلفيت|طوباس|ramallah|bethlehem|hebron|nablus|jenin|tulkarm|qalqilya|jericho/i },
+      { id: 'other', ar: 'باقي المناطق', en: 'All other areas', places: ['المدن والبلدات الأخرى', 'Other cities and towns'], win: ['3–5 أيام عمل', '3–5 business days'], fee: 40, cod: false }
+    ];
+    const METHODS = [
+      { id: 'card', ar: 'بطاقة بنكية', en: 'Bank card', sub: ['فيزا أو ماستركارد', 'Visa or Mastercard'], note: ['ستنتقل إلى صفحة دفع آمنة لدى مزوّد الدفع لإدخال بيانات البطاقة.', 'You will move to a secure payment page at the payment provider to enter your card details.'] },
+      { id: 'wallet', ar: 'محفظة إلكترونية', en: 'Digital wallet', sub: ['ادفع من محفظتك', 'Pay from your wallet'], note: ['ستنتقل إلى تطبيق المحفظة لتأكيد الدفع.', 'You will move to your wallet app to confirm the payment.'] },
+      { id: 'transfer', ar: 'تحويل فوري', en: 'Instant transfer', sub: ['من تطبيق البنك مباشرة', 'Straight from your bank app'], note: ['ستنتقل إلى تطبيق البنك لتأكيد التحويل، ونثبّت الطلب فور وصوله.', 'You will move to your bank app to confirm the transfer, and we lock in the order as soon as it arrives.'] },
+      { id: 'cod', ar: 'الدفع عند الاستلام', en: 'Cash on delivery', sub: ['ادفع نقداً للمندوب', 'Pay the courier in cash'], note: ['جهّز المبلغ نقداً. يستلمه المندوب عند تسليم الصندوق.', 'Have the amount ready in cash. The courier collects it when handing over the box.'] }
+    ];
+    const SAMPLE_CARDS = [
+      ['شو الشي اللي لو رجع الزمن بتعيده؟', 'What would you relive if time turned back?'],
+      ['مين آخر شخص خلاك تضحك من قلبك؟', 'Who last made you laugh from the heart?'],
+      ['شو أحلى ذكرى بتحكيها كل مرة؟', 'Which sweet memory do you retell every time?']
+    ];
+
+    /* ---------- state ---------- */
+    const S = { cart: { chat: 1, love: 1 }, promo: null, zone: null, zoneAuto: false, method: null, step: 0, view: 'shelf', order: null, lastRemoved: null };
+    const HASH = ['checkout', 'address', 'delivery', 'payment'];
+    let opener = null, undoTimer = null, prevHash = '';
+
+    const qtyOf = id => S.cart[id] || 0;
+    const lines = () => Object.keys(S.cart).filter(id => S.cart[id] > 0).map(id => ({ p: P[id], q: S.cart[id] }));
+    const count = () => lines().reduce((n, l) => n + l.q, 0);
+    function totals() {
+      const sub = lines().reduce((n, l) => n + l.p.price * l.q, 0);
+      const disc = S.promo ? Math.round(sub * PROMO.rate * 100) / 100 : 0;
+      const zone = ZONES.find(z => z.id === S.zone);
+      const del = zone ? zone.fee : 0;
+      const total = sub - disc + del;
+      return { sub, disc, zone, del, total, vat: total * VAT / (1 + VAT) }; // VAT is "of which", never added
+    }
+    const name = p => t(p.ar, p.en);
+    const nbPlaces = s => s.split(/(، |, )/).map(x => (x === '، ' || x === ', ') ? x : x.replace(/ /g, ' ')).join('');
+    const thumb = p => '<span class="dc-co-thumb" data-tone="' + p.tone + '"><svg viewBox="0 0 200 180" aria-hidden="true"><use href="#dc-box"/></svg></span>';
+    const withFocus = fn => { const a = document.activeElement, k = a && a.dataset && a.dataset.k; fn(); if (k) { const n = $('[data-k="' + k + '"]'); if (n && !n.disabled) n.focus({ preventScroll: true }); } };
+    const say = (el, msg) => { el.textContent = ''; setTimeout(() => { el.textContent = msg; }, 30); };
+
+    /* ---------- shelf ---------- */
+    function renderShelf() {
+      $('#shelfRows').innerHTML = PRODUCTS.map(p => {
+        const chips = '<div class="dc-row" style="gap:6px"><span class="dc-chip dc-chip--age">' + t(p.age[0], p.age[1]) + '</span>' + (p.season ? '<span class="dc-chip dc-chip--season">' + t(p.aud[0], p.aud[1]) + '</span>' : '<span class="dc-chip">' + t(p.aud[0], p.aud[1]) + '</span>') + '</div>';
+        const price = '<div class="dc-co-row__price"><div class="dc-price"><span class="dc-price__now dc-num"><small>₪</small>' + DC.num(p.price) + '</span><span class="dc-price__vat">' + t('شامل ضريبة القيمة المضافة', 'Incl. VAT') + '</span></div><span class="dc-ph">' + t('سعر تجريبي', 'Sample price') + '</span></div>';
+        const act = p.off
+          ? '<p class="dc-product__note" style="margin:0">' + t('يرجع مع بداية رمضان · غير متوفر الآن', 'Back when Ramadan starts · not available now') + '</p><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-act="notify">' + t('نبّهني لما يرجع', 'Notify me when it is back') + '</button>'
+          : '<span class="dc-co-incart" data-incart="' + p.id + '" aria-live="polite"></span><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-pop data-act="add" data-id="' + p.id + '">' + t('أضف إلى السلة', 'Add to cart') + I.heart + '</button>';
+        return '<li class="dc-co-row' + (p.off ? ' is-off' : '') + '">' + thumb(p) + '<div class="dc-co-row__body"><h3 class="dc-co-row__name">' + name(p) + '</h3>' + chips + '<p class="dc-co-row__meta">' + t(p.meta[0], p.meta[1]) + '</p></div><div class="dc-co-row__foot">' + price + '<div style="display:grid;gap:8px;justify-items:end">' + act + '</div></div></li>';
+      }).join('');
+      updateShelf();
+    }
+    function updateShelf() { $$('[data-incart]').forEach(n => { const q = qtyOf(n.dataset.incart); n.textContent = q ? t('في سلتك: ' + q, 'In your cart: ' + q) : ''; }); }
+
+    /* ---------- header badge ---------- */
+    function renderBadge(bump) {
+      const n = count(), c = $('#cartCount');
+      c.textContent = n; $('#cartBtn').setAttribute('aria-label', t('السلة، ' + n + ' منتجات', 'Cart, ' + n + ' items'));
+      c.hidden = n === 0;
+      if (bump) DC.bump(c);
+    }
+
+    /* ---------- qty stepper ---------- */
+    function stepper(id, where) {
+      const q = qtyOf(id), n = name(P[id]);
+      return '<div class="dc-co-qty" role="group" aria-label="' + t('الكمية: ', 'Quantity: ') + n + '">' +
+        '<button type="button" data-act="dec" data-id="' + id + '" data-k="' + where + ':dec:' + id + '" aria-label="' + t('إنقاص الكمية: ', 'Decrease quantity: ') + n + '">' + I.minus + '</button>' +
+        '<output class="dc-num" aria-live="polite">' + q + '</output>' +
+        '<button type="button" data-act="inc" data-id="' + id + '" data-k="' + where + ':inc:' + id + '" ' + (q >= MAX_QTY ? 'disabled title="' + t('الحد الأقصى ' + MAX_QTY + ' لكل صندوق', 'Up to ' + MAX_QTY + ' of each box') + '"' : '') + ' aria-label="' + t('زيادة الكمية: ', 'Increase quantity: ') + n + '">' + I.plus + '</button></div>';
+    }
+
+    /* ---------- drawer ---------- */
+    function emptyCard() {
+      return '<div class="dc-co-empty"><button class="dc-qcard" type="button" aria-pressed="false" aria-label="' + t('بطاقة، اضغط لتقلبها', 'Card, press to flip it') + '"><span class="dc-qcard__inner"><span class="dc-qcard__face dc-qcard__front dc-qcard__front--pink"><span class="dc-qcard__disc">' + t('؟', '?') + '</span></span><span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">' + t('دردشات', 'Dardachat') + '</span><span class="dc-qcard__q">' + t('مفتاح المعرفة هو السؤال', 'The key to knowing is the question') + '</span></span></span></button>' +
+        '<p>' + t('السلة فارغة. اقلب البطاقة، ثم اختر صندوقاً يفتح لكم الحديث.', 'Your cart is empty. Flip the card, then pick a box that gets the talk going.') + '</p></div>';
+    }
+    function renderDrawer() {
+      const L = lines(), T = totals(), body = $('#drawerBody'), foot = $('#drawerFoot');
+      $('#drawerCount').innerHTML = t(count() + ' منتجات', count() + ' items');
+      if (!L.length) {
+        body.innerHTML = emptyCard();
+        foot.innerHTML = '<div class="dc-co-undo" role="status">' + undoHtml() + '</div>' + (S.view === 'done' ? '<a class="dc-btn" href="shop.html" data-k="d:shop" style="justify-content:center">' : '<button class="dc-btn" type="button" data-act="close-cart" data-k="d:shop" style="justify-content:center">') + t('تصفّح الصناديق', 'Browse the boxes') + (S.view === 'done' ? '</a>' : '</button>');
+        return;
+      }
+      body.innerHTML = '<ul class="dc-co-drawer__list" id="drawerList">' + L.map(l =>
+        '<li class="dc-co-card" data-line="' + l.p.id + '">' + thumb(l.p) + '<div class="dc-co-card__body"><h3 class="dc-co-card__name">' + name(l.p) + '</h3><p class="dc-co-card__meta">' + t(l.p.age[0], l.p.age[1]) + ' · ' + t(l.p.aud[0], l.p.aud[1]) + '</p></div>' +
+        '<div class="dc-co-card__foot">' + stepper(l.p.id, 'd') + '<span class="dc-co-line-price">' + money(l.p.price * l.q) + '</span><button class="dc-co-rm" type="button" data-act="rm" data-id="' + l.p.id + '" data-k="d:rm:' + l.p.id + '" aria-label="' + t('إزالة ', 'Remove ') + name(l.p) + '">' + I.trash + '</button></div></li>').join('') + '</ul>';
+      foot.innerHTML = '<div class="dc-co-undo" role="status">' + undoHtml() + '</div>' +
+        '<div class="dc-co-total-line"><b>' + t('المجموع الفرعي', 'Subtotal') + '</b><span>' + money(T.sub) + '</span></div>' +
+        '<p class="dc-co-fine">' + t('الأسعار شاملة ضريبة القيمة المضافة. التوصيل يُحسب حسب عنوانك في الخطوات التالية.', 'Prices include VAT. Delivery is worked out from your address in the next steps.') + '</p>' +
+        '<button class="dc-btn dc-btn--cta" type="button" data-act="checkout" data-k="d:go" style="justify-content:center">' + t('إتمام الطلب', 'Checkout') + I.arrow + '</button>' +
+        '<button class="dc-btn dc-btn--ghost dc-btn--sm" type="button" data-act="close-cart" style="justify-content:center">' + t('متابعة التسوق', 'Keep shopping') + '</button>';
+    }
+    function undoHtml() {
+      const r = S.lastRemoved; if (!r) return '';
+      return '<span>' + t('أُزيل ' + P[r.id].ar, name(P[r.id]) + ' removed') + '</span><button class="dc-co-linkbtn" type="button" data-act="undo" data-k="d:undo">' + t('تراجع', 'Undo') + '</button>';
+    }
+    function requestCart(el) {
+      opener = el || $('#cartBtn');
+      if (location.hash === '#cart') { route(); return; }
+      prevHash = location.hash; // remembered so closing puts the user back exactly where they were
+      location.hash = 'cart';
+    }
+    function openCart() {
+      if ($('#drawer').classList.contains('is-open')) { renderDrawer(); return; }
+      opener = document.activeElement && document.activeElement !== document.body ? document.activeElement : $('#cartBtn');
+      renderDrawer();
+      const list = $('#drawerList'); if (list) { list.classList.remove('dc-deal'); void list.offsetWidth; list.classList.add('dc-deal'); setTimeout(() => list.classList.remove('dc-deal'), 1100); }
+      const d = $('#drawer'); d.removeAttribute('inert'); $('#scrim').classList.add('is-open'); d.classList.add('is-open');
+      $('#cartBtn').setAttribute('aria-expanded', 'true');
+      ['.dc-co-bar', '#main'].forEach(s => $(s).setAttribute('inert', ''));
+      document.documentElement.style.overflow = 'hidden';
+      setTimeout(() => { const f = $('[data-act="checkout"]', d) || $('[data-k="d:shop"]', d) || $('.dc-co-x', d); f.focus({ preventScroll: true }); }, 60);
+      if (location.hash !== '#cart') { prevHash = location.hash; history.replaceState(null, '', '#cart'); }
+    }
+    function closeCart(restore) {
+      const d = $('#drawer'); if (!d.classList.contains('is-open')) return;
+      d.classList.remove('is-open'); $('#scrim').classList.remove('is-open'); d.setAttribute('inert', '');
+      ['.dc-co-bar', '#main'].forEach(s => $(s).removeAttribute('inert'));
+      document.documentElement.style.overflow = '';
+      $('#cartBtn').setAttribute('aria-expanded', 'false');
+      if (location.hash === '#cart') history.replaceState(null, '', location.pathname + location.search + prevHash);
+      if (restore !== false) { const o = opener && document.contains(opener) ? opener : $('#cartBtn'); setTimeout(() => o.focus({ preventScroll: true }), 30); }
+      if (S.view === 'checkout' && (!count() || !$('#coEmpty').hidden)) route(); // emptied (or refilled by Undo) while the drawer was open: sync the checkout view
+    }
+    function trapTab(e) {
+      const d = $('#drawer'); if (!d.classList.contains('is-open') || e.key !== 'Tab') return;
+      const f = $$('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])', d).filter(n => n.offsetParent !== null);
+      if (!f.length) return; const a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
+
+    /* ---------- cart mutations ---------- */
+    function setQty(id, q, opts) {
+      opts = opts || {};
+      if (q <= 0) S.cart[id] = 0; else S.cart[id] = Math.min(MAX_QTY, q);
+      afterCart(opts);
+    }
+    function afterCart(o) {
+      withFocus(() => { renderBadge(o.bump); renderDrawer(); renderLines(); renderSummary(); updateShelf(); });
+      if (S.view === 'checkout' && !count()) route();
+    }
+    function removeLine(id, btn) {
+      const li = btn && btn.closest('.dc-co-card, .dc-co-line'), q = qtyOf(id);
+      // read the context now: setQty() re-renders and detaches li
+      const inDrawer = !!(li && li.closest('#drawer')), inLines = !!(li && li.closest('#lines'));
+      const nextId = li && li.nextElementSibling && li.nextElementSibling.dataset.line;
+      const finish = () => { S.lastRemoved = { id, q }; setQty(id, 0); clearTimeout(undoTimer); undoTimer = setTimeout(() => { S.lastRemoved = null; if ($('#drawer').classList.contains('is-open')) renderDrawer(); }, 7000);
+        say($('#cartLive'), t('أُزيل ' + P[id].ar, name(P[id]) + ' removed'));
+        let n = null;
+        if (inDrawer) n = (nextId && $('[data-k="d:rm:' + nextId + '"]')) || $('[data-k="d:go"]') || $('[data-k="d:shop"]');
+        else if (inLines) n = (nextId && $('[data-k="l:rm:' + nextId + '"]')) || (count() ? $('#next0') : $('#coEmpty .dc-qcard, #coEmpty a'));
+        if (n) n.focus({ preventScroll: true }); };
+      if (li && !DC.reducedMotion() && li.animate) {
+        const s = DC.lang === 'ar' ? -1 : 1;
+        li.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(' + (s * 60) + 'px) rotate(' + (s * 6) + 'deg)' }], { duration: 240, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' }).onfinish = finish;
+      } else finish();
+    }
+
+    /* ---------- checkout: step 1 lines + promo ---------- */
+    function renderLines() {
+      const L = lines(), box = $('#lines');
+      if (!box) return;
+      box.innerHTML = '<ul class="dc-co-lines">' + L.map(l =>
+        '<li class="dc-co-line" data-line="' + l.p.id + '">' + thumb(l.p) + '<div class="dc-co-row__body"><h3 class="dc-co-row__name">' + name(l.p) + '</h3><div class="dc-row" style="gap:6px"><span class="dc-chip dc-chip--age">' + t(l.p.age[0], l.p.age[1]) + '</span><span class="dc-chip">' + t(l.p.aud[0], l.p.aud[1]) + '</span></div><p class="dc-co-row__meta">' + t(l.p.meta[0], l.p.meta[1]) + '</p></div>' +
+        '<div class="dc-co-line__foot">' + stepper(l.p.id, 'l') + '<span class="dc-co-line-price">' + money(l.p.price * l.q) + '</span><button class="dc-co-rm" type="button" data-act="rm" data-id="' + l.p.id + '" data-k="l:rm:' + l.p.id + '" aria-label="' + t('إزالة ', 'Remove ') + name(l.p) + '">' + I.trash + '</button></div></li>').join('') + '</ul>';
+      renderPromo();
+    }
+    function renderPromo(keepValue, err) {
+      const box = $('#promoBox'); if (!box) return;
+      const open = box.dataset.open === '1', val = keepValue != null ? keepValue : '';
+      if (S.promo) { box.innerHTML = '<div class="dc-co-promo-ok">' + I.check + '<span>' + t('تم تطبيق الرمز ' + PROMO.code + ': خصم 10%', 'Code ' + PROMO.code + ' applied: 10% off') + '</span><button class="dc-co-linkbtn" type="button" data-act="promo-remove" data-k="l:promo-rm">' + t('إزالة', 'Remove') + '</button></div>'; return; }
+      box.innerHTML = '<button class="dc-btn dc-btn--ghost dc-btn--sm" type="button" data-act="promo-toggle" data-k="l:promo-t" aria-expanded="' + open + '" aria-controls="promoRow">' + t('عندك رمز خصم؟', 'Have a discount code?') + '</button>' +
+        '<div class="dc-co-promo-row" id="promoRow" ' + (open ? '' : 'hidden') + ' style="margin-block-start:12px"><div class="dc-field' + (err ? ' dc-field--error' : '') + '"><label for="promoIn">' + t('رمز الخصم', 'Discount code') + '</label><input id="promoIn" autocomplete="off" dir="ltr" value="' + val.replace(/"/g, '') + '" aria-describedby="promoHelp"' + (err ? ' aria-invalid="true"' : '') + '><span class="dc-field__help" id="promoHelp">' + (err ? t('الرمز غير صالح. تأكد من كتابته كما وصلك.', 'This code is not valid. Check it is typed as you received it.') : t('رمز تجريبي: SAMPLE10', 'Sample code: SAMPLE10')) + '</span></div><button class="dc-btn dc-btn--outline dc-btn--sm" type="button" data-act="promo-apply" data-k="l:promo-a">' + t('تطبيق', 'Apply') + '</button></div>';
+    }
+
+    /* ---------- summary ---------- */
+    let lastTotal = null;
+    function renderSummary() {
+      const L = lines(), T = totals(), empty = L.length === 0;
+      $('#summary').hidden = empty; $('.dc-co-layout').classList.toggle('is-empty', empty);
+      $('#sumTop').innerHTML = money(T.total);
+      $('#sumBody').innerHTML = '<ul class="dc-co-mini">' + L.map(l => '<li>' + thumb(l.p) + '<div><span class="dc-co-mini__name">' + name(l.p) + '</span><span class="dc-co-mini__qty">' + t('الكمية: ', 'Qty: ') + num(l.q) + '</span></div><span class="dc-co-line-price">' + money(l.p.price * l.q) + '</span></li>').join('') + '</ul>' +
+        '<dl class="dc-co-totals"><div><dt>' + t('المجموع الفرعي', 'Subtotal') + '</dt><dd>' + money(T.sub) + '</dd></div>' +
+        (T.disc ? '<div class="is-disc"><dt>' + t('خصم ' + PROMO.code, 'Discount ' + PROMO.code) + '</dt><dd>' + money(T.disc, '−') + '</dd></div>' : '') +
+        '<div ' + (T.zone ? '' : 'class="is-pending"') + '><dt>' + t('التوصيل', 'Delivery') + '</dt><dd>' + (T.zone ? money(T.del) : t('يُحسب حسب المنطقة', 'Set by your area')) + '</dd></div>' +
+        '<div class="is-total"><dt>' + t('الإجمالي', 'Total') + '</dt><dd id="sumTotal">' + money(T.total) + '</dd></div>' +
+        '<div class="is-of"><dt>' + t('منه ضريبة القيمة المضافة', 'of which VAT') + ' <span class="dc-ph">' + t('16% تجريبي', '16% sample') + '</span></dt><dd>' + money(T.vat) + '</dd></div></dl>' +
+        '<p class="dc-co-help">' + I.chat + '<span>' + t('محتاج مساعدة؟ ', 'Need help? ') + '<a href="https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحباً، عندي سؤال عن طلبي في دردشات', 'Hello, I have a question about my Dardachat order')) + '" target="_blank" rel="noopener">' + t('راسلنا على واتساب', 'Message us on WhatsApp') + '</a></span></p>';
+      if (lastTotal !== null && lastTotal !== T.total && !DC.reducedMotion()) DC.restart($('#sumTotal'), 'dc-co-tick');
+      lastTotal = T.total;
+    }
+    const mqDesk = window.matchMedia('(min-width: 920px)');
+    const syncSummary = () => { const d = $("#summary"); if (mqDesk.matches) d.setAttribute("open", ""); };
+    if (!mqDesk.matches) $("#summary").removeAttribute("open"); // mobile: summary starts collapsed so the form is first
+    mqDesk.addEventListener('change', syncSummary);
+    $('#summary > summary').addEventListener('click', e => { if (mqDesk.matches) e.preventDefault(); });
+
+    /* ---------- steps ---------- */
+    const STEP_LABELS = [['السلة', 'Cart'], ['العنوان', 'Address'], ['التوصيل', 'Delivery'], ['الدفع', 'Payment']];
+    function renderSteps() {
+      $('#steps').innerHTML = STEP_LABELS.map((l, i) => '<li class="' + (i < S.step ? 'is-done' : i === S.step ? 'is-now' : '') + '"><button type="button" data-act="goto" data-step="' + i + '" ' + (i === S.step ? 'aria-current="step"' : '') + (i > S.step ? ' disabled' : '') + '>' + I.check + '<span>' + t(l[0], l[1]) + '</span><span class="dc-sr">' + (i < S.step ? t('، مكتملة', ', done') : '') + '</span></button></li>').join('');
+    }
+    function stepValid(i) {
+      if (i === 0) return count() > 0;
+      if (i === 1) return ['name', 'phone', 'city', 'area', 'street'].every(k => !validate(k, $('#f-' + k).value));
+      if (i === 2) return !!S.zone;
+      return true;
+    }
+    function maxAllowed() { let i = 0; while (i < 3 && stepValid(i)) i++; return i; }
+    function showStep(i, dir) {
+      S.step = i;
+      $$('[data-step]').filter(n => n.matches('form')).forEach(f => { f.hidden = +f.dataset.step !== i; });
+      $('#coEmpty').hidden = true;
+      renderSteps();
+      if (i === 2) renderZones();
+      if (i === 3) renderPay();
+      const panel = $('#p' + i), h = $('h2', panel);
+      if (!DC.reducedMotion() && panel.animate && dir) { const s = (DC.lang === 'ar' ? -1 : 1) * dir; panel.animate([{ opacity: 0, transform: 'translateX(' + (s * 28) + 'px)' }, { opacity: 1, transform: 'none' }], { duration: 320, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
+      say($('#stepLive'), t('الخطوة ' + (i + 1) + ' من 4: ' + STEP_LABELS[i][0], 'Step ' + (i + 1) + ' of 4: ' + STEP_LABELS[i][1]));
+      renderSummary();
+      if (dir) { h.focus({ preventScroll: true }); const top = $('#coTitle').getBoundingClientRect().top + scrollY - 88; scrollTo({ top: Math.max(0, top), behavior: DC.reducedMotion() ? 'auto' : 'smooth' }); }
+    }
+
+    /* ---------- address validation ---------- */
+    const VALID = {
+      name: v => v.trim().split(/\s+/).filter(Boolean).length >= 2 ? null : ['اكتب الاسم الأول واسم العائلة', 'Enter your first name and family name'],
+      phone: v => !v.trim() ? ['اكتب رقم هاتفك', 'Enter your phone number'] : /^(\+?(972|970)|0)5\d{8}$/.test(v.replace(/[\s-]/g, '')) ? null : ['الرقم ناقص. اكتبه كاملاً مع المقدمة، مثل \u206605X XXX XXXX\u2069', 'The number is incomplete. Write it in full with the prefix, like \u206605X XXX XXXX\u2069'],
+      city: v => v.trim() ? null : ['اكتب اسم المدينة أو البلدة', 'Enter your city or town'],
+      area: v => v.trim() ? null : ['اكتب اسم الحي أو المنطقة', 'Enter your neighbourhood'],
+      street: v => v.trim().length >= 3 ? null : ['اكتب الشارع ورقم البناية ليجدك المندوب', 'Enter the street and building so the courier can find you']
+    };
+    const validate = (k, v) => VALID[k] ? VALID[k](v) : null;
+    function setErr(k, pair) {
+      const f = $('[data-f="' + k + '"]'), inp = $('#f-' + k), help = $('#h-' + k);
+      if (!help.dataset.arOrig) { help.dataset.arOrig = help.dataset.ar; help.dataset.enOrig = help.dataset.en; }
+      f.classList.toggle('dc-field--error', !!pair);
+      pair ? inp.setAttribute('aria-invalid', 'true') : inp.removeAttribute('aria-invalid');
+      help.dataset.ar = pair ? pair[0] : help.dataset.arOrig; help.dataset.en = pair ? pair[1] : help.dataset.enOrig;
+      help.textContent = help.dataset[DC.lang];
+    }
+    function checkAddress(show) {
+      let first = null;
+      Object.keys(VALID).forEach(k => { const e = validate(k, $('#f-' + k).value); if (show) setErr(k, e); if (e && !first) first = k; });
+      return first;
+    }
+    Object.keys(VALID).forEach(k => {
+      const inp = $('#f-' + k);
+      inp.addEventListener('blur', () => { if (inp.value) setErr(k, validate(k, inp.value)); });
+      inp.addEventListener('input', () => { if (inp.getAttribute('aria-invalid') && !validate(k, inp.value)) setErr(k, null); });
+    });
+
+    /* ---------- step 3: zones ---------- */
+    function suggestZone() { const c = $('#f-city').value; const z = ZONES.find(z => z.re && z.re.test(c)); return z ? z.id : null; }
+    function renderZones() {
+      const sug = suggestZone();
+      if (sug && (!S.zone || S.zoneAuto)) { S.zone = sug; S.zoneAuto = true; }
+      const box = $('#zoneOpts');
+      box.innerHTML = '<legend>' + t('منطقة التوصيل', 'Delivery area') + '</legend>' + ZONES.map(z =>
+        '<label class="dc-co-opt"><input type="radio" name="zone" value="' + z.id + '"' + (S.zone === z.id ? ' checked' : '') + '><span class="dc-co-dot">' + I.check + '</span>' +
+        '<span class="dc-co-opt__body"><span class="dc-co-opt__title">' + t(z.ar, z.en) + '</span><span class="dc-co-opt__sub">' + nbPlaces(t(z.places[0], z.places[1])) + '</span><span class="dc-co-opt__sub">' + t('الوصول المتوقع: ', 'Expected: ') + '<span class="dc-co-nowrap">' + t(z.win[0], z.win[1]) + '</span></span></span>' +
+        '<span class="dc-co-opt__aside"><span class="dc-num dc-co-opt__price">₪ ' + DC.num(z.fee) + '</span>' + (z.cod ? '<span class="dc-chip">' + t('الدفع عند الاستلام متاح', 'Cash on delivery available') + '</span>' : '<span class="dc-chip dc-chip--outline">' + t('دفع إلكتروني فقط', 'Online payment only') + '</span>') + '</span></label>').join('');
+      const sg = $('#zoneSuggest');
+      if (sug && S.zoneAuto) { sg.hidden = false; sg.innerHTML = I.info.replace('<svg', '<svg width="20" height="20" style="flex:none;color:var(--blue)"') + '<span>' + t('اخترنا هذه المنطقة بحسب مدينتك. يمكنك تغييرها.', 'We picked this area from your city. You can change it.') + '</span>'; } else sg.hidden = true;
+      $('#zoneErr').hidden = true;
+    }
+    $('#zoneOpts').addEventListener('change', e => { if (e.target.name === 'zone') { S.zone = e.target.value; S.zoneAuto = false; $('#zoneSuggest').hidden = true; $('#zoneErr').hidden = true; if (S.method === 'cod' && !ZONES.find(z => z.id === S.zone).cod) S.method = null; renderSummary(); } });
+
+    /* ---------- step 4: payment ---------- */
+    function codState() {
+      const T = totals(), z = ZONES.find(z => z.id === S.zone);
+      if (z && !z.cod) return { ok: false, why: ['غير متاح لمنطقتك. اختر طريقة دفع أخرى.', 'Not available for your area. Choose another payment method.'] };
+      if (T.total > COD_MAX) return { ok: false, why: ['غير متاح للطلبات فوق ₪ ' + COD_MAX + '. اختر طريقة دفع أخرى.', 'Not available for orders over ₪ ' + COD_MAX + '. Choose another payment method.'] };
+      return { ok: true };
+    }
+    function renderPay() {
+      const cs = codState(); if (S.method === 'cod' && !cs.ok) S.method = null;
+      $('#payOpts').innerHTML = '<legend>' + t('طريقة الدفع', 'Payment method') + '</legend>' + METHODS.map(m => {
+        const off = m.id === 'cod' && !cs.ok;
+        return '<label class="dc-co-opt' + (off ? ' is-off' : '') + '"><input type="radio" name="pay" value="' + m.id + '"' + (S.method === m.id ? ' checked' : '') + (off ? ' disabled' : '') + '><span class="dc-co-dot">' + I.check + '</span>' +
+          '<span class="dc-co-opt__body"><span class="dc-co-opt__title">' + t(m.ar, m.en) + '</span><span class="dc-co-opt__sub">' + t(m.sub[0], m.sub[1]) + '</span>' + (off ? '<span class="dc-co-opt__why">' + t(cs.why[0], cs.why[1]) + '</span>' : '') + '</span>' +
+          '<span class="dc-co-opt__aside">' + (m.id === 'cod' && !off ? '<span class="dc-chip dc-chip--pink">' + t('نقداً', 'Cash') + '</span>' : '') + '</span></label>';
+      }).join('');
+      payNote(); $('#payErr').hidden = true; $('#termsErr').hidden = true; $('#termsWrap').classList.remove('is-error');
+    }
+    function payNote() {
+      const n = $('#payNote'), m = METHODS.find(m => m.id === S.method);
+      n.innerHTML = m ? I.info + '<span>' + t(m.note[0], m.note[1]) + (m.id === 'cod' ? ' ' + t('المبلغ: ', 'Amount: ') + money(totals().total) + '.' : '') + '</span>' : '';
+    }
+    $('#payOpts').addEventListener('change', e => { if (e.target.name === 'pay') { S.method = e.target.value; payNote(); $('#payErr').hidden = true; } });
+    $('#terms').addEventListener('change', () => { if ($('#terms').checked) { $('#termsErr').hidden = true; $('#termsWrap').classList.remove('is-error'); } });
+
+    /* ---------- routing ---------- */
+    function showView(v) {
+      S.view = v;
+      $('#viewShelf').hidden = v !== 'shelf'; $('#viewCheckout').hidden = v !== 'checkout'; $('#viewDone').hidden = v !== 'done';
+    }
+    function route() {
+      const h = location.hash.replace('#', '');
+      if (h === 'cart') { openCart(); return; } // the drawer sits over whichever view the user is on
+      closeCart(false);
+      if (h === 'done') { if (!S.order) { location.replace('#checkout'); return; } if (S.view !== 'done') { showView('done'); renderDone(); } return; }
+      const i = HASH.indexOf(h);
+      if (i < 0) { showView('shelf'); return; }
+      const dir = S.view === 'checkout' ? (i >= S.step ? 1 : -1) : 0;
+      showView('checkout'); renderLines(); renderSummary();
+      if (!count()) { if (h !== 'checkout') history.replaceState(null, '', location.pathname + location.search + '#checkout'); $$('form[data-step]').forEach(f => f.hidden = true); $('#steps').innerHTML = ''; const e = $('#coEmpty'); e.hidden = false; e.innerHTML = emptyCard().replace('<div class="dc-co-empty">', '').replace(/<\/div>$/, '') + '<a class="dc-btn" href="#">' + t('تصفّح الصناديق', 'Browse the boxes') + '</a>'; return; }
+      const ok = Math.min(i, maxAllowed());
+      if (ok !== i) { if (ok === 1) checkAddress(true); location.replace('#' + HASH[ok]); }
+      showStep(ok, dir);
+      if (!dir) window.scrollTo({ top: 0 });
+    }
+    window.addEventListener('hashchange', route);
+    const go = i => { location.hash = HASH[i]; };
+
+    /* ---------- forms ---------- */
+    $('#p0').addEventListener('submit', e => { e.preventDefault(); if (count()) go(1); });
+    $('#p1').addEventListener('submit', e => { e.preventDefault(); const bad = checkAddress(true); if (bad) { $('#f-' + bad).focus(); return; } go(2); });
+    $('#p2').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!S.zone) { const er = $('#zoneErr'); er.hidden = false; er.textContent = t('اختر منطقة التوصيل لنحسب السعر.', 'Choose a delivery area so we can work out the price.'); $('#zoneOpts input').focus(); return; }
+      go(3);
+    });
+    $('#p3').addEventListener('submit', e => {
+      e.preventDefault();
+      let bad = null;
+      if (!S.method) { const er = $('#payErr'); er.hidden = false; er.textContent = t('اختر طريقة الدفع.', 'Choose a payment method.'); bad = $('#payOpts input:not([disabled])'); }
+      if (!$('#terms').checked) { $('#termsErr').hidden = false; $('#termsErr').textContent = t('وافق على الشروط لتكمل الطلب.', 'Agree to the terms to place your order.'); $('#termsWrap').classList.add('is-error'); bad = bad || $('#terms'); }
+      if (bad) { bad.focus(); return; }
+      if (S.placing) return; S.placing = true; const b = $('#confirmBtn'); b.setAttribute('aria-disabled', 'true'); b.setAttribute('aria-busy', 'true'); DC.heartPop(b); $('#confirmLbl').removeAttribute('data-ar'); $('#confirmLbl').removeAttribute('data-en'); $('#confirmLbl').textContent = t('جارٍ تأكيد الطلب', 'Placing your order'); $('#confirmDots').hidden = false;
+      setTimeout(() => {
+        const d = new Date(), pad = n => String(n).padStart(2, '0');
+        const T = totals();
+        S.order = { ref: 'DC-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + String(Math.floor(1000 + Math.random() * 9000)), items: lines(), T, zone: T.zone, method: S.method, phone: $('#f-phone').value.trim(), name: $('#f-name').value.trim(), address: [$('#f-street').value, $('#f-area').value, $('#f-city').value].map(s => s.trim()).filter(Boolean).join(t('، ', ', ')) };
+        S.cart = {}; S.promo = null; S.zone = null; S.zoneAuto = false; S.method = null; S.lastRemoved = null; $('#terms').checked = false; // order placed: the cart is empty again
+        renderBadge(); updateShelf(); renderLines(); renderSummary();
+        S.placing = false; b.removeAttribute('aria-disabled'); b.removeAttribute('aria-busy'); $('#confirmDots').hidden = true; $('#confirmLbl').setAttribute('data-ar', 'تأكيد الطلب'); $('#confirmLbl').setAttribute('data-en', 'Place order'); $('#confirmLbl').textContent = t('تأكيد الطلب', 'Place order');
+        location.hash = 'done';
+      }, DC.reducedMotion() ? 200 : 900);
+    });
+
+    /* ---------- confirmation ---------- */
+    function renderDone() {
+      const o = S.order; if (!o) return;
+      const m = METHODS.find(m => m.id === o.method), cod = o.method === 'cod';
+      const wa = 'https://wa.me/972543992424?text=' + encodeURIComponent(t('مرحباً، عندي سؤال عن طلبي رقم ' + o.ref, 'Hello, I have a question about order ' + o.ref));
+      $('#doneBody').innerHTML =
+        '<div class="dc-co-rise" style="--d:0s"><span class="dc-chip dc-chip--pink">' + t('تم استلام الطلب', 'Order received') + '</span>' +
+        '<h1 class="dc-co-title" id="doneTitle" tabindex="-1">' + t('شكراً لك، وصلنا طلبك', 'Thank you, we have your order') + '</h1>' +
+        '<p class="dc-co-lede">' + t('نجهّز صندوقك الآن. سنتواصل معك على الرقم ', 'We are getting your box ready. We will contact you on ') + '<span class="dc-num">' + o.phone.replace(/</g, '') + '</span>' + t(' عندما يخرج للتوصيل.', ' when it goes out for delivery.') + '</p></div>' +
+        '<dl class="dc-co-facts dc-co-rise" style="--d:.08s">' +
+        '<div><dt>' + t('رقم الطلب', 'Order number') + '</dt><dd><span class="dc-num dc-co-ref">' + o.ref + '</span></dd></div>' +
+        '<div><dt>' + t('الصناديق', 'Boxes') + '</dt><dd>' + o.items.map(l => name(l.p) + ' × ' + num(l.q)).join('<br>') + '</dd></div>' +
+        '<div><dt>' + t('التوصيل إلى', 'Delivering to') + '</dt><dd>' + o.name.replace(/</g, '') + '<br><span style="font-weight:400">' + o.address.replace(/</g, '') + '</span></dd></div>' +
+        '<div><dt>' + t('الوصول المتوقع', 'Expected') + '</dt><dd>' + t(o.zone.win[0], o.zone.win[1]) + ' <span class="dc-ph">' + t('تجريبي', 'sample') + '</span></dd></div>' +
+        '<div><dt>' + t('الدفع', 'Payment') + '</dt><dd>' + t(m.ar, m.en) + (cod ? ' · ' + t('جهّز ', 'have ') + money(o.T.total) + t(' نقداً', ' in cash') : ' · ' + money(o.T.total)) + '</dd></div></dl>' +
+        '<section class="dc-co-first dc-co-rise" style="--d:.16s" aria-labelledby="firstH"><h2 id="firstH">' + t('بطاقتك الأولى', 'Your first card') + '</h2><p>' + t('اقلب بطاقة لتقرأ سؤالاً، وابدأ الدردشة قبل أن يصل الصندوق. ', 'Flip a card to read a question, and start talking before the box arrives. ') + '<span class="dc-ph">' + t('أسئلة تجريبية', 'Sample questions') + '</span></p>' +
+        '<div class="dc-co-cards dc-deal">' + SAMPLE_CARDS.map((c, i) => '<button class="dc-qcard" type="button" aria-pressed="false" aria-label="' + t('بطاقة ' + (i + 1) + '، اضغط لتقلبها', 'Card ' + (i + 1) + ', press to flip it') + '"><span class="dc-qcard__inner"><span class="dc-qcard__face dc-qcard__front ' + (i % 2 ? '' : 'dc-qcard__front--pink') + '"><span class="dc-qcard__disc">' + t('؟', '?') + '</span></span><span class="dc-qcard__face dc-qcard__back"><span class="dc-qcard__kicker">' + t('دردشات', 'Dardachat') + '</span><span class="dc-qcard__q">' + t(c[0], c[1]) + '</span></span></span></button>').join('') + '</div></section>' +
+        '<div class="dc-row dc-co-rise" style="--d:.24s"><a class="dc-btn" href="shop.html"><span>' + t('تابع التسوق', 'Keep shopping') + '</span></a><a class="dc-btn dc-btn--outline" href="' + wa + '" target="_blank" rel="noopener"><span>' + t('راسلنا على واتساب', 'Message us on WhatsApp') + '</span></a></div>';
+      const st = $('#stage'); st.classList.remove('is-playing'); void st.offsetWidth; st.classList.add('is-playing');
+      $('.dc-co-box', st).classList.add('is-playing');
+      DC.draw($('#stageBrush'));
+      $('#stageBrush').classList.add('is-drawing');
+      window.scrollTo({ top: 0 });
+      setTimeout(() => $('#doneTitle') && $('#doneTitle').focus({ preventScroll: true }), 50);
+    }
+
+    /* ---------- delegated clicks ---------- */
+    document.addEventListener('click', e => {
+      const b = e.target.closest('[data-act]'); if (!b) return;
+      const act = b.dataset.act, id = b.dataset.id;
+      if (act === 'add') { S.cart[id] = Math.min(MAX_QTY, qtyOf(id) + 1); withFocus(() => { renderBadge(true); updateShelf(); renderSummary(); }); say($('#cartLive'), t('أُضيف ' + P[id].ar + ' إلى السلة', name(P[id]) + ' added to your cart')); }
+      else if (act === 'inc') setQty(id, qtyOf(id) + 1, { bump: true });
+      else if (act === 'dec') qtyOf(id) <= 1 ? removeLine(id, b) : setQty(id, qtyOf(id) - 1);
+      else if (act === 'rm') removeLine(id, b);
+      else if (act === 'undo') { const r = S.lastRemoved; S.lastRemoved = null; clearTimeout(undoTimer); if (r) { S.cart[r.id] = r.q; afterCart({ bump: true }); const n = $('[data-k="' + ($('#drawer').classList.contains('is-open') ? 'd' : 'l') + ':rm:' + r.id + '"]'); if (n) n.focus({ preventScroll: true }); } }
+      else if (act === 'open-cart') { if (S.view === 'shelf' || S.view === 'checkout') requestCart(b); }
+      else if (act === 'close-cart') { closeCart(); }
+      else if (act === 'checkout') { if (S.view === 'checkout') closeCart(); else { closeCart(false); location.hash = 'checkout'; } }
+      else if (act === 'to-shelf') { e.preventDefault(); location.hash = ''; history.replaceState(null, '', location.pathname + location.search); route(); window.scrollTo({ top: 0 }); }
+      else if (act === 'goto') { const i = +b.dataset.step; if (i < S.step) go(i); }
+      else if (act === 'back') { if (S.step > 0) go(S.step - 1); }
+      else if (act === 'promo-toggle') { const box = $('#promoBox'); box.dataset.open = box.dataset.open === '1' ? '0' : '1'; const r = $('#promoRow'); r.hidden = box.dataset.open !== '1'; b.setAttribute('aria-expanded', String(!r.hidden)); if (!r.hidden) $('#promoIn').focus(); }
+      else if (act === 'promo-apply') applyPromo();
+      else if (act === 'promo-remove') { S.promo = null; withFocus(() => { renderPromo(); renderSummary(); renderDrawer(); }); const t2 = $('[data-k="l:promo-t"]'); t2 && t2.focus(); }
+      else if (act === 'notify') { b.textContent = t('سنبلغك عند عودته', 'We will tell you when it is back'); b.disabled = true; }
+    });
+    function applyPromo() {
+      const v = $('#promoIn').value.trim();
+      if (v.toUpperCase() === PROMO.code) { S.promo = PROMO.code; renderPromo(); renderSummary(); const n = $('[data-k="l:promo-rm"]'); n && n.focus(); }
+      else { $('#promoBox').dataset.open = '1'; renderPromo(v, true); $('#promoIn').focus(); }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && $('#drawer').classList.contains('is-open')) { e.preventDefault(); closeCart(); }
+      if (e.key === 'Enter' && e.target.id === 'promoIn') { e.preventDefault(); applyPromo(); }
+      trapTab(e);
+    });
+    // the header's cart button and any other opener share one path
+    $('#cartBtn').addEventListener('click', e => { e.stopPropagation(); requestCart($('#cartBtn')); });
+    // "open-cart" buttons elsewhere are handled by the delegated handler above; make sure they do not double fire
+    $$('[data-act="open-cart"]').forEach(n => { if (n.id === 'cartBtn') n.removeAttribute('data-act'); });
+
+    // closing the drawer via hash keeps history tidy: pressing Back closes it
+    document.addEventListener('dc:lang', () => {
+      renderShelf(); renderBadge(); renderSteps(); renderSummary(); renderLines();
+      if (S.view === 'checkout') { if (S.step === 2) renderZones(); if (S.step === 3) renderPay(); }
+      if ($('#drawer').classList.contains('is-open')) renderDrawer();
+      if (S.view === 'done') { renderDone(); }
+      if (S.view === 'checkout' && !count()) route();
+    });
+
+    /* ---------- boot ---------- */
+    renderShelf(); renderBadge(); renderLines(); renderSummary(); renderSteps(); syncSummary();
+    route();
+  });
+  </script>
+</body>
+</html>
