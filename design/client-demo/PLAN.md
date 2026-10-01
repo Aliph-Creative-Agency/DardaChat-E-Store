@@ -20,7 +20,9 @@ Why (b): almost all the work already existed (the `design/prototypes/` screens),
 2. **Offline-safe:** three.js r128 (used only by the 3D table in the Journey) is now loaded from `vendor/three.min.js` instead of cdnjs. No page loads GSAP or anything else from a CDN. The only network resource left is Google Fonts, and system fonts take over when you are offline. If WebGL is unavailable, the Journey falls back to a flat 2D table.
 3. `index.html` is the client-facing start page: the old gallery with the internal review status chips, file names and review shortcuts removed. Its thumbnails are regenerated into `screenshots/thumbs/`.
 4. One review round with 3 parallel workers (A: home/shop/product; B: cart-checkout/services; C: journey/assistant/start). Fixes: one cart shared across pages (`sessionStorage` `dc-proto-cart`, so a box added on Home/Shop/Product appears in checkout), and AA contrast for the quiet “Sample” tags (`ds.css` `.dc-ph` now uses the `--surface` token as its background). Verdicts are in `_review/verdicts.md`.
-5. Took screenshots at 1440 and 390, Arabic and English, for every page and key state, and verified every page in Chromium (see README).
+5. Copy pass in the client's own voice (`_review/VOICE.md`, taken from the client's Canva page) on all 8 pages. Copy A, B and C were all approved.
+6. Real photos: Obaida's Canva screenshots of every game (`assests/canva sc shots/`) were cut into 25 JPGs in `assets/photos/` (580–1600 px, never upscaled). They are used on the box cards (home, shop), in all 4 product galleries, on the home service tickets and on the services banners and workshop cards. A first try with 120 px crops was rejected as blurry. Details are in `_review/PHOTOS.md` and `_review/verdicts.md` (Photos).
+7. Took screenshots at 1440 and 390, Arabic and English, for every page and key state, and verified every page in Chromium (see README).
 
 ## Page list (presentation order)
 
@@ -37,8 +39,14 @@ Why (b): almost all the work already existed (the `design/prototypes/` screens),
 
 ## Simulated or placeholder (marked quietly on the pages with “Sample” tags)
 
-- Box prices (₪119–₪169) and box art. Service prices are real (DESIGN.md §7).
+- Box prices (₪119–₪169). Service prices are real (DESIGN.md §7). Box and service photos are now the client's real photos.
+- The Ramadan Family Box is shown with its current photos and the note «تصميم مؤقت · سيُعاد تصميم هذا الصندوق» (the box is being redesigned).
+- All 8 workshop cards share one workshops photo.
 - Cart, checkout, order number, delivery zones and fees, promo code `SAMPLE10`. Nothing is sent anywhere.
 - The assistant's answers are pre-written from the real catalogue and service facts.
 - Journey content (stops, choices, results) is illustrative; the concept is the client's.
 - The logo is cropped from a screenshot. We need an SVG from the client.
+
+## Still needed from the client
+
+The final box prices, one image per workshop (8), a wide community/hero photo, the redesigned Ramadan box photos, the logo as SVG, and, ideally, original-resolution photos. To swap in a photo, overwrite the same filename in `assets/photos/`.

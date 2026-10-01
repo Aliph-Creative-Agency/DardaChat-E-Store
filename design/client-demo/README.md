@@ -36,7 +36,10 @@ Each of these is marked on the page with a small “Sample / تجريبي” tag
 
 | Item | Status |
 |---|---|
-| Box prices (₪119–₪169), box photos/art | Placeholder. We need prices and photos from the client. |
+| Box prices (₪119–₪169) | Placeholder (“سعر تجريبي”). We need final prices from the client. |
+| Box and service photos | **Real**: the client's own photos (Obaida's Canva screenshots, `assets/photos/`, see `_review/PHOTOS.md`). All 4 boxes, the product galleries, the home service tickets and the services banners. |
+| Ramadan Family Box | Real photos, but the box is being redesigned: marked «تصميم مؤقت · سيُعاد تصميم هذا الصندوق» on Home, Shop and Product. |
+| Workshop card images | All 8 workshop cards share one workshops photo until we get one image per workshop. |
 | Service prices | Real (from the brand spec) |
 | Cart, checkout, order number, delivery zones/fees, promo `SAMPLE10` | Simulated in the browser. Nothing is sent anywhere. The cart lives only in this browser tab, and closing the tab empties it. |
 | Payment | No payment is taken. Methods are shown only. |
@@ -45,6 +48,14 @@ Each of these is marked on the page with a small “Sample / تجريبي” tag
 | Question texts on the cards | Written by the design team in Dardachat's voice |
 | Logo | Cropped from a screenshot. We need the SVG from the client. |
 | WhatsApp / Instagram links | **Real** (Dardachat's number and account) |
+
+## Still needed from the client
+
+- Final box prices (all box prices are samples).
+- One image per workshop (8), and a wide community/hero photo (about 1920×1080).
+- The redesigned Ramadan box photos.
+- The logo as SVG.
+- Higher-resolution originals are welcome. The current photos are 580–1600 px screenshots: sharp at the sizes used, but originals would be safer for print and retina hero use. To swap, overwrite the same filenames in `assets/photos/`.
 
 ## Screenshots (to send if anything goes wrong)
 
@@ -55,7 +66,8 @@ Each of these is marked on the page with a small “Sample / تجريبي” tag
 | 00 | Start page |
 | 01 | Home |
 | 02 | Shop |
-| 03 | Product |
+| 03 | Product (default box: Dardachat with Love) |
+| 03b / 03c / 03d | Product: Dardachat Box / Who Among Us / Ramadan (`?box=`) |
 | 04 | Cart drawer open |
 | 05 | Checkout, step 1 |
 | 06 | Services |
@@ -65,6 +77,8 @@ Each of these is marked on the page with a small “Sample / تجريبي” tag
 | 10 | Assistant opened |
 | 11 | Assistant answering a question |
 
+60 PNGs in total (15 states × ar/en × 1440/390), all retaken on 2026-10-01 after the photo swap.
+
 `screenshots/thumbs/` holds the small JPEGs that the start page uses. Keep them.
 
 ## Verified
@@ -73,4 +87,4 @@ Every page and state above was checked in Chromium at 390 and 1440, in Arabic an
 
 ## Files
 
-`index.html` (start) · `home.html` `shop.html` `product.html` `cart-checkout.html` `services.html` `journey.html` `assistant.html` · `ds.css` (design-system tokens and components, generated from `design/system/`) · `_shared.js` (language, theme and motion) · `assets/` (logo, banner) · `vendor/three.min.js` (r128, MIT) · `screenshots/`. Source prototypes: `design/prototypes/`.
+`index.html` (start) · `home.html` `shop.html` `product.html` `cart-checkout.html` `services.html` `journey.html` `assistant.html` · `ds.css` (design-system tokens and components, generated from `design/system/`) · `_shared.js` (language, theme and motion) · `assets/` (logo, banner, `photos/` client photos + `MAP.json`) · `vendor/three.min.js` (r128, MIT) · `screenshots/`. Source prototypes: `design/prototypes/`.

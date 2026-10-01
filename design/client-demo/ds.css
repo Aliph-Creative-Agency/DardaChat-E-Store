@@ -332,9 +332,6 @@ html[data-motion="reduce"] .dc-brush.is-drawing path { stroke-dashoffset: 0; }
 .dc-proto-bar button[aria-pressed="true"] { background: var(--blue); color: var(--on-blue); }
 @media print { .dc-proto-bar { display: none; } }
 
-/* Client-demo photo gate (supervisor, 2026-10-01): the client photos we have are ~120 px Canva crops and look blurry when
-   upscaled. A photo slot with [data-photo-off] keeps its wiring (<img> + src) but shows the drawing instead.
-   When hi-res files land under the same names in assets/photos/, delete the data-photo-off attributes (home, shop, services)
-   and set PHOTOS_ON = true in product.html. */
-[data-photo-off] > svg { visibility: visible !important; }
-[data-photo-off] > img { display: none !important; }
+/* Client-demo photo crop (supervisor, 2026-10-01): the Ramadan "game" photo has the cards at the bottom and lights at the top;
+   anchor the cover crop low so the cards stay in frame in square/landscape slots (shop card, product slide at 390). */
+img[src$="box-ramadan-game.jpg"] { object-position: 50% 90%; }
