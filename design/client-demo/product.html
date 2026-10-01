@@ -63,6 +63,7 @@
     .dc-pdp-slide { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; visibility: hidden;
       transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base); }
     .dc-pdp-slide.is-on { opacity: 1; visibility: visible; transition-delay: 0s; }
+    .dc-pdp-slide img, .dc-pdp-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
     .dc-pdp-slide svg { width: 82%; height: auto; overflow: visible; }
     .dc-pdp-slide.is-in svg { animation: dc-pdp-arrive var(--dur-slow) var(--ease-spring) both; }
     @keyframes dc-pdp-arrive { from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 36px)) rotate(calc(var(--dir, 1) * 4deg)) scale(.94); } }
@@ -625,14 +626,24 @@ document.addEventListener('dc:ready', function () {
     }
   };
   var svgWrap = function (inner) { return '<svg viewBox="0 0 240 240" aria-hidden="true">' + inner + '</svg>'; };
+  /* client photos per box and slide index (assets/photos; same names get overwritten by the hi-res set) */
+  var PHOTOS = {
+    dardachat: ['box-dardachat-1', 'box-dardachat-open-1', 'cards-question-1', 'card-question-1'],
+    whoamong: ['box-whoamong-1']
+  };
   function slideSet(o) {
-    var g = o.ground;
-    return [
+    var g = o.ground, ph = PHOTOS[o.id] || [];
+    var set = [
       { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
       { cls: g[1], svg: ART.open(o), ar: 'الصندوق مفتوحًا', en: 'The box, open' },
       { cls: g[0], svg: ART.fan(o), ar: 'بطاقات من الصندوق', en: 'Cards from the box' },
       { cls: g[1], svg: ART.scatter(o), ar: 'محتويات الصندوق', en: 'What is inside the box' }
     ];
+    set.forEach(function (d, i) { if (ph[i]) d.img = 'assets/photos/' + ph[i] + '.jpg'; });
+    return set;
+  }
+  function photoImg(d) {
+    return '<img src="' + d.img + '" alt="' + d.ar + ' · ' + B.ar + '" data-ar-alt="' + d.ar + ' · ' + B.ar + '" data-en-alt="' + d.en + ' · ' + B.en + '" decoding="async">';
   }
 
   /* ------------------------------------------------------------------ gallery ------------------------------------------------------------------ */
@@ -646,7 +657,7 @@ document.addEventListener('dc:ready', function () {
       var el = document.createElement('div');
       el.className = 'dc-pdp-slide dc-pdp-slide--' + d.cls + (i === 0 ? ' is-on' : '');
       el.setAttribute('role', 'group'); el.setAttribute('aria-roledescription', 'slide');
-      el.innerHTML = svgWrap(d.svg);
+      el.innerHTML = d.img ? photoImg(d) : svgWrap(d.svg);
       stage.insertBefore(el, anchor);
       return el;
     });
@@ -654,7 +665,7 @@ document.addEventListener('dc:ready', function () {
     thumbEls = slideData.map(function (d, i) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'dc-pdp-thumb dc-pdp-slide--' + d.cls;
-      b.innerHTML = svgWrap(d.svg);
+      b.innerHTML = d.img ? photoImg(d) : svgWrap(d.svg);
       b.addEventListener('click', function () { go(i); });
       thumbs.appendChild(b);
       return b;
@@ -673,6 +684,8 @@ document.addEventListener('dc:ready', function () {
       b.setAttribute('aria-current', String(i === cur));
       b.setAttribute('aria-label', lang(slideData[i].ar, slideData[i].en) + ' ' + (i + 1) + ' / ' + slides.length);
     });
+    var phTag = $('.dc-pdp-ph'); if (phTag) phTag.hidden = !!slideData[cur].img;
+    $$('img[data-ar-alt]', stage).concat($$('img[data-ar-alt]', thumbs)).forEach(function (im) { im.alt = lang(im.dataset.arAlt, im.dataset.enAlt); });
     status.textContent = lang(slideData[cur].ar, slideData[cur].en) + ', ' + (cur + 1) + ' / ' + slides.length;
   }
   function go(i, dir) {

@@ -142,6 +142,8 @@
     [dir="rtl"] .dc-product:has(:focus-visible):not(.is-off) .dc-product__lid { transform: translateY(-10px) rotate(8deg); }
     [dir="rtl"] .dc-product.is-off:hover .dc-product__lid { animation-name: dc-shop-nudge-rtl; }
     .dc-shop-grid .dc-product__art svg { width: 76%; }
+    .dc-product__art.has-photo > svg { visibility: hidden; }
+    .dc-product__art > img.dc-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
     .dc-shop-grid .dc-product__art { transition: background-color var(--dur-base) var(--ease-out); }
     .dc-product__name .dc-shop-stretch:hover { color: var(--blue); }
 
@@ -325,7 +327,7 @@
       <!-- 1. صندوق دردشات -->
       <li class="dc-shop-item" data-id="dardachat" data-audience="family friends" data-age="12" data-season="year" data-name-ar="صندوق دردشات" data-name-en="Dardachat Box">
         <article class="dc-product">
-          <div class="dc-product__art">
+          <div class="dc-product__art has-photo">
             <svg viewBox="0 0 200 180" aria-hidden="true">
               <g class="dc-product__peek"><rect x="62" y="40" width="76" height="76" rx="10" fill="var(--surface)"/><circle cx="100" cy="76" r="20" fill="var(--red)"/></g>
               <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--sky)"/>
@@ -333,6 +335,7 @@
               <circle cx="100" cy="124" r="22" fill="var(--red)"/><path d="M92 124c0-4 3-7 8-7s8 3 8 7-8 10-8 10-8-6-8-10z" fill="var(--on-red)"/>
               <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
             </svg>
+            <img class="dc-photo" src="assets/photos/box-dardachat-1.jpg" alt="صندوق دردشات: العلبة وبطاقات الأسئلة" data-ar-alt="صندوق دردشات: العلبة وبطاقات الأسئلة" data-en-alt="Dardachat Box: the box and its question cards" loading="lazy" decoding="async">
           </div>
           <div class="dc-product__body">
             <div class="dc-row"><span class="dc-chip dc-chip--age dc-num">12+</span><span class="dc-chip" data-ar="للجمعات العائلية والأصدقاء" data-en="Family gatherings &amp; friends">للجمعات العائلية والأصدقاء</span></div>
@@ -351,7 +354,7 @@
       <!-- 2. صندوق مين فينا -->
       <li class="dc-shop-item" data-id="whoamong" data-audience="family friends" data-age="12" data-season="year" data-name-ar="صندوق مين فينا" data-name-en="Who Among Us Box">
         <article class="dc-product">
-          <div class="dc-product__art dc-product__art--sky">
+          <div class="dc-product__art has-photo dc-product__art--sky">
             <svg viewBox="0 0 200 180" aria-hidden="true">
               <g class="dc-product__peek"><rect x="48" y="44" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(-9 73 77)"/><rect x="100" y="42" width="50" height="66" rx="8" fill="var(--surface)" transform="rotate(8 125 75)"/><circle cx="125" cy="70" r="11" fill="var(--red)" transform="rotate(8 125 75)"/></g>
               <rect x="30" y="78" width="140" height="92" rx="10" fill="var(--pink)"/>
@@ -360,6 +363,7 @@
               <circle cx="89" cy="126" r="4.2" fill="var(--on-red)"/><circle cx="100" cy="118" r="4.2" fill="var(--on-red)"/><circle cx="111" cy="126" r="4.2" fill="var(--on-red)"/>
               <g class="dc-product__lid"><rect x="24" y="62" width="152" height="24" rx="8" fill="var(--blue)"/></g>
             </svg>
+            <img class="dc-photo" src="assets/photos/box-whoamong-1.jpg" alt="صندوق مين فينا بيد صاحبته" data-ar-alt="صندوق مين فينا بيد صاحبته" data-en-alt="The Who Among Us Box held up by a player" loading="lazy" decoding="async">
           </div>
           <div class="dc-product__body">
             <div class="dc-row"><span class="dc-chip dc-chip--age dc-num">12+</span><span class="dc-chip" data-ar="للجمعات العائلية والأصدقاء" data-en="Family gatherings &amp; friends">للجمعات العائلية والأصدقاء</span></div>

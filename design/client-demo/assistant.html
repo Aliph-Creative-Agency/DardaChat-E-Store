@@ -283,8 +283,8 @@ document.addEventListener('dc:ready', function () {
 
   /* ---------- what the assistant knows: real catalogue and service facts (DESIGN.md 6-7) ---------- */
   var SRC = {
-    who: [['صفحة الألعاب · صندوق مين فينا', 'Shop · Who Among Us Box'], 'shop.html'],
-    shop: [['صفحة الألعاب', 'Shop'], 'shop.html'],
+    who: [['صفحة صناديق الألعاب · صندوق مين فينا', 'Shop · Who Among Us Box'], 'shop.html'],
+    shop: [['صفحة صناديق الألعاب', 'Shop'], 'shop.html'],
     here: [['هذه الصفحة · محتويات الصندوق', 'This page · Box contents'], '#contents'],
     ramadan: [['صفحة المنتج · صندوق رمضان للعائلة', 'Product page · Ramadan Family Box'], 'shop.html'],
     sessions: [['صفحة الجلسات', 'Sessions page'], 'services.html#sessions'],
@@ -313,7 +313,7 @@ document.addEventListener('dc:ready', function () {
       en: 'Sessions are group dialogue sessions built on Dardachat question cards, for groups of up to 10. It costs ₪ 70 per person or ₪ 500 for the whole group, and lasts 1 hour.',
       src: 'sessions', book: { ar: 'الجلسات', en: 'Sessions', meta: ['[70] للشخص · [500] للمجموعة · ساعة', '[70] per person · [500] per group · 1 hour'], say: ['مرحبًا دردشات، أرغب في حجز جلسة.', 'Hello Dardachat, I would like to book a session.'] } },
     workshops: { re: /ورش|workshop/i,
-      ar: 'الورشات لمجموعات من 20 إلى 25 مشارك (ورشة الورود مع الحب لـ 8–10 أشخاص فقط): لعب مع نشاط فني ينتهي بذكرى تحتفظون بها. السعر من 100 إلى 180 ₪ للشخص حسب الورشة، والمدة من ساعتين إلى 3 ساعات. ويختلف سعر المجموعة بحسب عدد المشاركين وعدد الورشات، ويوجد مرونة.',
+      ar: 'الورشات لمجموعات من 20 إلى 25 مشاركًا (ورشة الورود مع الحب لـ 8–10 أشخاص فقط): لعب مع نشاط فني ينتهي بذكرى تحتفظون بها. السعر من 100 إلى 180 ₪ للشخص حسب الورشة، والمدة من ساعتين إلى 3 ساعات. ويختلف سعر المجموعة بحسب عدد المشاركين وعدد الورشات، ويوجد مرونة.',
       en: 'Workshops are for groups of 20 to 25 (Roses with Love is for 8–10 people only): play plus an art activity that ends with a keepsake. It costs ₪ 100 to ₪ 180 per person depending on the workshop, and lasts 2 to 3 hours. The group price depends on the number of participants and workshops, and there is flexibility.',
       src: 'workshops', book: { ar: 'الورشات', en: 'Workshops', meta: ['[100] إلى [180] للشخص · ساعتان إلى 3 ساعات', '[100] to [180] per person · 2 to 3 hours'], say: ['مرحبًا دردشات، أرغب في حجز ورشة.', 'Hello Dardachat, I would like to book a workshop.'] } },
     gift: { re: /هدية|هديّة|شريك|زوج|خطيب|حبيب|gift|couple|partner|romantic/i,

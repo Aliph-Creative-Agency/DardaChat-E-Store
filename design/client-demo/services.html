@@ -212,6 +212,8 @@
     }
     .dc-svc-art { border-radius: var(--radius-md); overflow: hidden; background: var(--pink); }
     .dc-svc-art--sky { background: var(--sky); }
+    .dc-svc-art.has-photo { position: relative; } .dc-svc-art.has-photo > svg { visibility: hidden; }
+    .dc-svc-art.has-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
     .dc-svc-art svg { display: block; width: 100%; height: auto; transition: transform var(--dur-slow) var(--ease-spring); }
     .dc-svc-card:hover .dc-svc-art svg { transform: scale(1.06) rotate(-1.5deg); }
     .dc-svc-art .k1 { fill: var(--brush); } .dc-svc-art .k2 { fill: var(--sky); } .dc-svc-art .k3 { fill: var(--red); } .dc-svc-art .k4 { fill: var(--surface); }
@@ -392,7 +394,7 @@
 
       <div class="dc-svc-grid" id="wsGrid">
       <article class="dc-service dc-svc-card" data-rv data-grp="groups" style="--i:0" id="ws-gift">
-        <div class="dc-svc-art dc-svc-art--pink" aria-hidden="true"><svg viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" x="44" y="10" width="72" height="58" rx="8"/><rect class="k2" x="54" y="20" width="24" height="16" rx="4"/><rect class="k1" x="84" y="20" width="22" height="16" rx="4"/><rect class="k1" x="54" y="42" width="24" height="16" rx="4"/><path class="k3" transform="translate(86 38) scale(1.15)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></div><div class="dc-svc-titlebox"><h3 class="dc-service__title" data-ar="ورشة هدية لذاتي" data-en="A Gift to Myself">ورشة هدية لذاتي</h3></div>
+        <div class="dc-svc-art dc-svc-art--pink has-photo"><svg aria-hidden="true" viewBox="0 0 160 84" preserveAspectRatio="xMidYMid slice"><rect class="k4" x="44" y="10" width="72" height="58" rx="8"/><rect class="k2" x="54" y="20" width="24" height="16" rx="4"/><rect class="k1" x="84" y="20" width="22" height="16" rx="4"/><rect class="k1" x="54" y="42" width="24" height="16" rx="4"/><path class="k3" transform="translate(86 38) scale(1.15)" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><img src="assets/photos/workshop-1.jpg" alt="ورشة عمل بأجواء مرحة بين مشاركات" data-ar-alt="ورشة عمل بأجواء مرحة بين مشاركات" data-en-alt="A lively workshop among participants" loading="lazy" decoding="async"></div><div class="dc-svc-titlebox"><h3 class="dc-service__title" data-ar="ورشة هدية لذاتي" data-en="A Gift to Myself">ورشة هدية لذاتي</h3></div>
         <p class="dc-service__desc" data-ar="ورشة لتعزيز التفكير بطريقة إيجابية، مع صناعة لوحة الأهداف السنوية بأيديكم." data-en="A workshop on thinking positively, with the making of an annual goals board by hand.">ورشة لتعزيز التفكير بطريقة إيجابية، مع صناعة لوحة الأهداف السنوية بأيديكم.</p>
         <dl class="dc-service__facts">
           <div><dt data-ar="للفرد" data-en="Per person">للفرد</dt><dd class="dc-num">₪100</dd></div>
