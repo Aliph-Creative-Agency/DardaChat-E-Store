@@ -1,34 +1,42 @@
 # Client photos in the demo
 
-Source: the client Canva capture (1910x9456). The photos there are thumbnails of about 120 px, so every image is soft when shown full size. Obaida's hi-res files overwrite these same names.
+Source: Obaida's screenshots in assests/canva sc shots/ (quality-85 JPG, max 1600 px wide, never upscaled). The earlier 120 px crops are deleted.
 
 | file | px | where it's used |
 |---|---|---|
-| box-dardachat-1.jpg | 92x138 | home main card, shop card, product?box=dardachat slide 1 |
-| box-dardachat-open-1.jpg | 120x175 | product?box=dardachat slide 2 |
-| cards-question-1.jpg | 93x139 | product?box=dardachat slide 3 |
-| card-question-1.jpg | 120x160 | product?box=dardachat slide 4 |
-| cards-challenge-1.jpg | 120x80 | unused |
-| box-whoamong-1.jpg | 86x129 | home row card, shop card, product?box=whoamong slide 1 |
-| session-1.jpg | 120x80 | home services ticket: sessions |
-| gamenight-1.jpg | 120x90 | home services ticket: game nights |
-| workshop-1.jpg | 120x90 | home services ticket: workshops; services ws-gift card art |
-| community-1.jpg | 120x95 | unused, spare |
-| board-love-1.jpg | 120x120 | unused, spare |
+| box-dardachat-box.jpg | 582x876 | home/shop card, product dardachat slide 1 |
+| box-dardachat-contents.jpg | 578x874 | product dardachat slide 2 |
+| box-dardachat-questions.jpg | 581x878 | product dardachat slide 3 |
+| box-dardachat-challenges.jpg | 1316x877 | product dardachat slide 4 |
+| box-dardachat-card.jpg | 653x878 | product dardachat slide 5 |
+| box-whoamong-box.jpg | 582x874 | home/shop card, product whoamong slide 1 |
+| box-whoamong-cards.jpg | 583x876 | product whoamong slide 2 |
+| box-whoamong-signs.jpg | 581x875 | product whoamong slide 3 |
+| box-whoamong-instructions.jpg | 583x877 | product whoamong slide 4 |
+| box-whoamong-card.jpg | 582x878 | product whoamong slide 5 |
+| box-ramadan-game.jpg | 1282x1600 | home/shop card, product ramadan slide 1 |
+| box-ramadan-full.jpg | 771x874 | product ramadan slide 2 |
+| box-ramadan-card.jpg | 734x873 | product ramadan slide 3 |
+| box-love-box.jpg | 1315x877 | home/shop card, product love slide 1 |
+| box-love-contents.jpg | 1309x875 | product love slide 2 |
+| box-love-board.jpg | 877x876 | product love slide 3 |
+| box-love-card.jpg | 617x876 | product love slide 4 |
+| box-love-instructions.jpg | 1244x874 | product love slide 5 |
+| cat-sessions.jpg | 1315x879 | home services ticket |
+| cat-gamenights.jpg | 1172x878 | home services ticket |
+| cat-workshops.jpg | 1170x877 | home ticket; all 8 workshop cards on services |
+| cat-boxes.jpg | 585x878 | unused spare |
+| banner-sessions.jpg | 1600x477 | services #sessions |
+| banner-gamenights.jpg | 1600x476 | services #game-nights |
+| banner-workshops.jpg | 1600x479 | services #workshops |
 
-Kept as drawings: Ramadan box (images blank in the capture), Dardachat with Love box (its photos are blank), the other 7 workshop cards, the sessions and game-night sections on services.html (no image slot).
+Notes: text-heavy slides (instructions, contents, challenges, love box) use object-fit: contain on product pages; the Ramadan box carries the note "Temporary design · this box is being redesigned" on home, shop and product. The 8 workshop cards share cat-workshops.jpg.
 
 ## NEEDED FROM THE CLIENT
 
-Everything below should be at least 1200 px on the long edge (product shots square, 1600x1600 ideal), sharp, JPG or PNG.
-
-| slot | min px | subject |
-|---|---|---|
-| Dardachat box: closed, open, cards, contents (4 product slides, hero card on home/shop) | 1600x1600 each | the real box on a clean light background, plus open box, cards fanned, props |
-| Who Among Us box: 4 slides (closed, open, cards, voting signs/booklet) | 1600x1600 each | the box alone, not held by a person |
-| Dardachat with Love box: 4 slides + home/shop card | 1600x1600 each | box, open box, question cards, crystal hearts, dice, spinner |
-| Ramadan family box: 4 slides + cards | 1600x1600 each | box, cards in 3 types, play in an iftar setting |
-| Sessions (home ticket, future services banner) | 1200x900 | a session of up to 10 people with cards on the table |
-| Game nights | 1200x900 | teams playing with the boxes |
-| Workshops: one image per workshop (8 cards) | 1200x700 | each workshop's activity: goal board, clay, embroidery, mother-child, love flowers, series |
-| Home hero / community | 1920x1080 | people playing, natural light |
+| slot | subject |
+|---|---|
+| Workshops: one image per workshop (8 cards) | each workshop's activity (goal board, clay, embroidery, mother-child, love flowers, series) |
+| Home hero / community, 1920x1080 | people playing, natural light |
+| Ramadan box | final redesign photos (current set is temporary) |
+| Final prices | still marked as sample prices |

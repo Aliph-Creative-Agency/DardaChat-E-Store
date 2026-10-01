@@ -1,90 +1,202 @@
 {
- "box-dardachat-1.jpg": {
+ "box-dardachat-box.jpg": {
   "px": [
-   92,
-   138
+   582,
+   876
   ],
-  "subject": "Dardachat box, closed, on a surface",
-  "slot": "home main card, shop card, product?box=dardachat slide 1"
+  "subject": "Dardachat box closed",
+  "slot": "home/shop card, product dardachat slide 1"
  },
- "box-dardachat-open-1.jpg": {
+ "box-dardachat-contents.jpg": {
   "px": [
-   120,
-   175
+   578,
+   874
   ],
-  "subject": "Dardachat box open with card decks and props",
-  "slot": "product?box=dardachat slide 2"
+  "subject": "Open box with contents",
+  "slot": "product dardachat slide 2"
  },
- "cards-question-1.jpg": {
+ "box-dardachat-questions.jpg": {
   "px": [
-   93,
-   139
+   581,
+   878
   ],
-  "subject": "Hand holding blue and pink question cards",
-  "slot": "product?box=dardachat slide 3"
+  "subject": "Question cards in hand",
+  "slot": "product dardachat slide 3"
  },
- "card-question-1.jpg": {
+ "box-dardachat-challenges.jpg": {
   "px": [
-   120,
-   160
+   1316,
+   877
   ],
-  "subject": "Hand holding a question card outdoors",
-  "slot": "product?box=dardachat slide 4"
+  "subject": "Challenge cards in hand",
+  "slot": "product dardachat slide 4"
  },
- "cards-challenge-1.jpg": {
+ "box-dardachat-card.jpg": {
   "px": [
-   120,
-   80
+   653,
+   878
   ],
-  "subject": "Hand with challenge cards (unused, spare)",
-  "slot": "unused"
+  "subject": "A question card",
+  "slot": "product dardachat slide 5"
  },
- "box-whoamong-1.jpg": {
+ "box-whoamong-box.jpg": {
   "px": [
-   86,
-   129
+   582,
+   874
   ],
-  "subject": "Player holding the Who Among Us box/booklet",
-  "slot": "home row card, shop card, product?box=whoamong slide 1"
+  "subject": "Who Among Us box",
+  "slot": "home/shop card, product whoamong slide 1"
  },
- "session-1.jpg": {
+ "box-whoamong-cards.jpg": {
   "px": [
-   120,
-   80
+   583,
+   876
   ],
-  "subject": "Three men in a conversation session",
-  "slot": "home services ticket: sessions"
+  "subject": "Cards in hand",
+  "slot": "product whoamong slide 2"
  },
- "gamenight-1.jpg": {
+ "box-whoamong-signs.jpg": {
   "px": [
-   120,
-   90
+   581,
+   875
   ],
-  "subject": "Women crafting around a table (labelled game nights in the capture)",
-  "slot": "home services ticket: game nights"
+  "subject": "Voting signs",
+  "slot": "product whoamong slide 3"
  },
- "workshop-1.jpg": {
+ "box-whoamong-instructions.jpg": {
   "px": [
-   120,
-   90
+   583,
+   877
   ],
-  "subject": "Women doing an art activity outdoors (workshop)",
-  "slot": "home services ticket: workshops; services ws-gift card art"
+  "subject": "Instructions (text)",
+  "slot": "product whoamong slide 4"
  },
- "community-1.jpg": {
+ "box-whoamong-card.jpg": {
   "px": [
-   120,
-   95
+   582,
+   878
   ],
-  "subject": "Group at an outdoor picnic table (Dardachat community)",
-  "slot": "unused, spare"
+  "subject": "A question card",
+  "slot": "product whoamong slide 5"
  },
- "board-love-1.jpg": {
+ "box-ramadan-game.jpg": {
   "px": [
-   120,
-   120
+   1282,
+   1600
   ],
-  "subject": "Love box dotted board (pale blue)",
-  "slot": "unused, spare"
+  "subject": "Ramadan game, cards and lights",
+  "slot": "home/shop card, product ramadan slide 1"
+ },
+ "box-ramadan-full.jpg": {
+  "px": [
+   771,
+   874
+  ],
+  "subject": "Ramadan full game",
+  "slot": "product ramadan slide 2"
+ },
+ "box-ramadan-card.jpg": {
+  "px": [
+   734,
+   873
+  ],
+  "subject": "Ramadan question card",
+  "slot": "product ramadan slide 3"
+ },
+ "box-love-box.jpg": {
+  "px": [
+   1315,
+   877
+  ],
+  "subject": "Love box illustration",
+  "slot": "home/shop card, product love slide 1"
+ },
+ "box-love-contents.jpg": {
+  "px": [
+   1309,
+   875
+  ],
+  "subject": "Love box contents table",
+  "slot": "product love slide 2"
+ },
+ "box-love-board.jpg": {
+  "px": [
+   877,
+   876
+  ],
+  "subject": "Love game board",
+  "slot": "product love slide 3"
+ },
+ "box-love-card.jpg": {
+  "px": [
+   617,
+   876
+  ],
+  "subject": "Love question card",
+  "slot": "product love slide 4"
+ },
+ "box-love-instructions.jpg": {
+  "px": [
+   1244,
+   874
+  ],
+  "subject": "Love instructions (text)",
+  "slot": "product love slide 5"
+ },
+ "cat-sessions.jpg": {
+  "px": [
+   1315,
+   879
+  ],
+  "subject": "Sessions photo",
+  "slot": "home services ticket"
+ },
+ "cat-gamenights.jpg": {
+  "px": [
+   1172,
+   878
+  ],
+  "subject": "Game nights photo",
+  "slot": "home services ticket"
+ },
+ "cat-workshops.jpg": {
+  "px": [
+   1170,
+   877
+  ],
+  "subject": "Workshops photo",
+  "slot": "home ticket; all 8 workshop cards on services"
+ },
+ "cat-boxes.jpg": {
+  "px": [
+   585,
+   878
+  ],
+  "subject": "Game boxes photo",
+  "slot": "unused spare"
+ },
+ "banner-sessions.jpg": {
+  "px": [
+   1600,
+   477
+  ],
+  "subject": "Sessions banner",
+  "slot": "services #sessions"
+ },
+ "banner-gamenights.jpg": {
+  "px": [
+   1600,
+   476
+  ],
+  "subject": "Game nights banner",
+  "slot": "services #game-nights"
+ },
+ "banner-workshops.jpg": {
+  "px": [
+   1600,
+   479
+  ],
+  "subject": "Workshops banner",
+  "slot": "services #workshops"
  }
 }
