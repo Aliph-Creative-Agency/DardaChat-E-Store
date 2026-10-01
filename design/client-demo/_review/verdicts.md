@@ -37,3 +37,11 @@
 - Voice matches §2: services use the plural (تواصلوا، تصفحوا), checkout uses the singular and MSA (هل لديك رمز خصم؟، أبلغني عند عودته), and specs use label lines (التكلفة:، المدة الزمنية). The client's words are used: توت باج، تنسيق الورود، تشكيل الصلصال، الأزواج والشركاء، صناديق الألعاب. The fixed CTA «احجز عبر واتساب» is kept.
 - Minor, accepted: «التكلفة: من» keeps a "from" sense where the price is a minimum. It is factual and not salesy, so no change.
 - No revise round needed.
+
+## Copy A (home, shop, product): APPROVE
+
+- Same scripted audit as B: no "!", emoji, hype, «ورش», «شريك الحياة», «ابتداءً» or «حضرتك», no colloquial UI, and "Dardachat" spelled correctly. The only colloquial hit is the sample question card «شو أول شي لفت نظرك فيّ…» on product, which VOICE §2 allows. The initial text matches `data-ar` everywhere (0 mismatches).
+- Facts compared with `design/prototypes/`: home and product are identical (₪, ages, wa.me links). Shop's only change is the workshop teaser price (3 copies: text, `data-ar-html`, `data-en-html`).
+- **The fact change is ruled correct and kept: ₪100–180.** DESIGN.md §7 and `services.html` list the workshop per-person prices as 100 / 120 / 130 / 100 / 180 / 150, so the range is accurate. Home (`₪ 100–180 للفرد`) and the assistant (`100 إلى 180 ₪ للشخص`) already said this, and it avoids «ابتداءً من». After the change all pages agree. (Sessions and game nights stay at ₪70 per person everywhere.) A broke the "no fact changes" rule here, but in the direction of consistency, so it is accepted.
+- Voice follows the client: «صناديق الألعاب», «الفئة المستهدفة / الفئة العمرية», «الجمعات العائلية»، «الأزواج والشركاء», «محتويات الصندوق», «مخصص لـ / مصمم لـ», «للتواصل: واتساب», «توت باج / تشكيل الصلصال / تطريز فلسطيني».
+- No revise round needed.
