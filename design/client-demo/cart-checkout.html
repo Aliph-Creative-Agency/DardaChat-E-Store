@@ -297,6 +297,7 @@
 
     @media (prefers-reduced-motion: reduce) { .dc-co-rise, .is-playing .dc-co-card-in, .is-playing .dc-co-lid, .is-playing .dc-co-h { animation-delay: 0s !important; } }
     html[data-motion="reduce"] .dc-co-rise, html[data-motion="reduce"] .is-playing .dc-co-card-in, html[data-motion="reduce"] .is-playing .dc-co-lid, html[data-motion="reduce"] .is-playing .dc-co-h { animation-delay: 0s !important; }
+      .dc-ph { color: var(--ink-soft); } /* --warning is 4.4:1 on surface-sunk; ink-soft keeps AA */
   </style>
 </head>
 <body>
@@ -526,7 +527,26 @@
     ];
 
     /* ---------- state ---------- */
-    const S = { cart: { chat: 1, love: 1 }, promo: null, zone: null, zoneAuto: false, method: null, step: 0, view: 'shelf', order: null, lastRemoved: null };
+    /* shared session cart written by home/shop/product ({total, lines:{dardachat|whoamong|love|ramadan: qty}}); the sample cart shows only while it is empty */
+    const SHARED_KEY = 'dc-proto-cart', ID_MAP = { dardachat: 'chat', whoamong: 'who', love: 'love', ramadan: 'ramadan' };
+    function sharedCart() {
+      const out = {};
+      try {
+        const sv = JSON.parse(sessionStorage.getItem(SHARED_KEY) || 'null');
+        if (sv && sv.lines) Object.keys(sv.lines).forEach(k => { const id = ID_MAP[k] || k, q = Math.floor(+sv.lines[k]); if (P[id] && !P[id].off && q > 0) out[id] = Math.min(MAX_QTY, (out[id] || 0) + q); });
+      } catch (e) {}
+      return out;
+    }
+    function saveShared() {
+      try {
+        const rev = {}; Object.keys(ID_MAP).forEach(k => { rev[ID_MAP[k]] = k; });
+        const lines = {}; let total = 0;
+        Object.keys(S.cart).forEach(id => { if (S.cart[id] > 0) { lines[rev[id] || id] = S.cart[id]; total += S.cart[id]; } });
+        sessionStorage.setItem(SHARED_KEY, JSON.stringify({ total, lines }));
+      } catch (e) {}
+    }
+    const SHARED0 = sharedCart();
+    const S = { cart: Object.keys(SHARED0).length ? SHARED0 : { chat: 1, love: 1 }, promo: null, zone: null, zoneAuto: false, method: null, step: 0, view: 'shelf', order: null, lastRemoved: null };
     const HASH = ['checkout', 'address', 'delivery', 'payment'];
     let opener = null, undoTimer = null, prevHash = '';
 
@@ -565,7 +585,7 @@
     function renderBadge(bump) {
       const n = count(), c = $('#cartCount');
       c.textContent = n; $('#cartBtn').setAttribute('aria-label', t('السلة، ' + n + ' منتجات', 'Cart, ' + n + ' items'));
-      c.hidden = n === 0;
+      c.hidden = n === 0; saveShared();
       if (bump) DC.bump(c);
     }
 
