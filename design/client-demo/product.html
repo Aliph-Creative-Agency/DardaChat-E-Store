@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"><link rel="icon" type="image/png" href="assets/favicon.png">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-ar="صندوق دردشات مع الحب · دردشات" data-en="Dardachat with Love Box · Dardachat">صندوق دردشات مع الحب · دردشات</title>
   <link rel="stylesheet" href="ds.css">
@@ -151,6 +151,7 @@
       .dc-pdp-hero { gap: var(--space-4); }
       .dc-pdp-gallery { gap: var(--space-2); }
       .dc-pdp-stage { aspect-ratio: 4 / 3; }
+      .dc-pdp-slide { grid-template-rows: 100%; } /* definite row so the drawing height:92% resolves (it overflowed the 4:3 stage) */
       .dc-pdp-slide svg { width: auto; height: 92%; }
       .dc-pdp-thumbs { grid-template-columns: repeat(5, 56px); justify-content: center; }
       .dc-pdp-buy { gap: var(--space-3); }

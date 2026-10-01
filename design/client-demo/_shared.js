@@ -236,7 +236,7 @@
   function renderDrawer() {
     var L = validLines(), n = cartCount(), keep = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-k');
     dTitle.textContent = DC.t('سلتك', 'Your cart');
-    dCount.textContent = DC.t(n + ' منتجات', n + ' items');
+    dCount.textContent = DC.t(n === 1 ? 'منتج واحد' : n === 2 ? 'منتجان' : n <= 10 ? n + ' منتجات' : n + ' منتجًا', n + (n === 1 ? ' item' : ' items'));
     drawer.querySelector('.shell-x').setAttribute('aria-label', DC.t('إغلاق السلة', 'Close cart'));
     var undo = lastRemoved ? '<div class="shell-undo" role="status"><span>' + DC.t('أُزيل ' + CAT[lastRemoved.id].ar, CAT[lastRemoved.id].en + ' removed') + '</span><button type="button" class="shell-link" data-shell="undo" data-k="undo">' + DC.t('تراجع', 'Undo') + '</button></div>' : '';
     if (!L.length) {

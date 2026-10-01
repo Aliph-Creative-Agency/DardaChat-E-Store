@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"><link rel="icon" type="image/png" href="assets/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-ar="السلة والدفع · دردشات" data-en="Cart &amp; checkout · Dardachat">السلة والدفع · دردشات</title>
   <link rel="stylesheet" href="ds.css">
   <script src="_shared.js" defer></script>
@@ -605,7 +605,7 @@
     }
     function renderDrawer() {
       const L = lines(), T = totals(), body = $('#drawerBody'), foot = $('#drawerFoot');
-      $('#drawerCount').innerHTML = t(count() + ' منتجات', count() + ' items');
+      { const n = count(); $('#drawerCount').innerHTML = t(n === 1 ? 'منتج واحد' : n === 2 ? 'منتجان' : n <= 10 ? n + ' منتجات' : n + ' منتجًا', n + (n === 1 ? ' item' : ' items')); }
       if (!L.length) {
         body.innerHTML = emptyCard();
         foot.innerHTML = '<div class="dc-co-undo" role="status">' + undoHtml() + '</div>' + (S.view === 'done' ? '<a class="dc-btn" href="shop.html" data-k="d:shop" style="justify-content:center">' : '<button class="dc-btn" type="button" data-act="close-cart" data-k="d:shop" style="justify-content:center">') + t('تصفّح صناديق الألعاب', 'Browse the game boxes') + (S.view === 'done' ? '</a>' : '</button>');
