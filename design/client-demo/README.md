@@ -9,7 +9,7 @@ A clickable preview of the Dardachat shop. It is front end only, with sample dat
 3. Before the meeting, open every page once with internet on. Fonts come from Google Fonts. Offline, everything still works, but the system font stands in for Baloo Bhaijaan / IBM Plex.
 4. If you present from a phone, AirDrop/WhatsApp the PNGs from `screenshots/` instead. Pages opened from a file on a phone are unreliable. Alternatively, run `python -m http.server` in this folder and open `http://<laptop-ip>:8000` from the phone on the same Wi-Fi.
 
-**Controls (bottom of every page):** English/العربية, Night/Cream, Less motion. The choice carries over from page to page. The motion setting also follows the OS “reduce motion” preference automatically.
+**Controls (bottom of every page):** a small floating toolbar with English/العربية, Night/Cream and Less motion. The choice carries over from page to page. The motion setting also follows the OS “reduce motion” preference automatically. This toolbar is a demo control, not part of the shop design. It stays in the live demo because it is how you switch language, but it is hidden in all screenshots. To hide it live as well, add `<html data-no-protobar>` to a page.
 
 ## Click-through script (about 10 minutes)
 
