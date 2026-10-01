@@ -8,7 +8,7 @@
      DC.t(ar, en)       pick a string for the current language (for text built in JS)
      DC.restart(el, cls) remove + reflow + re-add a class (re-runs a CSS animation)
      DC.go(url)         navigate with the short page-transition veil (same-site link clicks use it automatically)
-     DC.cart            shared session cart: .count() .lines() .set(id, qty) .open() .close()  (+ 'dc:cart' event)
+     DC.cart            shared session cart: .count() .lines() .set(id, qty) .add(id, qty) .open() .close()  (+ 'dc:cart' event)
      DC.heartPop(btn)   .dc-btn[data-pop] heart pop        DC.bump(el)  cart-count bump
      DC.flip(card)      toggle .dc-qcard (keeps aria-pressed in sync)
      DC.draw(svg)       brush draw-on: measures each path, sets --len, adds .is-drawing
@@ -182,6 +182,11 @@
   DC.cart = {
     count: cartCount, lines: validLines,
     set: function (id, q) { if (CAT[id]) { writeLine(id, q); changed(); } },
+    add: function (id, q) { /* used by the assistant widget: adds q (default 1) and bumps the badges */
+      if (!CAT[id]) return false;
+      writeLine(id, (+readCart().lines[id] || 0) + (q > 0 ? Math.floor(q) : 1)); changed();
+      document.querySelectorAll('.dc-cart__count').forEach(DC.bump); return true;
+    },
     open: function (opener) { openDrawer(opener); }, close: function () { closeDrawer(); }
   };
   function changed() { paintBadges(); if (drawerOpen()) renderDrawer(); emit('dc:cart', { count: cartCount() }); }
