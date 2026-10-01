@@ -627,12 +627,15 @@ document.addEventListener('dc:ready', function () {
   };
   var svgWrap = function (inner) { return '<svg viewBox="0 0 240 240" aria-hidden="true">' + inner + '</svg>'; };
   /* client photos per box and slide index (assets/photos; same names get overwritten by the hi-res set) */
+  /* Photo gate: the current files are ~120 px Canva crops, too soft for the large gallery. Set to true when hi-res files
+     land under the same names in assets/photos/ (see ds.css "photo gate"). */
+  var PHOTOS_ON = false;
   var PHOTOS = {
     dardachat: ['box-dardachat-1', 'box-dardachat-open-1', 'cards-question-1', 'card-question-1'],
     whoamong: ['box-whoamong-1']
   };
   function slideSet(o) {
-    var g = o.ground, ph = PHOTOS[o.id] || [];
+    var g = o.ground, ph = (PHOTOS_ON && PHOTOS[o.id]) || [];
     var set = [
       { cls: g[0], svg: ART.closed(o), ar: 'الصندوق مغلقًا', en: 'The closed box' },
       { cls: g[1], svg: ART.open(o), ar: 'الصندوق مفتوحًا', en: 'The box, open' },
